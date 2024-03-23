@@ -1,0 +1,6 @@
+@QuackersAPI_DDD_HostAddress = http://localhost:5038
+
+GET {{QuackersAPI_DDD_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
