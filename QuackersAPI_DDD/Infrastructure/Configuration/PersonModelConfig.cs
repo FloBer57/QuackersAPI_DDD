@@ -10,7 +10,7 @@ namespace QuackersAPI_DDD.Infrastructure.Configuration
         {
             builder.ToTable("person");
             builder.HasKey(e => e.Person_Id);
-            builder.Property(e => e.Person_Password).IsRequired().HasMaxLength(255);
+            builder.Property(e => e.Person_Password).HasMaxLength(255);
             builder.HasIndex(e => e.Person_Email).IsUnique();
             builder.HasIndex(e => e.Person_PhoneNumber);
             builder.Property(e => e.Person_FirstName).IsRequired().HasMaxLength(50);

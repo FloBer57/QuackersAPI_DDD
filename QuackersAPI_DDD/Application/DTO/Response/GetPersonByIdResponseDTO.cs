@@ -1,18 +1,18 @@
-﻿using QuackersAPI_DDD.Domain.Model;
+﻿using QuackersAPI_DDD.Application.DTO;
 
 namespace QuackersAPI_DDD.Application.DTO.Response
 {
     public class GetPersonByIdResponseDTO
     {
-        public string FirstName { get; set; }
-        public string LastName { get; set; }
+        public PersonDTO Person { get; set; }
         public string Message { get; set; }
 
-        public GetPersonByIdResponseDTO(Person person)
+        public GetPersonByIdResponseDTO(PersonDTO person)
         {
-            FirstName = person.Person_FirstName;
-            LastName = person.Person_LastName;
-            Message = $"L'utilisateur {FirstName} {LastName} a été récupéré avec succès.";
+            Person = person;
+            Message = person != null
+                ? $"L'utilisateur {person.FirstName} {person.LastName} a été récupéré avec succès."
+                : "Utilisateur non trouvé.";
         }
     }
 }

@@ -1,15 +1,17 @@
-﻿
-namespace QuackersAPI_DDD.Application.Interface
+﻿namespace QuackersAPI_DDD.Application.Interface
 {
     using System.Collections.Generic;
     using System.Threading.Tasks;
-    using QuackersAPI_DDD.Application.DTO.Request; 
-    using QuackersAPI_DDD.Application.DTO.Response; 
+    using QuackersAPI_DDD.Application.DTO.Request;
+    using QuackersAPI_DDD.Application.DTO.Response;
 
     public interface IPersonService
     {
-        Task<GetPersonByIdResponseDTO> GetPersonById(int id);
-        Task<IEnumerable<GetAllPersonsRequestDTO>> GetAllPersons();
         Task<CreatePersonResponseDTO> CreatePerson(CreatePersonRequestDTO personDto);
+        Task<GetAllPersonResponseDTO> GetAllPersons();
+        Task<GetPersonByIdResponseDTO> GetPersonById(int id);
+        Task<UpdatePersonByIdResponseDTO> UpdatePassword(int id, string newPassword);
+        Task<UpdatePersonByIdResponseDTO> UpdatePhoneNumber(int id, string newPhoneNumber);
+        Task<DeletePersonByIdResponseDTO> DeletePerson(int id);
     }
 }

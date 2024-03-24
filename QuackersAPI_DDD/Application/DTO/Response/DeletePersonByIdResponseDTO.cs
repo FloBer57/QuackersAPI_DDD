@@ -1,18 +1,14 @@
-﻿using QuackersAPI_DDD.Domain.Model;
-
-namespace QuackersAPI_DDD.Application.DTO.Response
+﻿namespace QuackersAPI_DDD.Application.DTO.Response
 {
     public class DeletePersonByIdResponseDTO
     {
-        public string FirstName { get; set; }
-        public string LastName { get; set; }
+        public bool Success { get; set; }
         public string Message { get; set; }
 
-        public DeletePersonByIdResponseDTO(Person person) 
+        public DeletePersonByIdResponseDTO(bool success, string message)
         {
-            FirstName = person.Person_FirstName;
-            LastName = person.Person_LastName;
-            Message = $"L'utilisateur {FirstName} {LastName} à été supprimé avec succès.";
-        }    
+            Success = success;
+            Message = message;
+        }
     }
 }

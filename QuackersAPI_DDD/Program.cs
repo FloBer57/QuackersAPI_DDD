@@ -1,6 +1,10 @@
 
 using Microsoft.EntityFrameworkCore;
+using QuackersAPI_DDD.Application.Interface;
+using QuackersAPI_DDD.Application.Service;
 using QuackersAPI_DDD.Infrastructure.Database;
+using QuackersAPI_DDD.Infrastructure.Interface;
+using QuackersAPI_DDD.Infrastructure.Repository;
 
 namespace QuackersAPI_DDD
 {
@@ -18,6 +22,9 @@ namespace QuackersAPI_DDD
             builder.Services.AddSwaggerGen();
             builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseMySql(builder.Configuration.GetConnectionString("DefaultConnection"), new MySqlServerVersion(new Version(8, 0, 21))));
+            builder.Services.AddScoped<IPersonService, PersonService>();
+            builder.Services.AddScoped<IPersonRepository, PersonRepository>();
+            builder.Services.AddControllers();
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.

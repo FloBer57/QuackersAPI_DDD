@@ -7,6 +7,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Application\DTO\Response\NewFolder\**" />
+    <Content Remove="Application\DTO\Response\NewFolder\**" />
+    <EmbeddedResource Remove="Application\DTO\Response\NewFolder\**" />
+    <None Remove="Application\DTO\Response\NewFolder\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="BCrypt.Net-Next" Version="4.0.3" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.3" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.3" />
@@ -20,7 +27,6 @@
     <Folder Include="Domain\Service\" />
     <Folder Include="Domain\Repository\" />
     <Folder Include="Infrastructure\EntityConfig\" />
-    <Folder Include="Infrastructure\Repository\" />
   </ItemGroup>
 
 </Project>

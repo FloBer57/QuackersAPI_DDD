@@ -2,65 +2,89 @@
 using QuackersAPI_DDD.Application.DTO.Request;
 using QuackersAPI_DDD.Application.DTO.Response;
 using QuackersAPI_DDD.Application.Interface;
-using Microsoft.EntityFrameworkCore; // Ajoutez cette ligne
 using QuackersAPI_DDD.Domain.Model;
-using QuackersAPI_DDD.Infrastructure.Database;
 using System;
+using System.Threading.Tasks;
+using System.Collections.Generic;
 
 namespace QuackersAPI_DDD.API.Controller
 {
-    [Route("api/[Controller]")]
+    [Route("api/[controller]")]
     [ApiController]
     public class PersonController : ControllerBase
     {
-        private readonly AppDbContext _context;
+        private readonly IPersonService _personService;
 
-        public PersonController(AppDbContext context)
+        public PersonController(IPersonService personService)
         {
-            _context = context;
+            _personService = personService;
         }
 
-
-        // Create api/user
         [HttpPost]
         public async Task<IActionResult> CreateUser([FromBody] CreatePersonRequestDTO createUserRequestDTO)
         {
-            Person person = new Person
+            CreatePersonResponseDTO createResponse = await _personService.CreatePerson(createUserRequestDTO);
+            if (createResponse == null)
             {
-                Person_FirstName = createUserRequestDTO.Firstname,
-                Person_LastName = createUserRequestDTO.LastName,
-                Person_Email = createUserRequestDTO.Email,
-                Person_PhoneNumber = createUserRequestDTO.PhoneNumber,
-            };
-            _context.Person.Add(person);
-            await _context.SaveChangesAsync();
-
-            var messageDto = new CreatePersonResponseDTO(person);
-            return CreatedAtAction(nameof(GetUserById), new { id = person.Person_Id }, new { person, message = messageDto.Message });
+                return BadRequest("Unable to create user.");
+            }
+            return CreatedAtAction(nameof(GetUserById), new { id = createResponse.Id }, createResponse);
         }
 
-
-        // GET: api/user
         [HttpGet]
         public async Task<IActionResult> GetAllUsers()
         {
-            List<Person> users = await _context.Person.ToListAsync();
-            string message = $"Nombre total d'utilisateurs récupérés : {users.Count}.";
-            return Ok(new { Users = users, Message = message });
+            var users = await _personService.GetAllPersons();
+            return Ok(users);
         }
 
-        // GET: api/user/{id}
         [HttpGet("{id}")]
         public async Task<IActionResult> GetUserById(int id)
         {
-            Person person = await _context.Person.FindAsync(id);
-            if (person == null)
+            var user = await _personService.GetPersonById(id);
+            if (user == null)
             {
-                return NotFound($"Utilisateur avec l'ID {id} non trouvé.");
+                return NotFound($"User with ID {id} not found.");
+            }
+            return Ok(user);
+        }
+
+        [HttpPatch("update-password/{id}")]
+        public async Task<IActionResult> UpdatePassword(int id, [FromBody] UpdatePasswordRequestDTO request)
+        {
+            var updateResponse = await _personService.UpdatePassword(id, request.NewPassword);
+            if (!updateResponse.Success)
+            {
+                return BadRequest(updateResponse.Message);
+            }
+            return Ok(updateResponse.Message);
+        }
+
+        [HttpPatch("update-phonenumber/{id}")]
+        public async Task<IActionResult> UpdatePhoneNumber(int id, [FromBody] UpdatePhoneNumberRequestDTO request)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
             }
 
-            string message = $"L'utilisateur avec l'ID {id} a été récupéré avec succès.";
-            return Ok(new { User = person, Message = message });
+            var updateResponse = await _personService.UpdatePhoneNumber(id, request.NewPhoneNumber);
+            if (!updateResponse.Success)
+            {
+                return BadRequest(updateResponse.Message);
+            }
+            return Ok(updateResponse.Message);
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeletePerson(int id)
+        {
+            var deleteResponse = await _personService.DeletePerson(id);
+            if (!deleteResponse.Success)
+            {
+                return NotFound(deleteResponse.Message);
+            }
+            return Ok(deleteResponse.Message);
         }
     }
 }
