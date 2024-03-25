@@ -1,6 +1,7 @@
-﻿using QuackersAPI_DDD.Domain.Model;
+﻿using QuackersAPI_DDD.Application.DTO.PersonFolderDTO;
+using QuackersAPI_DDD.Domain.Model;
 
-namespace QuackersAPI_DDD.Application.DTO.Response
+namespace QuackersAPI_DDD.Application.DTO.PersonFolderDTO.Response
 {
     public class CreatePersonResponseDTO
     {

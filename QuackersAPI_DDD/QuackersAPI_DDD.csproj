@@ -7,16 +7,16 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Application\DTO\Response\NewFolder\**" />
+    <Compile Remove="Application\DTO\PersonFolderDTO\Response\NewFolder\**" />
     <Compile Remove="Domain\Service\**" />
     <Compile Remove="Infrastructure\EntityConfig\**" />
-    <Content Remove="Application\DTO\Response\NewFolder\**" />
+    <Content Remove="Application\DTO\PersonFolderDTO\Response\NewFolder\**" />
     <Content Remove="Domain\Service\**" />
     <Content Remove="Infrastructure\EntityConfig\**" />
-    <EmbeddedResource Remove="Application\DTO\Response\NewFolder\**" />
+    <EmbeddedResource Remove="Application\DTO\PersonFolderDTO\Response\NewFolder\**" />
     <EmbeddedResource Remove="Domain\Service\**" />
     <EmbeddedResource Remove="Infrastructure\EntityConfig\**" />
-    <None Remove="Application\DTO\Response\NewFolder\**" />
+    <None Remove="Application\DTO\PersonFolderDTO\Response\NewFolder\**" />
     <None Remove="Domain\Service\**" />
     <None Remove="Infrastructure\EntityConfig\**" />
   </ItemGroup>

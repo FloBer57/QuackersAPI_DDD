@@ -1,6 +1,6 @@
-﻿using QuackersAPI_DDD.Application.DTO;
+﻿using QuackersAPI_DDD.Application.DTO.PersonFolderDTO;
 
-namespace QuackersAPI_DDD.Application.DTO.Response
+namespace QuackersAPI_DDD.Application.DTO.PersonFolderDTO.Response
 {
     public class GetPersonByIdResponseDTO
     {

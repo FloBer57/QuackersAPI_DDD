@@ -1,11 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using QuackersAPI_DDD.Application.DTO.Request;
-using QuackersAPI_DDD.Application.DTO.Response;
 using QuackersAPI_DDD.Application.Interface;
 using QuackersAPI_DDD.Domain.Model;
 using System;
 using System.Threading.Tasks;
 using System.Collections.Generic;
+using QuackersAPI_DDD.Application.DTO.PersonFolderDTO.Response;
+using QuackersAPI_DDD.Application.DTO.PersonFolderDTO.Request;
 
 namespace QuackersAPI_DDD.API.Controller
 {

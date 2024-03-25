@@ -2,8 +2,8 @@
 {
     using System.Collections.Generic;
     using System.Threading.Tasks;
-    using QuackersAPI_DDD.Application.DTO.Request;
-    using QuackersAPI_DDD.Application.DTO.Response;
+    using QuackersAPI_DDD.Application.DTO.PersonFolderDTO.Request;
+    using QuackersAPI_DDD.Application.DTO.PersonFolderDTO.Response;
 
     public interface IPersonService
     {

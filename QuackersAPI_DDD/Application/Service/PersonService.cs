@@ -2,8 +2,9 @@
 using System.Linq;
 using System.Threading.Tasks;
 using QuackersAPI_DDD.Application.DTO;
-using QuackersAPI_DDD.Application.DTO.Request;
-using QuackersAPI_DDD.Application.DTO.Response;
+using QuackersAPI_DDD.Application.DTO.PersonFolderDTO;
+using QuackersAPI_DDD.Application.DTO.PersonFolderDTO.Request;
+using QuackersAPI_DDD.Application.DTO.PersonFolderDTO.Response;
 using QuackersAPI_DDD.Application.Interface;
 using QuackersAPI_DDD.Domain.Model;
 using QuackersAPI_DDD.Domain.Utilitie;

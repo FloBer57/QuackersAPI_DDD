@@ -1,6 +1,6 @@
 ﻿using QuackersAPI_DDD.Domain.Model;
 
-namespace QuackersAPI_DDD.Application.DTO
+namespace QuackersAPI_DDD.Application.DTO.PersonFolderDTO
 {
     public class PersonDTO
     {
@@ -12,7 +12,7 @@ namespace QuackersAPI_DDD.Application.DTO
         public string Email { get; set; }
         public string Password { get; set; }
         public string ProfilPicturePath { get; set; }
-        public string Description { get; set; } 
+        public string Description { get; set; }
         public bool IsTemporaryPassword { get; set; }
         public string TokenResetPassword { get; set; }
         public int PersonJobTitle_Id { get; set; } = 1;

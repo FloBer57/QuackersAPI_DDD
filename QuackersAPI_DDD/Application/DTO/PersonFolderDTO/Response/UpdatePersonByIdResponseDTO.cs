@@ -1,7 +1,7 @@
 ﻿using QuackersAPI_DDD.Domain.Model;
 using QuackersAPI_DDD.Domain.Utilitie;
 
-namespace QuackersAPI_DDD.Application.DTO.Response
+namespace QuackersAPI_DDD.Application.DTO.PersonFolderDTO.Response
 {
     public class UpdatePersonByIdResponseDTO
     {
