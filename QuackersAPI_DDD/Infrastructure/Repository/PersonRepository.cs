@@ -3,9 +3,9 @@
     using Microsoft.EntityFrameworkCore;
     using QuackersAPI_DDD.Domain.Model;
     using QuackersAPI_DDD.Infrastructure.Database;
-    using QuackersAPI_DDD.Infrastructure.Interface;
     using System.Collections.Generic;
     using System.Threading.Tasks;
+    using QuackersAPI_DDD.Infrastructure.InterfaceRepository;
 
     public class PersonRepository : IPersonRepository
     {

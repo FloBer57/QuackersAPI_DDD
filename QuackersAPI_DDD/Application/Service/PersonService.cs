@@ -7,7 +7,7 @@ using QuackersAPI_DDD.Application.DTO.Response;
 using QuackersAPI_DDD.Application.Interface;
 using QuackersAPI_DDD.Domain.Model;
 using QuackersAPI_DDD.Domain.Utilitie;
-using QuackersAPI_DDD.Infrastructure.Interface;
+using QuackersAPI_DDD.Infrastructure.InterfaceRepository;
 
 namespace QuackersAPI_DDD.Application.Service
 {
@@ -41,9 +41,9 @@ namespace QuackersAPI_DDD.Application.Service
             return new GetAllPersonResponseDTO(personDtos);
         }
 
-        public async Task<GetPersonByIdResponseDTO> GetPersonById(int id)
+        public async Task<GetPersonByIdResponseDTO> GetPersonById(GetPersonByIdRequestDTO getPersonDto)
         {
-            var person = await _repository.GetPersonById(id);
+            var person = await _repository.GetPersonById(getPersonDto.Id);
             if (person == null)
             {
                 return null;

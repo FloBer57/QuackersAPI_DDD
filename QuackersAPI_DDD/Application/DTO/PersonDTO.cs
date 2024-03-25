@@ -12,7 +12,7 @@ namespace QuackersAPI_DDD.Application.DTO
         public string Email { get; set; }
         public string Password { get; set; }
         public string ProfilPicturePath { get; set; }
-        public string Description { get; set; } = "Je suis nouveau sur Quackers!";
+        public string Description { get; set; } 
         public bool IsTemporaryPassword { get; set; }
         public string TokenResetPassword { get; set; }
         public int PersonJobTitle_Id { get; set; } = 1;

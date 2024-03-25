@@ -8,9 +8,17 @@
 
   <ItemGroup>
     <Compile Remove="Application\DTO\Response\NewFolder\**" />
+    <Compile Remove="Domain\Service\**" />
+    <Compile Remove="Infrastructure\EntityConfig\**" />
     <Content Remove="Application\DTO\Response\NewFolder\**" />
+    <Content Remove="Domain\Service\**" />
+    <Content Remove="Infrastructure\EntityConfig\**" />
     <EmbeddedResource Remove="Application\DTO\Response\NewFolder\**" />
+    <EmbeddedResource Remove="Domain\Service\**" />
+    <EmbeddedResource Remove="Infrastructure\EntityConfig\**" />
     <None Remove="Application\DTO\Response\NewFolder\**" />
+    <None Remove="Domain\Service\**" />
+    <None Remove="Infrastructure\EntityConfig\**" />
   </ItemGroup>
 
   <ItemGroup>
@@ -24,9 +32,6 @@
 
   <ItemGroup>
     <Folder Include="Application\Utilitie\" />
-    <Folder Include="Domain\Service\" />
-    <Folder Include="Domain\Repository\" />
-    <Folder Include="Infrastructure\EntityConfig\" />
   </ItemGroup>
 
 </Project>

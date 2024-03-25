@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using QuackersAPI_DDD.Application.Interface;
 using QuackersAPI_DDD.Application.Service;
 using QuackersAPI_DDD.Infrastructure.Database;
-using QuackersAPI_DDD.Infrastructure.Interface;
+using QuackersAPI_DDD.Infrastructure.InterfaceRepository;
 using QuackersAPI_DDD.Infrastructure.Repository;
 
 namespace QuackersAPI_DDD

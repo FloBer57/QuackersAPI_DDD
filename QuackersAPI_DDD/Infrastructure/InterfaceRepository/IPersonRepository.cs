@@ -1,4 +1,4 @@
-﻿namespace QuackersAPI_DDD.Infrastructure.Interface
+﻿namespace QuackersAPI_DDD.Infrastructure.InterfaceRepository
 {
     using System.Collections.Generic;
     using System.Threading.Tasks;
