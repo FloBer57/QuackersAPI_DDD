@@ -9,7 +9,7 @@
     {
         Task<CreatePersonResponseDTO> CreatePerson(CreatePersonRequestDTO personDto);
         Task<GetAllPersonResponseDTO> GetAllPersons();
-        Task<GetPersonByIdResponseDTO> GetPersonById(GetPersonByIdRequestDTO getPersonDto);
+        Task<GetPersonByIdResponseDTO> GetPersonById(int id);
         Task<UpdatePersonByIdResponseDTO> UpdatePassword(int id, string newPassword);
         Task<UpdatePersonByIdResponseDTO> UpdatePhoneNumber(int id, string newPhoneNumber);
         Task<DeletePersonByIdResponseDTO> DeletePerson(int id);

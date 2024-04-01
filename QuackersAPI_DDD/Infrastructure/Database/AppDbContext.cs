@@ -20,8 +20,9 @@ namespace QuackersAPI_DDD.Infrastructure.Database
         public DbSet<PersonXChannel> PersonXChannels { get; set; }
         public DbSet<ChannelRolePerson> ChannelPersonRoles { get; set; }
         public DbSet<ChannelType> ChannelTypes { get; set; }
-        public DbSet<Channel> Channels { get; set; }
-        public DbSet<ChannelRolePersonXPersonXChannel> ChannelRolePersonXPersonXChannels { get; set; }
+        */
+        public DbSet<Channel> Channel { get; set; }
+        /* public DbSet<ChannelRolePersonXPersonXChannel> ChannelRolePersonXPersonXChannels { get; set; }
         public DbSet<Reaction> Reactions { get; set; }
         public DbSet<NotificationType> NotificationTypes { get; set; }
         public DbSet<Logged> Loggeds { get; set; }
@@ -34,6 +35,7 @@ namespace QuackersAPI_DDD.Infrastructure.Database
         {
             // Configurations pour chaque table
             modelBuilder.ApplyConfigurationsFromAssembly(typeof(PersonModelConfig).Assembly);
+            modelBuilder.ApplyConfigurationsFromAssembly(typeof(ChannelModelConfig).Assembly);
 
         }
     }

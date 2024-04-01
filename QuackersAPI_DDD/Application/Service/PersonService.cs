@@ -42,9 +42,9 @@ namespace QuackersAPI_DDD.Application.Service
             return new GetAllPersonResponseDTO(personDtos);
         }
 
-        public async Task<GetPersonByIdResponseDTO> GetPersonById(GetPersonByIdRequestDTO getPersonDto)
+        public async Task<GetPersonByIdResponseDTO> GetPersonById(int id)
         {
-            var person = await _repository.GetPersonById(getPersonDto.Id);
+            var person = await _repository.GetPersonById(id);
             if (person == null)
             {
                 return null;

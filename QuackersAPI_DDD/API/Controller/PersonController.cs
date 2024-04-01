@@ -21,9 +21,9 @@ namespace QuackersAPI_DDD.API.Controller
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateUser([FromBody] CreatePersonRequestDTO createUserRequestDTO)
+        public async Task<IActionResult> CreateUser([FromBody] CreatePersonRequestDTO createPersonRequestDTO)
         {
-            CreatePersonResponseDTO createResponse = await _personService.CreatePerson(createUserRequestDTO);
+            CreatePersonResponseDTO createResponse = await _personService.CreatePerson(createPersonRequestDTO);
             if (createResponse == null)
             {
                 return BadRequest("Unable to create user.");
