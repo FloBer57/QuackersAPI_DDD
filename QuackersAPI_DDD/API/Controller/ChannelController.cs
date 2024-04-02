@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using QuackersAPI_DDD.Application.DTO.PersonFolderDTO.Request;
-using QuackersAPI_DDD.Application.DTO.PersonFolderDTO.Response;
+using QuackersAPI_DDD.Application.DTO.ChannelFolderDTO.Request;
+using QuackersAPI_DDD.Application.DTO.ChannelFolderDTO.Response;
 using QuackersAPI_DDD.Application.Interface;
 
 namespace QuackersAPI_DDD.API.Controller
@@ -40,15 +40,15 @@ namespace QuackersAPI_DDD.API.Controller
             var channel = await _channelService.GetChannelById(id);
             if (channel == null)
             {
-                return NotFound($"Le channel avec l'{id} n'as pas été trouvé..");
+                return NotFound($"Le channel {id} n'as pas été trouvé..");
             }
             return Ok(channel);
         }
 
-        /*[HttpPatch("update-password/{id}")]
-        public async Task<IActionResult> UpdateName(int id, [FromBody] UpdateChannelRequestDTO request)
+        [HttpPatch("update-password/{id}")]
+        public async Task<IActionResult> UpdateName(int id, [FromBody] UpdateChannelNameRequestDTO request)
         {
-            var updateResponse = await _channelService.UpdateChannel(id, request.NewName);
+            var updateResponse = await _channelService.UpdateName(id, request.NewName);
             if (!updateResponse.Success)
             {
                 return BadRequest(updateResponse.Message);
@@ -65,6 +65,6 @@ namespace QuackersAPI_DDD.API.Controller
                 return NotFound(deleteResponse.Message);
             }
             return Ok(deleteResponse.Message);
-        }*/
+        }
     }
 }

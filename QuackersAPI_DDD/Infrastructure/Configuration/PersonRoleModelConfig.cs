@@ -4,7 +4,7 @@ using QuackersAPI_DDD.Domain.Model;
 
 namespace QuackersAPI_DDD.Infrastructure.Configuration
 {
-    public class PersonRoleModelConfig
+    public class PersonRoleModelConfig : IEntityTypeConfiguration<PersonRole>
     {
         public void Configure(EntityTypeBuilder<PersonRole> builder)
         {

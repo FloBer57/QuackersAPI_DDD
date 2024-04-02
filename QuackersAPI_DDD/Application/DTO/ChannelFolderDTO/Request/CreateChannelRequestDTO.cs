@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace QuackersAPI_DDD.Application.DTO.PersonFolderDTO.Request
+namespace QuackersAPI_DDD.Application.DTO.ChannelFolderDTO.Request
 {
     public class CreateChannelRequestDTO
     {

@@ -11,23 +11,26 @@ namespace QuackersAPI_DDD.Infrastructure.Database
 
         // Définir les DbSet pour chaque type d'entité
         public DbSet<Person> Person { get; set; }
-        /* public DbSet<PersonStatut> PersonStatuts { get; set; }
-        public DbSet<PersonRole> PersonRoles { get; set; }
-        public DbSet<PersonJobTitle> PersonJobTitles { get; set; }
+        public DbSet<PersonStatut> PersonStatut { get; set; }
+        public DbSet<PersonRole> PersonRole { get; set; }
+        public DbSet<PersonJobTitle> PersonJobTitle { get; set; }
+        /*
         public DbSet<PersonXNotification> PersonXNotifications { get; set; }
         public DbSet<PersonXMessage> UsersXMessages { get; set; }
         public DbSet<PersonXLoggedIn> PersonXLoggedIns { get; set; }
         public DbSet<PersonXChannel> PersonXChannels { get; set; }
         public DbSet<ChannelRolePerson> ChannelPersonRoles { get; set; }
-        public DbSet<ChannelType> ChannelTypes { get; set; }
         */
+        public DbSet<ChannelType> ChannelType { get; set; }
         public DbSet<Channel> Channel { get; set; }
         /* public DbSet<ChannelRolePersonXPersonXChannel> ChannelRolePersonXPersonXChannels { get; set; }
         public DbSet<Reaction> Reactions { get; set; }
         public DbSet<NotificationType> NotificationTypes { get; set; }
         public DbSet<Logged> Loggeds { get; set; }
         public DbSet<Notification> Notifications { get; set; }
-        public DbSet<Message> Messages { get; set; }
+        */
+        public DbSet<Message> Message { get; set; }
+        /*
         public DbSet<Attachment> Attachments { get; set; }
         public DbSet<MessageXReactionXPerson> MessageXReactionXUsers { get; set; }
         */
@@ -35,7 +38,12 @@ namespace QuackersAPI_DDD.Infrastructure.Database
         {
             // Configurations pour chaque table
             modelBuilder.ApplyConfigurationsFromAssembly(typeof(PersonModelConfig).Assembly);
+            modelBuilder.ApplyConfigurationsFromAssembly(typeof(PersonJobTitle).Assembly);
+            modelBuilder.ApplyConfigurationsFromAssembly(typeof(PersonRole).Assembly);
+            modelBuilder.ApplyConfigurationsFromAssembly(typeof(PersonStatut).Assembly);
             modelBuilder.ApplyConfigurationsFromAssembly(typeof(ChannelModelConfig).Assembly);
+            modelBuilder.ApplyConfigurationsFromAssembly(typeof(ChannelType).Assembly);
+            modelBuilder.ApplyConfigurationsFromAssembly(typeof(MessageModelConfig).Assembly);
 
         }
     }

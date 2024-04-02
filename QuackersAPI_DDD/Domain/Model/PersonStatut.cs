@@ -4,5 +4,7 @@
     {
         public int PersonStatut_Id { get; set; }
         public string PersonStatut_Name { get; set; }
+
+        public ICollection<Person> Persons { get; set; }
     }
 }

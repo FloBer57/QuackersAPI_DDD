@@ -19,10 +19,11 @@ namespace QuackersAPI_DDD.Domain.Model
         public int PersonStatut_Id { get; set; } = 1;
         public int PersonRole_Id { get; set; } = 1;
 
-        // Clefs étrangères 
-        /* public virtual PersonJobTitle PersonJobTitle { get; set; }
+
+        public ICollection<Channel> Channels { get; set; }
+        public virtual PersonJobTitle PersonJobTitle { get; set; }
         public virtual PersonStatut PersonStatut { get; set; }
-        public virtual PersonRole PersonRole { get; set; } */
+        public virtual PersonRole PersonRole { get; set; } 
 
     }
 }

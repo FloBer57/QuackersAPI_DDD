@@ -1,7 +1,6 @@
-﻿using QuackersAPI_DDD.Application.DTO.PersonFolderDTO;
-using QuackersAPI_DDD.Application.DTO.PersonFolderDTO.ChannelFolderDTO;
+﻿using QuackersAPI_DDD.Application.DTO.PersonFolderDTO.ChannelFolderDTO;
 
-namespace QuackersAPI_DDD.Application.DTO.PersonFolderDTO.Response
+namespace QuackersAPI_DDD.Application.DTO.ChannelFolderDTO.Response
 {
     public class GetChannelByIdResponseDTO
     {

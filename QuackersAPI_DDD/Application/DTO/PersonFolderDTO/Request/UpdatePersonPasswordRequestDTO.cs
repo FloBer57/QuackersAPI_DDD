@@ -2,7 +2,7 @@
 
 namespace QuackersAPI_DDD.Application.DTO.PersonFolderDTO.Request
 {
-    public class UpdatePasswordRequestDTO
+    public class UpdatePersonPasswordRequestDTO
     {
         [Required(ErrorMessage = "Le mot de passe est nécéssaire.")]
         public string NewPassword { get; set; }

@@ -2,10 +2,10 @@
 using System.Linq;
 using System.Threading.Tasks;
 using QuackersAPI_DDD.Application.DTO;
+using QuackersAPI_DDD.Application.DTO.ChannelFolderDTO.Request;
+using QuackersAPI_DDD.Application.DTO.ChannelFolderDTO.Response;
 using QuackersAPI_DDD.Application.DTO.PersonFolderDTO;
 using QuackersAPI_DDD.Application.DTO.PersonFolderDTO.ChannelFolderDTO;
-using QuackersAPI_DDD.Application.DTO.PersonFolderDTO.Request;
-using QuackersAPI_DDD.Application.DTO.PersonFolderDTO.Response;
 using QuackersAPI_DDD.Application.Interface;
 using QuackersAPI_DDD.Domain.Model;
 using QuackersAPI_DDD.Domain.Utilitie;
@@ -51,13 +51,13 @@ namespace QuackersAPI_DDD.Application.Service
             var channelDto = new ChannelDTO(channel);
             return new GetChannelByIdResponseDTO(channelDto);
         }
-        /*
+      
         public async Task<UpdateChannelByIdResponseDTO> UpdateName(int id, string newName)
         {
             var channel = await _repository.GetChannelById(id);
             if (channel != null)
             {
-                channel.Channel_Password = SecurityService.HashPassword(newName);
+                channel.Channel_Name = newName;
                 await _repository.UpdateChannel(channel);
                 return new UpdateChannelByIdResponseDTO(true, $"Le Nom du channel est désormais {channel.Channel_Name}");
             }
@@ -74,6 +74,6 @@ namespace QuackersAPI_DDD.Application.Service
 
             await _repository.DeleteChannel(id);
             return new DeleteChannelByIdResponseDTO(true, $"Le channel {channel.Channel_Name} a été supprimé avec succès");
-        } */
+        } 
     }
 }

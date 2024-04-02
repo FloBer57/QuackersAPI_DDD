@@ -23,6 +23,19 @@ namespace QuackersAPI_DDD.Infrastructure.Configuration
             builder.HasIndex(e => e.PersonJobTitle_Id);
             builder.HasIndex(e => e.PersonStatut_Id);
             builder.HasIndex(e => e.PersonRole_Id);
+
+            // Configure the foreign key relationships
+            builder.HasOne(e => e.PersonJobTitle)
+                .WithMany(r => r.Persons)
+                .HasForeignKey(e => e.PersonJobTitle_Id);
+
+            builder.HasOne(e => e.PersonStatut)
+                .WithMany(r => r.Persons)
+                .HasForeignKey(e => e.PersonStatut_Id);
+
+            builder.HasOne(e => e.PersonRole)
+                .WithMany(r => r.Persons) // Assurez-vous qu'il y a une collection de Persons dans PersonRole
+                .HasForeignKey(e => e.PersonRole_Id);
         }
     }
 }

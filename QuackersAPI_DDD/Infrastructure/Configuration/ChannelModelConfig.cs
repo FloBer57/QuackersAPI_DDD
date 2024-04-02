@@ -1,5 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using QuackersAPI_DDD.Domain.Model;
 
 namespace QuackersAPI_DDD.Infrastructure.Configuration
@@ -13,6 +13,10 @@ namespace QuackersAPI_DDD.Infrastructure.Configuration
             builder.Property(e => e.Channel_Name).HasMaxLength(50);
             builder.Property(e => e.Channel_ImagePath).HasMaxLength(255);
             builder.HasIndex(e => e.ChannelType_Id);
+
+            builder.HasOne(e => e.ChannelType)
+                .WithMany(r => r.Channels)
+                .HasForeignKey(e => e.ChannelType_Id);
         }
     }
 }

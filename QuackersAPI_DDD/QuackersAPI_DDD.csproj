@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
@@ -22,6 +22,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Remove="Application\DTO\ChannelFolderDTO\Response\UpdateChannelResponseDTO.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="BCrypt.Net-Next" Version="4.0.3" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.3" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.3" />
@@ -31,6 +35,16 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Application\DTO\ChannelTypeFolderDTO\Response\" />
+    <Folder Include="Application\DTO\ChannelTypeFolderDTO\Request\" />
+    <Folder Include="Application\DTO\MessageFolderDTO\Response\" />
+    <Folder Include="Application\DTO\MessageFolderDTO\Request\" />
+    <Folder Include="Application\DTO\PersonJobTitleFolderDTO\Response\" />
+    <Folder Include="Application\DTO\PersonJobTitleFolderDTO\Request\" />
+    <Folder Include="Application\DTO\PersonRoleFolderDTO\Response\" />
+    <Folder Include="Application\DTO\PersonRoleFolderDTO\Request\" />
+    <Folder Include="Application\DTO\PersonStatutFolderDTO\Response\" />
+    <Folder Include="Application\DTO\PersonStatutFolderDTO\Request\" />
     <Folder Include="Application\Utilitie\" />
   </ItemGroup>
 

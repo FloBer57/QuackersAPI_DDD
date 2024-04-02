@@ -4,5 +4,7 @@
     {
         public int PersonJobTitle_Id { get; set; }
         public string PersonJobTitle_Name { get; set; }
+
+        public ICollection<Person> Persons { get; set; }
     }
 }

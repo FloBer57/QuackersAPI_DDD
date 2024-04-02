@@ -50,7 +50,7 @@ namespace QuackersAPI_DDD.API.Controller
         }
 
         [HttpPatch("update-password/{id}")]
-        public async Task<IActionResult> UpdatePassword(int id, [FromBody] UpdatePasswordRequestDTO request)
+        public async Task<IActionResult> UpdatePassword(int id, [FromBody] UpdatePersonPasswordRequestDTO request)
         {
             var updateResponse = await _personService.UpdatePassword(id, request.NewPassword);
             if (!updateResponse.Success)
@@ -61,7 +61,7 @@ namespace QuackersAPI_DDD.API.Controller
         }
 
         [HttpPatch("update-phonenumber/{id}")]
-        public async Task<IActionResult> UpdatePhoneNumber(int id, [FromBody] UpdatePhoneNumberRequestDTO request)
+        public async Task<IActionResult> UpdatePhoneNumber(int id, [FromBody] UpdatePersonPhoneNumberRequestDTO request)
         {
             if (!ModelState.IsValid)
             {
