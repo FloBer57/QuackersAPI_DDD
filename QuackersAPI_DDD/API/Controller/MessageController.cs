@@ -2,11 +2,7 @@
 
 namespace QuackersAPI_DDD.API.Controller
 {
-    public class MessageController : Controller
+    public class MessageController : ControllerBase
     {
-        public IActionResult Index()
-        {
-            return View();
-        }
     }
 }

@@ -2,11 +2,7 @@
 
 namespace QuackersAPI_DDD.API.Controller
 {
-    public class PersonJobTitleController : Controller
+    public class PersonJobTitleController : ControllerBase
     {
-        public IActionResult Index()
-        {
-            return View();
-        }
     }
 }

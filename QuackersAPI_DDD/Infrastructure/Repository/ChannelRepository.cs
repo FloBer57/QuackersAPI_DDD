@@ -18,33 +18,33 @@
 
         public async Task CreateChannel(Channel channel)
         {
-            _context.Channel.Add(channel);
+            _context.Channels.Add(channel);
             await _context.SaveChangesAsync();
         }
 
         public async Task<Channel> GetChannelById(int id)
         {
-            return await _context.Channel.FindAsync(id);
+            return await _context.Channels.FindAsync(id);
         }
 
         public async Task<IEnumerable<Channel>> GetAllChannel()
         {
-            return await _context.Channel.ToListAsync();
+            return await _context.Channels.ToListAsync();
         }
 
         public async Task UpdateChannel(Channel channel)
         {
-            _context.Channel.Attach(channel);
+            _context.Channels.Attach(channel);
             _context.Entry(channel).State = EntityState.Modified;
             await _context.SaveChangesAsync();
         }
 
         public async Task DeleteChannel(int id)
         {
-            var channel = await _context.Channel.FindAsync(id);
+            var channel = await _context.Channels.FindAsync(id);
             if (channel != null)
             {
-                _context.Channel.Remove(channel);
+                _context.Channels.Remove(channel);
                 await _context.SaveChangesAsync();
             }
         }

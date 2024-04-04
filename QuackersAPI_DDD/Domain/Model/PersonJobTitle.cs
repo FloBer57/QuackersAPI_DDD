@@ -1,10 +1,13 @@
-﻿namespace QuackersAPI_DDD.Domain.Model
-{
-    public class PersonJobTitle
-    {
-        public int PersonJobTitle_Id { get; set; }
-        public string PersonJobTitle_Name { get; set; }
+﻿using System;
+using System.Collections.Generic;
 
-        public ICollection<Person> Persons { get; set; }
-    }
+namespace QuackersAPI_DDD.Domain.Model;
+
+public partial class Personjobtitle
+{
+    public int PersonJob_TitleId { get; set; }
+
+    public string? PersonJobTitle_Name { get; set; }
+
+    public virtual ICollection<Person> People { get; set; } = new List<Person>();
 }
