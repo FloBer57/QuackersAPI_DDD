@@ -2,11 +2,7 @@
 
 namespace QuackersAPI_DDD.API.Controller
 {
-    public class ChannelTypeController : Controller
+    public class ChannelTypeController : ControllerBase
     {
-        public IActionResult Index()
-        {
-            return View();
-        }
     }
 }

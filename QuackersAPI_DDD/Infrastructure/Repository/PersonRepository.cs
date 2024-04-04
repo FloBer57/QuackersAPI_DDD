@@ -18,33 +18,33 @@
 
         public async Task CreatePerson(Person person)
         {
-            _context.Person.Add(person);
+            _context.Persons.Add(person);
             await _context.SaveChangesAsync();
         }
 
         public async Task<Person> GetPersonById(int id)
         {
-            return await _context.Person.FindAsync(id);
+            return await _context.Persons.FindAsync(id);
         }
 
         public async Task<IEnumerable<Person>> GetAllPerson()
         {
-            return await _context.Person.ToListAsync();
+            return await _context.Persons.ToListAsync();
         }
 
         public async Task UpdatePerson(Person person)
         {
-            _context.Person.Attach(person);
+            _context.Persons.Attach(person);
             _context.Entry(person).State = EntityState.Modified;
             await _context.SaveChangesAsync();
         }
 
         public async Task DeletePerson(int id)
         {
-            var person = await _context.Person.FindAsync(id);
+            var person = await _context.Persons.FindAsync(id);
             if (person != null)
             {
-                _context.Person.Remove(person);
+                _context.Persons.Remove(person);
                 await _context.SaveChangesAsync();
             }
         }

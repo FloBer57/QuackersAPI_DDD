@@ -45,7 +45,7 @@ namespace QuackersAPI_DDD.API.Controller
             return Ok(channel);
         }
 
-        [HttpPatch("update-password/{id}")]
+        [HttpPatch("update-channel-name/{id}")]
         public async Task<IActionResult> UpdateName(int id, [FromBody] UpdateChannelNameRequestDTO request)
         {
             var updateResponse = await _channelService.UpdateName(id, request.NewName);
