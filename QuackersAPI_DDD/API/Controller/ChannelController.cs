@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using QuackersAPI_DDD.Application.DTO.ChannelFolderDTO.Request;
-using QuackersAPI_DDD.Application.DTO.ChannelFolderDTO.Response;
 using QuackersAPI_DDD.Application.Interface;
+using QuackersAPI_DDD.Domain.Model;
 
 namespace QuackersAPI_DDD.API.Controller
 {
@@ -16,21 +15,10 @@ namespace QuackersAPI_DDD.API.Controller
             _channelService = channelService;
         }
 
-        [HttpPost]
-        public async Task<IActionResult> CreateChannel([FromBody] CreateChannelRequestDTO createChannelRequestDTO)
-        {
-            CreateChannelResponseDTO createResponse = await _channelService.CreateChannel(createChannelRequestDTO);
-            if (createResponse == null)
-            {
-                return BadRequest("Une erreur est arrivé, impossible de crée un utilisateur.");
-            }
-            return CreatedAtAction(nameof(GetChannelById), new { id = createResponse.Id }, createResponse);
-        }
-
         [HttpGet]
-        public async Task<IActionResult> GetAllChannel()
+        public async Task<IActionResult> GetAllChannels()
         {
-            var channels = await _channelService.GetAllChannel();
+            var channels = await _channelService.GetAllChannels();
             return Ok(channels);
         }
 
@@ -40,31 +28,38 @@ namespace QuackersAPI_DDD.API.Controller
             var channel = await _channelService.GetChannelById(id);
             if (channel == null)
             {
-                return NotFound($"Le channel {id} n'as pas été trouvé..");
+                return NotFound($"Channel with id {id} not found.");
             }
             return Ok(channel);
         }
 
-        [HttpPatch("update-channel-name/{id}")]
-        public async Task<IActionResult> UpdateName(int id, [FromBody] UpdateChannelNameRequestDTO request)
+        [HttpPost]
+        public async Task<IActionResult> CreateChannel([FromBody] Channel channel)
         {
-            var updateResponse = await _channelService.UpdateName(id, request.NewName);
-            if (!updateResponse.Success)
+            var createdChannel = await _channelService.CreateChannel(channel);
+            return CreatedAtAction(nameof(GetChannelById), new { id = createdChannel.Channel_Id }, createdChannel);
+        }
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateChannel(int id, [FromBody] Channel updatedChannel)
+        {
+            var updated = await _channelService.UpdateChannel(id, updatedChannel);
+            if (updated == null)
             {
-                return BadRequest(updateResponse.Message);
+                return NotFound($"Channel with id {id} not found.");
             }
-            return Ok(updateResponse.Message);
+            return Ok(updated);
         }
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteChannel(int id)
         {
-            var deleteResponse = await _channelService.DeleteChannel(id);
-            if (!deleteResponse.Success)
+            var success = await _channelService.DeleteChannel(id);
+            if (!success)
             {
-                return NotFound(deleteResponse.Message);
+                return NotFound($"Channel with id {id} not found.");
             }
-            return Ok(deleteResponse.Message);
+            return Ok($"Channel with id {id} deleted successfully.");
         }
     }
 }

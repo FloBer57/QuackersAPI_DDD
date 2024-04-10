@@ -16,37 +16,38 @@
             _context = context;
         }
 
-        public async Task CreateChannel(Channel channel)
+        public async Task<Channel> CreateChannel(Channel channel)
         {
             _context.Channels.Add(channel);
             await _context.SaveChangesAsync();
+            return channel;
+        }
+
+        public async Task<IEnumerable<Channel>> GetAllChannels()
+        {
+            return await _context.Channels
+                .Include(c => c.ChannelType)
+                .ToListAsync();
         }
 
         public async Task<Channel> GetChannelById(int id)
         {
-            return await _context.Channels.FindAsync(id);
+            return await _context.Channels
+                .Include(c => c.ChannelType)
+                .FirstOrDefaultAsync(c => c.Channel_Id == id);
         }
 
-        public async Task<IEnumerable<Channel>> GetAllChannel()
+        public async Task<Channel> UpdateChannel(Channel channel)
         {
-            return await _context.Channels.ToListAsync();
-        }
-
-        public async Task UpdateChannel(Channel channel)
-        {
-            _context.Channels.Attach(channel);
             _context.Entry(channel).State = EntityState.Modified;
             await _context.SaveChangesAsync();
+            return channel;
         }
 
-        public async Task DeleteChannel(int id)
+        public async Task DeleteChannel(Channel channel)
         {
-            var channel = await _context.Channels.FindAsync(id);
-            if (channel != null)
-            {
-                _context.Channels.Remove(channel);
-                await _context.SaveChangesAsync();
-            }
+            _context.Channels.Remove(channel);
+            await _context.SaveChangesAsync();
         }
     }
 }

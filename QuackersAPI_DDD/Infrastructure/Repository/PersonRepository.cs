@@ -16,10 +16,16 @@
             _context = context;
         }
 
-        public async Task CreatePerson(Person person)
+        public async Task<Person> CreatePerson(Person person)
         {
             _context.Persons.Add(person);
             await _context.SaveChangesAsync();
+            return person;
+        }
+
+        public async Task<IEnumerable<Person>> GetAllPersons()
+        {
+            return await _context.Persons.ToListAsync();
         }
 
         public async Task<Person> GetPersonById(int id)
@@ -27,21 +33,16 @@
             return await _context.Persons.FindAsync(id);
         }
 
-        public async Task<IEnumerable<Person>> GetAllPerson()
+        public async Task<Person> UpdatePerson(Person person)
         {
-            return await _context.Persons.ToListAsync();
-        }
-
-        public async Task UpdatePerson(Person person)
-        {
-            _context.Persons.Attach(person);
             _context.Entry(person).State = EntityState.Modified;
             await _context.SaveChangesAsync();
+            return person;
         }
 
         public async Task DeletePerson(int id)
         {
-            var person = await _context.Persons.FindAsync(id);
+            var person = await GetPersonById(id);
             if (person != null)
             {
                 _context.Persons.Remove(person);

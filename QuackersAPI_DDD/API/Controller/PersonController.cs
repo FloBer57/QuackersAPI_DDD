@@ -4,8 +4,6 @@ using QuackersAPI_DDD.Domain.Model;
 using System;
 using System.Threading.Tasks;
 using System.Collections.Generic;
-using QuackersAPI_DDD.Application.DTO.PersonFolderDTO.Response;
-using QuackersAPI_DDD.Application.DTO.PersonFolderDTO.Request;
 
 namespace QuackersAPI_DDD.API.Controller
 {
@@ -20,71 +18,51 @@ namespace QuackersAPI_DDD.API.Controller
             _personService = personService;
         }
 
-        [HttpPost]
-        public async Task<IActionResult> CreateUser([FromBody] CreatePersonRequestDTO createPersonRequestDTO)
-        {
-            CreatePersonResponseDTO createResponse = await _personService.CreatePerson(createPersonRequestDTO);
-            if (createResponse == null)
-            {
-                return BadRequest("Unable to create user.");
-            }
-            return CreatedAtAction(nameof(GetUserById), new { id = createResponse.Id }, createResponse);
-        }
-
         [HttpGet]
-        public async Task<IActionResult> GetAllUsers()
+        public async Task<IActionResult> GetAllPersons()
         {
-            var users = await _personService.GetAllPersons();
-            return Ok(users);
+            var persons = await _personService.GetAllPersons();
+            return Ok(persons);
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetUserById(int id)
+        public async Task<IActionResult> GetPersonById(int id)
         {
-            var user = await _personService.GetPersonById(id);
-            if (user == null)
+            var person = await _personService.GetPersonById(id);
+            if (person == null)
             {
-                return NotFound($"User with ID {id} not found.");
+                return NotFound($"Person with id {id} not found.");
             }
-            return Ok(user);
+            return Ok(person);
         }
 
-        [HttpPatch("update-password/{id}")]
-        public async Task<IActionResult> UpdatePassword(int id, [FromBody] UpdatePersonPasswordRequestDTO request)
+        [HttpPost]
+        public async Task<IActionResult> CreatePerson([FromBody] Person person)
         {
-            var updateResponse = await _personService.UpdatePassword(id, request.NewPassword);
-            if (!updateResponse.Success)
-            {
-                return BadRequest(updateResponse.Message);
-            }
-            return Ok(updateResponse.Message);
+            var createdPerson = await _personService.CreatePerson(person);
+            return CreatedAtAction(nameof(GetPersonById), new { id = createdPerson.Person_Id }, createdPerson);
         }
 
-        [HttpPatch("update-phonenumber/{id}")]
-        public async Task<IActionResult> UpdatePhoneNumber(int id, [FromBody] UpdatePersonPhoneNumberRequestDTO request)
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdatePerson(int id, [FromBody] Person person)
         {
-            if (!ModelState.IsValid)
+            var updatedPerson = await _personService.UpdatePerson(id, person);
+            if (updatedPerson == null)
             {
-                return BadRequest(ModelState);
+                return NotFound($"Person with id {id} not found.");
             }
-
-            var updateResponse = await _personService.UpdatePhoneNumber(id, request.NewPhoneNumber);
-            if (!updateResponse.Success)
-            {
-                return BadRequest(updateResponse.Message);
-            }
-            return Ok(updateResponse.Message);
+            return Ok(updatedPerson);
         }
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeletePerson(int id)
         {
-            var deleteResponse = await _personService.DeletePerson(id);
-            if (!deleteResponse.Success)
+            var success = await _personService.DeletePerson(id);
+            if (!success)
             {
-                return NotFound(deleteResponse.Message);
+                return NotFound($"Person with id {id} not found.");
             }
-            return Ok(deleteResponse.Message);
+            return Ok($"Person with id {id} deleted successfully.");
         }
     }
 }

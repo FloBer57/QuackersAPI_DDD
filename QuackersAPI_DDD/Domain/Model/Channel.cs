@@ -13,7 +13,7 @@ public partial class Channel
 
     public int ChannelType_Id { get; set; } = 1;
 
-    public virtual Channeltype ChannelType { get; set; } = null!;
+    public virtual ChannelType ChannelType { get; set; } = null!;
 
     public virtual ICollection<Channelpersonrolexpersonxchannel> Channelpersonrolexpersonxchannels { get; set; } = new List<Channelpersonrolexpersonxchannel>();
 

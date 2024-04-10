@@ -1,13 +1,13 @@
 ﻿using QuackersAPI_DDD.Domain.Model;
 
-namespace QuackersAPI_DDD.Infrastructure.InterfaceRepository
+namespace QuackersAPI_DDD.Application.InterfaceService
 {
-    public interface IChannelTypeRepository
+    public interface IChannelTypeService
     {
         Task<IEnumerable<ChannelType>> GetAllChannelTypes();
         Task<ChannelType> GetChannelTypeById(int id);
         Task<ChannelType> CreateChannelType(ChannelType channelType);
-        Task<ChannelType> UpdateChannelType(ChannelType channelType);
-        Task DeleteChannelType(int id);
+        Task<ChannelType> UpdateChannelType(int id, ChannelType channelType);
+        Task<bool> DeleteChannelType(int id);
     }
 }

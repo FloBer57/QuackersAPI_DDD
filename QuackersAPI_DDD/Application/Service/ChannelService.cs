@@ -15,65 +15,54 @@ namespace QuackersAPI_DDD.Application.Service
 {
     public class ChannelService : IChannelService
     {
-        private readonly IChannelRepository _repository;
+        private readonly IChannelRepository _channelRepository;
 
-        public ChannelService(IChannelRepository repository)
+        public ChannelService(IChannelRepository channelRepository)
         {
-            _repository = repository;
+            _channelRepository = channelRepository;
         }
 
-        public async Task<CreateChannelResponseDTO> CreateChannel(CreateChannelRequestDTO channelDto)
+        public async Task<Channel> CreateChannel(Channel channel)
         {
-            var channel = new Channel
-            {
-                Channel_Name = channelDto.newName,
-            };
-
-            await _repository.CreateChannel(channel);
-            return new CreateChannelResponseDTO(new ChannelDTO(channel));
+            return await _channelRepository.CreateChannel(channel);
         }
 
-        public async Task<GetAllChannelResponseDTO> GetAllChannel()
+        public async Task<IEnumerable<Channel>> GetAllChannels()
         {
-            var channels = await _repository.GetAllChannel();
-            var channelDtos = channels.Select(p => new ChannelDTO(p)).ToList();
-            return new GetAllChannelResponseDTO(channelDtos);
+            return await _channelRepository.GetAllChannels();
         }
 
-        public async Task<GetChannelByIdResponseDTO> GetChannelById(int Id)
+        public async Task<Channel> GetChannelById(int id)
         {
-            var channel = await _repository.GetChannelById(Id);
+            return await _channelRepository.GetChannelById(id);
+        }
+
+        public async Task<Channel> UpdateChannel(int id, Channel updatedChannel)
+        {
+            var channel = await _channelRepository.GetChannelById(id);
             if (channel == null)
             {
-                return null;
+                throw new InvalidOperationException($"Channel with id {id} not found.");
             }
 
-            var channelDto = new ChannelDTO(channel);
-            return new GetChannelByIdResponseDTO(channelDto);
-        }
-      
-        public async Task<UpdateChannelByIdResponseDTO> UpdateName(int id, string newName)
-        {
-            var channel = await _repository.GetChannelById(id);
-            if (channel != null)
-            {
-                channel.Channel_Name = newName;
-                await _repository.UpdateChannel(channel);
-                return new UpdateChannelByIdResponseDTO(true, $"Le Nom du channel est désormais {channel.Channel_Name}");
-            }
-            return new UpdateChannelByIdResponseDTO(false, "Channel non trouvé");
+            channel.Channel_Name = updatedChannel.Channel_Name;
+            channel.Channel_ImagePath = updatedChannel.Channel_ImagePath;
+            channel.ChannelType_Id = updatedChannel.ChannelType_Id;
+
+            // Assume UpdateChannel method exists in the repository to update the channel
+            return await _channelRepository.UpdateChannel(channel);
         }
 
-        public async Task<DeleteChannelByIdResponseDTO> DeleteChannel(int id)
+        public async Task<bool> DeleteChannel(int id)
         {
-            var channel = await _repository.GetChannelById(id);
+            var channel = await _channelRepository.GetChannelById(id);
             if (channel == null)
             {
-                return new DeleteChannelByIdResponseDTO(false, "Channel non trouvé");
+                return false;
             }
 
-            await _repository.DeleteChannel(id);
-            return new DeleteChannelByIdResponseDTO(true, $"Le channel {channel.Channel_Name} a été supprimé avec succès");
-        } 
+            await _channelRepository.DeleteChannel(channel);
+            return true;
+        }
     }
 }
