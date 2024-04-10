@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace QuackersAPI_DDD.Domain.Model;
 
-public partial class Channeltype
+public partial class ChannelType
 {
     public int ChannelType_Id { get; set; }
 

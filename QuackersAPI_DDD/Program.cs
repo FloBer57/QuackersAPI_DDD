@@ -1,6 +1,7 @@
 
 using Microsoft.EntityFrameworkCore;
 using QuackersAPI_DDD.Application.Interface;
+using QuackersAPI_DDD.Application.InterfaceService;
 using QuackersAPI_DDD.Application.Service;
 using QuackersAPI_DDD.Infrastructure.Database;
 using QuackersAPI_DDD.Infrastructure.InterfaceRepository;
@@ -26,6 +27,8 @@ namespace QuackersAPI_DDD
             builder.Services.AddScoped<IChannelRepository, ChannelRepository>();
             builder.Services.AddScoped<IPersonService, PersonService>();
             builder.Services.AddScoped<IPersonRepository, PersonRepository>();
+            builder.Services.AddScoped<IChannelTypeService, ChannelTypeService>();
+            builder.Services.AddScoped<IChannelTypeRepository, ChannelTypeRepository>();
             builder.Services.AddControllers();
             var app = builder.Build();
 

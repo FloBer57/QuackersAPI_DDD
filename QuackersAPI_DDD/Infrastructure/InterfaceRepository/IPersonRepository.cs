@@ -6,10 +6,10 @@
 
     public interface IPersonRepository
     {
-        Task CreatePerson(Person person);
+        Task<Person> CreatePerson(Person person);
+        Task<IEnumerable<Person>> GetAllPersons();
         Task<Person> GetPersonById(int id);
-        Task<IEnumerable<Person>> GetAllPerson();
-        Task UpdatePerson(Person person);
+        Task<Person> UpdatePerson(Person person);
         Task DeletePerson(int id);
     }
 }

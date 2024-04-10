@@ -23,7 +23,7 @@ public partial class AppDbContext : DbContext
 
     public virtual DbSet<Channelpersonrolexpersonxchannel> Channelpersonrolexpersonxchannels { get; set; }
 
-    public virtual DbSet<Channeltype> Channeltypes { get; set; }
+    public virtual DbSet<ChannelType> ChannelTypes { get; set; }
 
     public virtual DbSet<Message> Messages { get; set; }
 
@@ -158,7 +158,7 @@ public partial class AppDbContext : DbContext
                 .HasConstraintName("channelpersonrolexpersonxchannel_ibfk_1");
         });
 
-        modelBuilder.Entity<Channeltype>(entity =>
+        modelBuilder.Entity<ChannelType>(entity =>
         {
             entity.HasKey(e => e.ChannelType_Id).HasName("PRIMARY");
 

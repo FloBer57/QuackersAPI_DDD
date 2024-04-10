@@ -7,22 +7,14 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Application\DTO\PersonFolderDTO\Response\NewFolder\**" />
     <Compile Remove="Domain\Service\**" />
     <Compile Remove="Infrastructure\EntityConfig\**" />
-    <Content Remove="Application\DTO\PersonFolderDTO\Response\NewFolder\**" />
     <Content Remove="Domain\Service\**" />
     <Content Remove="Infrastructure\EntityConfig\**" />
-    <EmbeddedResource Remove="Application\DTO\PersonFolderDTO\Response\NewFolder\**" />
     <EmbeddedResource Remove="Domain\Service\**" />
     <EmbeddedResource Remove="Infrastructure\EntityConfig\**" />
-    <None Remove="Application\DTO\PersonFolderDTO\Response\NewFolder\**" />
     <None Remove="Domain\Service\**" />
     <None Remove="Infrastructure\EntityConfig\**" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Compile Remove="Application\DTO\ChannelFolderDTO\Response\UpdateChannelResponseDTO.cs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -35,16 +27,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Application\DTO\ChannelTypeFolderDTO\Response\" />
-    <Folder Include="Application\DTO\ChannelTypeFolderDTO\Request\" />
-    <Folder Include="Application\DTO\MessageFolderDTO\Response\" />
-    <Folder Include="Application\DTO\MessageFolderDTO\Request\" />
-    <Folder Include="Application\DTO\PersonJobTitleFolderDTO\Response\" />
-    <Folder Include="Application\DTO\PersonJobTitleFolderDTO\Request\" />
-    <Folder Include="Application\DTO\PersonRoleFolderDTO\Response\" />
-    <Folder Include="Application\DTO\PersonRoleFolderDTO\Request\" />
-    <Folder Include="Application\DTO\PersonStatutFolderDTO\Response\" />
-    <Folder Include="Application\DTO\PersonStatutFolderDTO\Request\" />
     <Folder Include="Application\Utilitie\" />
   </ItemGroup>
 
