@@ -1,4 +1,5 @@
-﻿using QuackersAPI_DDD.Domain.Model;
+﻿using QuackersAPI_DDD.API.DTO.ChannelTypeDTO;
+using QuackersAPI_DDD.Domain.Model;
 
 namespace QuackersAPI_DDD.Application.InterfaceService
 {
@@ -6,8 +7,8 @@ namespace QuackersAPI_DDD.Application.InterfaceService
     {
         Task<IEnumerable<ChannelType>> GetAllChannelTypes();
         Task<ChannelType> GetChannelTypeById(int id);
-        Task<ChannelType> CreateChannelType(ChannelType channelType);
-        Task<ChannelType> UpdateChannelType(int id, ChannelType channelType);
+        Task<ChannelType> CreateChannelType(CreateChannelTypeDTO channelType);
+        Task<ChannelType> UpdateChannelType(int id, UpdateChannelTypeDTO channelType);
         Task<bool> DeleteChannelType(int id);
     }
 }

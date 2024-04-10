@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using QuackersAPI_DDD.API.DTO.ChannelTypeDTO;
 using QuackersAPI_DDD.Application.InterfaceService;
 using QuackersAPI_DDD.Domain.Model;
 
@@ -34,24 +35,20 @@ namespace QuackersAPI_DDD.API.Controller
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateChannelType([FromBody] ChannelType channelType)
+        public async Task<IActionResult> CreateChannelType([FromBody] CreateChannelTypeDTO dto)
         {
-            var createdChannelType = await _channelTypeService.CreateChannelType(channelType);
+            var createdChannelType = await _channelTypeService.CreateChannelType(dto);
             return CreatedAtAction(nameof(GetChannelTypeById), new { id = createdChannelType.ChannelType_Id }, createdChannelType);
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateChannelTypeName(int id, [FromBody] ChannelType channelType)
+        public async Task<IActionResult> UpdateChannelType(int id, [FromBody] UpdateChannelTypeDTO dto)
         {
-            var existingChannelType = await _channelTypeService.GetChannelTypeById(id);
-            if (existingChannelType == null)
+            var updatedChannelType = await _channelTypeService.UpdateChannelType(id, dto);
+            if (updatedChannelType == null)
             {
                 return NotFound($"ChannelType with id {id} not found.");
             }
-
-            existingChannelType.ChannelType_Name = channelType.ChannelType_Name;
-
-            var updatedChannelType = await _channelTypeService.UpdateChannelType(id, existingChannelType);
             return Ok(updatedChannelType);
         }
 

@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using QuackersAPI_DDD.API.DTO.ChannelDTO;
 using QuackersAPI_DDD.Application.Interface;
 using QuackersAPI_DDD.Domain.Model;
 
@@ -33,23 +34,31 @@ namespace QuackersAPI_DDD.API.Controller
             return Ok(channel);
         }
 
-        [HttpPost]
-        public async Task<IActionResult> CreateChannel([FromBody] Channel channel)
+        [HttpGet("{id}/channels")]
+        public async Task<IActionResult> GetChannelsByChannelType(int id)
         {
-            var createdChannel = await _channelService.CreateChannel(channel);
+            var channels = await _channelService.GetChannelsByChannelType(id);
+            return Ok(channels);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> CreateChannel([FromBody] CreateChannelDTO createChannelDTO)
+        {
+            var createdChannel = await _channelService.CreateChannel(createChannelDTO);
             return CreatedAtAction(nameof(GetChannelById), new { id = createdChannel.Channel_Id }, createdChannel);
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateChannel(int id, [FromBody] Channel updatedChannel)
+        public async Task<IActionResult> UpdateChannel(int id, [FromBody] UpdateChannelDTO updateChannelDTO)
         {
-            var updated = await _channelService.UpdateChannel(id, updatedChannel);
-            if (updated == null)
+            var updatedChannel = await _channelService.UpdateChannel(id, updateChannelDTO);
+            if (updatedChannel == null)
             {
                 return NotFound($"Channel with id {id} not found.");
             }
-            return Ok(updated);
+            return Ok(updatedChannel);
         }
+
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteChannel(int id)

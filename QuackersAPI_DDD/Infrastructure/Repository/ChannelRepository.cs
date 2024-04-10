@@ -18,6 +18,8 @@
 
         public async Task<Channel> CreateChannel(Channel channel)
         {
+            channel.ChannelType_Id = channel.ChannelType_Id == 0 ? 1 : channel.ChannelType_Id;
+
             _context.Channels.Add(channel);
             await _context.SaveChangesAsync();
             return channel;
@@ -27,6 +29,13 @@
         {
             return await _context.Channels
                 .Include(c => c.ChannelType)
+                .ToListAsync();
+        }
+
+        public async Task<IEnumerable<Channel>> GetChannelsByChannelType(int channelTypeId)
+        {
+            return await _context.Channels
+                .Where(c => c.ChannelType_Id == channelTypeId)
                 .ToListAsync();
         }
 

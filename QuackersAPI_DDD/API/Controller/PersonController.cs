@@ -4,6 +4,8 @@ using QuackersAPI_DDD.Domain.Model;
 using System;
 using System.Threading.Tasks;
 using System.Collections.Generic;
+using QuackersAPI_DDD.API.DTO.PersonDTO;
+using QuackersAPI_DDD.Domain.Utilitie;
 
 namespace QuackersAPI_DDD.API.Controller
 {
@@ -37,22 +39,24 @@ namespace QuackersAPI_DDD.API.Controller
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreatePerson([FromBody] Person person)
+        public async Task<IActionResult> CreatePerson([FromBody] CreatePersonDTO createPersonDTO)
         {
-            var createdPerson = await _personService.CreatePerson(person);
+            var createdPerson = await _personService.CreatePerson(createPersonDTO);
             return CreatedAtAction(nameof(GetPersonById), new { id = createdPerson.Person_Id }, createdPerson);
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdatePerson(int id, [FromBody] Person person)
+        public async Task<IActionResult> UpdatePerson(int id, [FromBody] UpdatePersonDTO updatePersonDTO)
         {
-            var updatedPerson = await _personService.UpdatePerson(id, person);
+            var updatedPerson = await _personService.UpdatePerson(id, updatePersonDTO);
             if (updatedPerson == null)
             {
                 return NotFound($"Person with id {id} not found.");
             }
+
             return Ok(updatedPerson);
         }
+
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeletePerson(int id)

@@ -8,7 +8,7 @@ public partial class Person
 {
     public int Person_Id { get; set; }
 
-    public string Person_Password { get; set; } = PasswordGenerator.GeneratePassword();
+    public string Person_Password { get; set; }
 
     public string Person_Email { get; set; }
 
