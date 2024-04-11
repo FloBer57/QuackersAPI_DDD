@@ -22,7 +22,7 @@ namespace QuackersAPI_DDD.Application.Service
 
         public async Task<Channel> CreateChannel(CreateChannelDTO createChannelDTO)
         {
-            var defaultChannelTypeId = 6; // ID du type de canal par défaut
+            var defaultChannelTypeId = 1; // ID du type de canal par défaut
             var channelType = await _channelTypeService.GetChannelTypeById(defaultChannelTypeId);
             if (channelType == null)
             {
@@ -38,14 +38,9 @@ namespace QuackersAPI_DDD.Application.Service
                 ChannelType = channelType
             };
 
-            // Créer le canal dans la base de données
             var createdChannel = await _channelRepository.CreateChannel(channel);
 
-            // Ajouter le nouveau canal à la collection de canaux du ChannelType correspondant
             channelType.Channels.Add(createdChannel);
-
-            // Mettre à jour le ChannelType avec la collection mise à jour
-            await _channelTypeService.UpdateChannelType(defaultChannelTypeId, new UpdateChannelTypeDTO { ChannelType_Name = channelType.ChannelType_Name });
 
             return createdChannel;
         }

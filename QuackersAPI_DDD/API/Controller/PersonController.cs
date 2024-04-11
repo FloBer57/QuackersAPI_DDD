@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Collections.Generic;
 using QuackersAPI_DDD.API.DTO.PersonDTO;
 using QuackersAPI_DDD.Domain.Utilitie;
+using QuackersAPI_DDD.Application.Service;
 
 namespace QuackersAPI_DDD.API.Controller
 {
@@ -24,6 +25,10 @@ namespace QuackersAPI_DDD.API.Controller
         public async Task<IActionResult> GetAllPersons()
         {
             var persons = await _personService.GetAllPersons();
+            if (persons == null)
+            {
+                return NotFound($"No person have been created");
+            }
             return Ok(persons);
         }
 
@@ -36,6 +41,39 @@ namespace QuackersAPI_DDD.API.Controller
                 return NotFound($"Person with id {id} not found.");
             }
             return Ok(person);
+        }
+
+        [HttpGet("{id}/JobTitle")]
+        public async Task<IActionResult> GetPersonByJobTitle(int id)
+        {
+            var channels = await _personService.GetPersonsByJobTitle(id);
+            if (channels == null)
+            {
+                return NotFound($"Person with JobTitle id {id} not found");
+            }
+            return Ok(channels);
+        }
+
+        [HttpGet("{id}/Statut")]
+        public async Task<IActionResult> GetPersonByStatut(int id)
+        {
+            var channels = await _personService.GetPersonsByStatut(id);
+            if (channels == null)
+            {
+                return NotFound($"Person with Statut id {id} not found");
+            }
+            return Ok(channels);
+        }
+
+        [HttpGet("{id}/Role")]
+        public async Task<IActionResult> GetPersonByRole(int id)
+        {
+            var channels = await _personService.GetPersonsByRole(id);
+            if (channels == null)
+            {
+                return NotFound($"Person with Role id {id} not found");
+            }
+            return Ok(channels);
         }
 
         [HttpPost]

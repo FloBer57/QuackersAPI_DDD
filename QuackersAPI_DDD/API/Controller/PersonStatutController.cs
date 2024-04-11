@@ -20,6 +20,10 @@ namespace QuackersAPI_DDD.API.Controller
         public async Task<ActionResult<IEnumerable<PersonStatut>>> GetAllPersonStatuts()
         {
             var personStatuts = await _personStatutService.GetAllPersonStatuts();
+            if (personStatuts == null)
+            {
+                return NotFound("No PersonStatus can be found");
+            }
             return Ok(personStatuts);
         }
 

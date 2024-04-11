@@ -26,6 +26,10 @@ namespace QuackersAPI_DDD.API.Controller
         public async Task<IActionResult> GetAllPersonJobTitle()
         {
             var personJobTitles = await _personJobTitleService.GetAllPersonJobTitle();
+            if (personJobTitles == null)
+            {
+                return NotFound("No PersonJobTitle can be found");
+            }
             return Ok(personJobTitles);
         }
 

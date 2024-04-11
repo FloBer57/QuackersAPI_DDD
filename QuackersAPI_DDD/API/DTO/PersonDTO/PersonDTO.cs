@@ -1,14 +1,16 @@
-﻿namespace QuackersAPI_DDD.API.DTO.PersonDTO
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace QuackersAPI_DDD.API.DTO.PersonDTO
 {
     public class PersonDTO
     {
-        public int Id { get; set; }
-        public string Email { get; set; }
-        public string FirstName { get; set; }
-        public string LastName { get; set; }
+        [Phone(ErrorMessage = "Invalid phone number format.")]
         public string? PhoneNumber { get; set; }
+
+        [StringLength(500, MinimumLength = 10, ErrorMessage = "Description must be between 10 and 500 characters.")]
         public string? Description { get; set; }
-        // Ajouter d'autres champs au besoin, mais éviter les données sensibles comme le mot de passe
+
+        public string ProfilPicturePath { get; set; } = "Path/To/Default/Image";
     }
 
 }

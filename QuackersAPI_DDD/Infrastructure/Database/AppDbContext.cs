@@ -376,7 +376,7 @@ public partial class AppDbContext : DbContext
 
         modelBuilder.Entity<PersonJobTitle>(entity =>
         {
-            entity.HasKey(e => e.PersonJob_TitleId).HasName("PRIMARY");
+            entity.HasKey(e => e.PersonJob_TitleId);
 
             entity.ToTable("personjobtitle");
 
@@ -390,11 +390,9 @@ public partial class AppDbContext : DbContext
 
         modelBuilder.Entity<PersonRole>(entity =>
         {
-            entity.HasKey(e => e.PersonRole_Id).HasName("PRIMARY");
+            entity.HasKey(e => e.PersonRole_Id);
 
             entity.ToTable("personrole");
-
-            entity.HasIndex(e => e.PersonRole_Name, "PersonRole_Name").IsUnique();
 
             entity.Property(e => e.PersonRole_Id)
                 .HasColumnType("int(11)")
@@ -406,11 +404,9 @@ public partial class AppDbContext : DbContext
 
         modelBuilder.Entity<PersonStatut>(entity =>
         {
-            entity.HasKey(e => e.PersonStatut_Id).HasName("PRIMARY");
+            entity.HasKey(e => e.PersonStatut_Id);
 
             entity.ToTable("personstatut");
-
-            entity.HasIndex(e => e.PersonStatut_Name, "PersonStatut_Name").IsUnique();
 
             entity.Property(e => e.PersonStatut_Id)
                 .HasColumnType("int(11)")
