@@ -15,7 +15,7 @@ public partial class Channel
 
     public virtual ChannelType ChannelType { get; set; } 
 
-    public virtual ICollection<Channelpersonrolexpersonxchannel> Channelpersonrolexpersonxchannels { get; set; } = new List<Channelpersonrolexpersonxchannel>();
+    public virtual ICollection<ChannelPersonRoleXPersonXChannel> Channelpersonrolexpersonxchannels { get; set; } = new List<ChannelPersonRoleXPersonXChannel>();
 
     public virtual ICollection<Message> Messages { get; set; } = new List<Message>();
 

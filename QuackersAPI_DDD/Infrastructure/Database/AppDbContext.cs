@@ -21,7 +21,7 @@ public partial class AppDbContext : DbContext
 
     public virtual DbSet<Channel> Channels { get; set; }
 
-    public virtual DbSet<Channelpersonrolexpersonxchannel> Channelpersonrolexpersonxchannels { get; set; }
+    public virtual DbSet<ChannelPersonRoleXPersonXChannel> Channelpersonrolexpersonxchannels { get; set; }
 
     public virtual DbSet<ChannelType> ChannelTypes { get; set; }
 
@@ -35,11 +35,11 @@ public partial class AppDbContext : DbContext
 
     public virtual DbSet<Person> Persons { get; set; }
 
-    public virtual DbSet<Personjobtitle> Personjobtitles { get; set; }
+    public virtual DbSet<PersonJobTitle> Personjobtitles { get; set; }
 
-    public virtual DbSet<Personrole> Personroles { get; set; }
+    public virtual DbSet<PersonRole> Personroles { get; set; }
 
-    public virtual DbSet<Personstatut> Personstatuts { get; set; }
+    public virtual DbSet<PersonStatut> Personstatuts { get; set; }
 
     public virtual DbSet<Personxchannel> Personxchannels { get; set; }
 
@@ -127,7 +127,7 @@ public partial class AppDbContext : DbContext
                 .HasConstraintName("channel_ibfk_1");
         });
 
-        modelBuilder.Entity<Channelpersonrolexpersonxchannel>(entity =>
+        modelBuilder.Entity<ChannelPersonRoleXPersonXChannel>(entity =>
         {
             entity.HasKey(e => new { e.Person_Id, e.Channel_Id })
                 .HasName("PRIMARY")
@@ -374,7 +374,7 @@ public partial class AppDbContext : DbContext
                 .HasConstraintName("person_ibfk_2");
         });
 
-        modelBuilder.Entity<Personjobtitle>(entity =>
+        modelBuilder.Entity<PersonJobTitle>(entity =>
         {
             entity.HasKey(e => e.PersonJob_TitleId).HasName("PRIMARY");
 
@@ -388,7 +388,7 @@ public partial class AppDbContext : DbContext
                 .HasColumnName("PersonJobTitle_Name");
         });
 
-        modelBuilder.Entity<Personrole>(entity =>
+        modelBuilder.Entity<PersonRole>(entity =>
         {
             entity.HasKey(e => e.PersonRole_Id).HasName("PRIMARY");
 
@@ -404,7 +404,7 @@ public partial class AppDbContext : DbContext
                 .HasColumnName("PersonRole_Name");
         });
 
-        modelBuilder.Entity<Personstatut>(entity =>
+        modelBuilder.Entity<PersonStatut>(entity =>
         {
             entity.HasKey(e => e.PersonStatut_Id).HasName("PRIMARY");
 

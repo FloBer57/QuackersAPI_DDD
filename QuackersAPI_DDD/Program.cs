@@ -29,6 +29,12 @@ namespace QuackersAPI_DDD
             builder.Services.AddScoped<IPersonRepository, PersonRepository>();
             builder.Services.AddScoped<IChannelTypeService, ChannelTypeService>();
             builder.Services.AddScoped<IChannelTypeRepository, ChannelTypeRepository>();
+            builder.Services.AddScoped<IPersonJobTitleService, PersonJobTitleService>();
+            builder.Services.AddScoped<IPersonJobTitleRepository, PersonJobTitleRepository>();
+            builder.Services.AddScoped<IPersonRoleService, PersonRoleService>();
+            builder.Services.AddScoped<IPersonRoleRepository, PersonRoleRepository>();
+            builder.Services.AddScoped<IPersonStatutService, PersonStatutService>();
+            builder.Services.AddScoped<IPersonStatutRepository, PersonStatutRepository>();
             builder.Services.AddControllers();
             var app = builder.Build();
 

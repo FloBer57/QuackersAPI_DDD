@@ -38,17 +38,17 @@ public partial class Person
 
     public int PersonRole_Id { get; set; } = 1;
 
-    public virtual ICollection<Channelpersonrolexpersonxchannel> Channelpersonrolexpersonxchannels { get; set; } = new List<Channelpersonrolexpersonxchannel>();
+    public virtual ICollection<ChannelPersonRoleXPersonXChannel> Channelpersonrolexpersonxchannels { get; set; } = new List<ChannelPersonRoleXPersonXChannel>();
 
     public virtual ICollection<Message> Messages { get; set; } = new List<Message>();
 
     public virtual ICollection<Messagexreactionxperson> Messagexreactionxpeople { get; set; } = new List<Messagexreactionxperson>();
 
-    public virtual Personjobtitle PersonJobTitle { get; set; } = null!;
+    public virtual PersonJobTitle PersonJobTitle { get; set; } = null!;
 
-    public virtual Personrole PersonRole { get; set; } = null!;
+    public virtual PersonRole PersonRole { get; set; } = null!;
 
-    public virtual Personstatut PersonStatut { get; set; } = null!;
+    public virtual PersonStatut PersonStatut { get; set; } = null!;
 
     public virtual ICollection<Personxchannel> Personxchannels { get; set; } = new List<Personxchannel>();
 
