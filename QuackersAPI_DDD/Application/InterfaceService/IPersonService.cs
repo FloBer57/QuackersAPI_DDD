@@ -9,6 +9,9 @@
     {
         Task<Person> CreatePerson(CreatePersonDTO createPersonDTO);
         Task<IEnumerable<Person>> GetAllPersons();
+        Task<IEnumerable<Person>> GetPersonsByJobTitle(int jobTitleId);
+        Task<IEnumerable<Person>> GetPersonsByStatut(int statutId);
+        Task<IEnumerable<Person>> GetPersonsByRole(int roleId);
         Task<Person> GetPersonById(int id);
         Task<Person> UpdatePerson(int id, UpdatePersonDTO person);
         Task<bool> DeletePerson(int id);

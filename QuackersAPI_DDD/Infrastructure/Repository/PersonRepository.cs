@@ -49,5 +49,26 @@
                 await _context.SaveChangesAsync();
             }
         }
+
+        public async Task<IEnumerable<Person>> GetPersonByJobTitle(int jobTitleId)
+        {
+            return await _context.Persons
+                .Where(p => p.PersonJobTitle_Id == jobTitleId)
+                .ToListAsync();
+        }
+
+        public async Task<IEnumerable<Person>> GetPersonByStatut(int statutId)
+        {
+            return await _context.Persons
+                .Where(p => p.PersonStatut_Id == statutId)
+                .ToListAsync();
+        }
+
+        public async Task<IEnumerable<Person>> GetPersonByRole(int roleId)
+        {
+            return await _context.Persons
+                .Where(p => p.PersonRole_Id == roleId)
+                .ToListAsync();
+        }
     }
 }

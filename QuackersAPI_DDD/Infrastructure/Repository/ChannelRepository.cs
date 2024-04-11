@@ -18,8 +18,6 @@
 
         public async Task<Channel> CreateChannel(Channel channel)
         {
-            channel.ChannelType_Id = channel.ChannelType_Id == 0 ? 1 : channel.ChannelType_Id;
-
             _context.Channels.Add(channel);
             await _context.SaveChangesAsync();
             return channel;
