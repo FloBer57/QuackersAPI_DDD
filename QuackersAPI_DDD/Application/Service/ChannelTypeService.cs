@@ -1,4 +1,5 @@
-﻿using QuackersAPI_DDD.Application.InterfaceService;
+﻿using QuackersAPI_DDD.API.DTO.ChannelTypeDTO;
+using QuackersAPI_DDD.Application.InterfaceService;
 using QuackersAPI_DDD.Domain.Model;
 using QuackersAPI_DDD.Infrastructure.InterfaceRepository;
 
@@ -10,7 +11,7 @@ namespace QuackersAPI_DDD.Application.Service
 
         public ChannelTypeService(IChannelTypeRepository channelTypeRepository)
         {
-            _channelTypeRepository = channelTypeRepository;
+            _channelTypeRepository = channelTypeRepository ?? throw new ArgumentNullException(nameof(channelTypeRepository));
         }
 
         public async Task<IEnumerable<ChannelType>> GetAllChannelTypes()
@@ -23,12 +24,13 @@ namespace QuackersAPI_DDD.Application.Service
             return await _channelTypeRepository.GetChannelTypeById(id);
         }
 
-        public async Task<ChannelType> CreateChannelType(ChannelType channelType)
+        public async Task<ChannelType> CreateChannelType(CreateChannelTypeDTO dto)
         {
+            var channelType = new ChannelType { ChannelType_Name = dto.ChannelType_Name };
             return await _channelTypeRepository.CreateChannelType(channelType);
         }
 
-        public async Task<ChannelType> UpdateChannelType(int id, ChannelType updatedChannelType)
+        public async Task<ChannelType> UpdateChannelType(int id, UpdateChannelTypeDTO updateChannelTypeDTO)
         {
             var channelType = await _channelTypeRepository.GetChannelTypeById(id);
             if (channelType == null)
@@ -36,8 +38,9 @@ namespace QuackersAPI_DDD.Application.Service
                 throw new InvalidOperationException($"ChannelType with id {id} not found.");
             }
 
-            // Assume this method updates the channel type with the new values
-            return await _channelTypeRepository.UpdateChannelType(updatedChannelType);
+            channelType.ChannelType_Name = updateChannelTypeDTO.ChannelType_Name;
+
+            return await _channelTypeRepository.UpdateChannelType(channelType);
         }
 
         public async Task<bool> DeleteChannelType(int id)
