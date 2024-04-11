@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace QuackersAPI_DDD.Domain.Model;
 
-public partial class Personjobtitle
+public partial class PersonJobTitle
 {
     public int PersonJob_TitleId { get; set; }
 
