@@ -20,6 +20,10 @@ namespace QuackersAPI_DDD.API.Controller
         public async Task<IActionResult> GetAllChannels()
         {
             var channels = await _channelService.GetAllChannels();
+            if (channels == null)
+            {
+                return NotFound("No channel can be found");
+            }
             return Ok(channels);
         }
 
@@ -38,6 +42,10 @@ namespace QuackersAPI_DDD.API.Controller
         public async Task<IActionResult> GetChannelsByChannelType(int id)
         {
             var channels = await _channelService.GetChannelsByChannelType(id);
+            if (channels == null)
+            {
+                return NotFound($"No channel with ChannelTypeId = {id} can be found");
+            }
             return Ok(channels);
         }
 

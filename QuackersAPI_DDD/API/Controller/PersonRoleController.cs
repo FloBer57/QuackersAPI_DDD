@@ -26,6 +26,10 @@ namespace QuackersAPI_DDD.API.Controller
         public async Task<IActionResult> GetAllPersonRoles()
         {
             var personRoles = await _personRoleService.GetAllPersonRoles();
+            if (personRoles == null)
+            {
+                return NotFound("No PersonRole can be found");
+            }
             return Ok(personRoles);
         }
 
@@ -35,7 +39,7 @@ namespace QuackersAPI_DDD.API.Controller
             var personRole = await _personRoleService.GetPersonRoleById(id);
             if (personRole == null)
             {
-                return NotFound();
+                return NotFound("No PersonRole with id = {id} can be found");
             }
             return Ok(personRole);
         }
