@@ -1,17 +1,17 @@
 ﻿namespace QuackersAPI_DDD.Application.Interface
 {
+    using QuackersAPI_DDD.API.DTO.ChannelDTO;
+    using QuackersAPI_DDD.Domain.Model;
     using System.Collections.Generic;
     using System.Threading.Tasks;
-    using QuackersAPI_DDD.Application.DTO.ChannelFolderDTO.Request;
-    using QuackersAPI_DDD.Application.DTO.ChannelFolderDTO.Response;
 
     public interface IChannelService
     {
-        Task<CreateChannelResponseDTO> CreateChannel(CreateChannelRequestDTO personDto);
-        Task<GetAllChannelResponseDTO> GetAllChannel();
-        Task<GetChannelByIdResponseDTO> GetChannelById(int Id);
-        Task<UpdateChannelByIdResponseDTO> UpdateName(int id, string newName);
-        Task<DeleteChannelByIdResponseDTO> DeleteChannel(int id);
-        
+        Task<Channel> CreateChannel(CreateChannelDTO channel);
+        Task<IEnumerable<Channel>> GetChannelsByChannelType(int channelTypeId);
+        Task<IEnumerable<Channel>> GetAllChannels();
+        Task<Channel> GetChannelById(int id);
+        Task<Channel> UpdateChannel(int id, UpdateChannelDTO channel);
+        Task<bool> DeleteChannel(int id);
     }
 }

@@ -9,13 +9,13 @@ public partial class Channel
 
     public string Channel_Name { get; set; } = null!;
 
-    public string? Channel_ImagePath { get; set; }
+    public string? Channel_ImagePath { get; set; } = "Path/To/Default/Image";
 
-    public int ChannelType_Id { get; set; } = 1;
+    public int ChannelType_Id { get; set; }
 
-    public virtual Channeltype ChannelType { get; set; } = null!;
+    public virtual ChannelType ChannelType { get; set; } 
 
-    public virtual ICollection<Channelpersonrolexpersonxchannel> Channelpersonrolexpersonxchannels { get; set; } = new List<Channelpersonrolexpersonxchannel>();
+    public virtual ICollection<ChannelPersonRoleXPersonXChannel> Channelpersonrolexpersonxchannels { get; set; } = new List<ChannelPersonRoleXPersonXChannel>();
 
     public virtual ICollection<Message> Messages { get; set; } = new List<Message>();
 

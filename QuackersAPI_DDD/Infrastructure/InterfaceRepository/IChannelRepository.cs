@@ -6,10 +6,11 @@
 
     public interface IChannelRepository
     {
-        Task CreateChannel(Channel channel);
+        Task<Channel> CreateChannel(Channel channel);
+        Task<IEnumerable<Channel>> GetAllChannels();
         Task<Channel> GetChannelById(int id);
-        Task<IEnumerable<Channel>> GetAllChannel();
-        Task UpdateChannel(Channel channel);
-        Task DeleteChannel(int id);
+        Task<IEnumerable<Channel>> GetChannelsByChannelType(int channelTypeId);
+        Task<Channel> UpdateChannel(Channel channel);
+        Task DeleteChannel(Channel channel);
     }
 }
