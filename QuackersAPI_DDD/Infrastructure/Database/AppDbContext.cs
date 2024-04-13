@@ -24,6 +24,8 @@ public partial class AppDbContext : DbContext
     public virtual DbSet<ChannelPersonRoleXPersonXChannel> Channelpersonrolexpersonxchannels { get; set; }
 
     public virtual DbSet<ChannelType> ChannelTypes { get; set; }
+    public virtual DbSet<ChannelPersonRole> ChannelPersonRoles { get; set; }
+
 
     public virtual DbSet<Message> Messages { get; set; }
 
@@ -127,6 +129,21 @@ public partial class AppDbContext : DbContext
                 .HasConstraintName("channel_ibfk_1");
         });
 
+        modelBuilder.Entity<ChannelPersonRole>(entity =>
+        {
+            entity.HasKey(e => e.ChannelPersonRole_Id).HasName("PRIMARY");
+
+            entity.ToTable("channelpersonrole");
+
+            entity.HasIndex(e => e.ChannelPersonRole_Name, "ChannelPersonRole_Name").IsUnique();
+
+            entity.Property(e => e.ChannelPersonRole_Id)
+                .HasColumnType("int(11)")
+                .HasColumnName("ChannelPersonRole_Id");
+            entity.Property(e => e.ChannelPersonRole_Name)
+                .HasMaxLength(50)
+                .HasColumnName("ChannelPersonRole_Name");
+        });
         modelBuilder.Entity<ChannelPersonRoleXPersonXChannel>(entity =>
         {
             entity.HasKey(e => new { e.Person_Id, e.Channel_Id })
@@ -156,6 +173,11 @@ public partial class AppDbContext : DbContext
                 .HasForeignKey(d => d.Person_Id)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("channelpersonrolexpersonxchannel_ibfk_1");
+
+            entity.HasOne(d => d.ChannelPersonRole).WithMany(p => p.ChannelPersonRolesXPersonsXChannels)
+              .HasForeignKey(d => d.ChannelPersonRole_Id)
+              .OnDelete(DeleteBehavior.ClientSetNull)
+              .HasConstraintName("channelpersonrolexpersonxchannel_ibfk_3");
         });
 
         modelBuilder.Entity<ChannelType>(entity =>
