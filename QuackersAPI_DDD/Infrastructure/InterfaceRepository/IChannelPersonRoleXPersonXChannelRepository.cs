@@ -1,4 +1,5 @@
-﻿using QuackersAPI_DDD.Domain.Model;
+﻿using Microsoft.AspNetCore.Mvc;
+using QuackersAPI_DDD.Domain.Model;
 
 namespace QuackersAPI_DDD.Infrastructure.InterfaceRepository
 {
@@ -9,5 +10,6 @@ namespace QuackersAPI_DDD.Infrastructure.InterfaceRepository
         Task<ChannelPersonRoleXPersonXChannel> CreateAssociation(ChannelPersonRoleXPersonXChannel association);
         Task<ChannelPersonRoleXPersonXChannel> UpdateAssociation(ChannelPersonRoleXPersonXChannel association);
         Task<bool> DeleteAssociation(int personId, int channelId);
+        Task AddPersonRoleToChannel(int personId, int channelId);
     }
 }

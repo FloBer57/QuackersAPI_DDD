@@ -57,5 +57,15 @@ namespace QuackersAPI_DDD.Infrastructure.Repository
             }
             return false;
         }
+
+        public async Task AddPersonRoleToChannel(int personId, int channelId)
+        {
+            var association = await GetAssociationByIds(personId,channelId);
+            if (association != null)
+            {
+                _context.Channelpersonrolexpersonxchannels.Add(association);
+                await _context.SaveChangesAsync();
+            }
+        }
     }
 }

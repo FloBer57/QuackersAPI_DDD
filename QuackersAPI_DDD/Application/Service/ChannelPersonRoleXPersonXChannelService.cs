@@ -1,4 +1,5 @@
-﻿using QuackersAPI_DDD.API.DTO.ChannelPersonRoleXPersonXChannel;
+﻿using Microsoft.AspNetCore.Mvc;
+using QuackersAPI_DDD.API.DTO.ChannelPersonRoleXPersonXChannel;
 using QuackersAPI_DDD.Application.InterfaceService;
 using QuackersAPI_DDD.Domain.Model;
 using QuackersAPI_DDD.Infrastructure.InterfaceRepository;
@@ -74,6 +75,24 @@ namespace QuackersAPI_DDD.Application.Service
         public async Task<bool> DeleteAssociation(int personId, int channelId)
         {
             return await _repository.DeleteAssociation(personId, channelId);
+        }
+
+        public async Task AddPersonRoleToChannel(int personId, int channelId)
+        {
+            var person = await _personRepository.GetPersonById(personId);
+            var channel = await _channelRepository.GetChannelById(channelId);
+            if (person == null || channel == null)
+            {
+                throw new ArgumentException("Person or Channel not found.");
+            }
+
+            var existingAssociation = await _repository.GetAssociationByIds(personId, channelId);
+            if (existingAssociation != null)
+            {
+                throw new InvalidOperationException("This association already exists.");
+            }
+
+            await _repository.AddPersonRoleToChannel(personId, channelId);
         }
     }
 }

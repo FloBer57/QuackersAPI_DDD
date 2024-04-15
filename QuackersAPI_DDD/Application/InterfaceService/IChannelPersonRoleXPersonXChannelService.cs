@@ -1,4 +1,5 @@
-﻿using QuackersAPI_DDD.API.DTO.ChannelPersonRoleXPersonXChannel;
+﻿using Microsoft.AspNetCore.Mvc;
+using QuackersAPI_DDD.API.DTO.ChannelPersonRoleXPersonXChannel;
 using QuackersAPI_DDD.Domain.Model;
 
 namespace QuackersAPI_DDD.Application.InterfaceService
@@ -10,5 +11,6 @@ namespace QuackersAPI_DDD.Application.InterfaceService
         Task<ChannelPersonRoleXPersonXChannel> CreateAssociation(CreateChannelPersonRoleXPersonXChannelDTO dto);
         Task<ChannelPersonRoleXPersonXChannel> UpdateAssociation(int personId, int channelId, UpdateChannelPersonRoleXPersonXChannelDTO dto);
         Task<bool> DeleteAssociation(int personId, int channelId);
+        Task AddPersonRoleToChannel(int personId, int channelId);
     }
 }

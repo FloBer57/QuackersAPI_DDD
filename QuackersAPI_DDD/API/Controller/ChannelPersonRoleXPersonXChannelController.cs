@@ -62,6 +62,21 @@ namespace QuackersAPI_DDD.API.Controller
             }
         }
 
+        [HttpPost("addPersonRoleToChannel/{personId}/{channelId}")] 
+        public async Task<IActionResult> AddPersonRoleToChannel(int personId, int channelId)
+        {
+            try
+            {
+                await _service.AddPersonRoleToChannel(personId, channelId);
+                return CreatedAtAction(nameof(GetAssociationById), new { personId, channelId }, null);
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, "Internal server error: " + e.Message);
+            }
+        }
+
+
         [HttpPut("{personId}/{channelId}")]
         public async Task<IActionResult> UpdateAssociation(int personId, int channelId, [FromBody] UpdateChannelPersonRoleXPersonXChannelDTO dto)
         {

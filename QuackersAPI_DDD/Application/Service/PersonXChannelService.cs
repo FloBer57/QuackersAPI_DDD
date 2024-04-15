@@ -1,4 +1,5 @@
-﻿using QuackersAPI_DDD.API.DTO.PersonXChannelDTO;
+﻿using Microsoft.EntityFrameworkCore;
+using QuackersAPI_DDD.API.DTO.PersonXChannelDTO;
 using QuackersAPI_DDD.Application.InterfaceService;
 using QuackersAPI_DDD.Domain.Model;
 using QuackersAPI_DDD.Infrastructure.InterfaceRepository;
@@ -8,10 +9,14 @@ namespace QuackersAPI_DDD.Application.Service
     public class PersonXChannelService : IPersonXChannelService
     {
         private readonly IPersonXChannelRepository _repository;
+        private readonly IPersonRepository _personRepository;
+        private readonly IChannelRepository _channelRepository;
 
-        public PersonXChannelService(IPersonXChannelRepository repository)
+        public PersonXChannelService(IPersonXChannelRepository repository, IPersonRepository personRepository, IChannelRepository channelRepository)
         {
             _repository = repository;
+            _personRepository = personRepository;
+            _channelRepository = channelRepository;
         }
 
         public async Task<IEnumerable<PersonXChannel>> GetAllAssociations()
@@ -50,5 +55,24 @@ namespace QuackersAPI_DDD.Application.Service
         {
             return await _repository.DeleteAssociation(personId, channelId);
         }
+
+        public async Task AddPersonToChannel(int personId, int channelId)
+        {
+            var person = await _personRepository.GetPersonById(personId);
+            var channel = await _channelRepository.GetChannelById(channelId);
+            if (person == null || channel == null)
+            {
+                throw new ArgumentException("Person or Channel not found.");
+            }
+
+            var existingAssociation = await _repository.GetAssociationById(personId, channelId);
+            if (existingAssociation != null)
+            {
+                throw new InvalidOperationException("This association already exists.");
+            }
+
+            await _repository.AddPersonToChannel(personId, channelId); 
+        }
+
     }
 }

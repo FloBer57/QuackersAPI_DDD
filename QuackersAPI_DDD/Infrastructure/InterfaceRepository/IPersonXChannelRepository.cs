@@ -9,5 +9,6 @@ namespace QuackersAPI_DDD.Infrastructure.InterfaceRepository
         Task<PersonXChannel> CreateAssociation(PersonXChannel association);
         Task<PersonXChannel> UpdateAssociation(PersonXChannel association);
         Task<bool> DeleteAssociation(int personId, int channelId);
+        Task AddPersonToChannel(int personId, int channelId);
     }
 }
