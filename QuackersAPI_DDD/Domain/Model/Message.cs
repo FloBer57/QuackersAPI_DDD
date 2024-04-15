@@ -20,9 +20,9 @@ public partial class Message
 
     public virtual Channel Channel { get; set; } = null!;
 
-    public virtual ICollection<Messagexreactionxperson> Messagexreactionxpeople { get; set; } = new List<Messagexreactionxperson>();
+    public virtual ICollection<MessageXReactionXPerson> Messagexreactionxpeople { get; set; } = new List<MessageXReactionXPerson>();
 
     public virtual Person Person { get; set; } = null!;
 
-    public virtual ICollection<Personxmessage> Personxmessages { get; set; } = new List<Personxmessage>();
+    public virtual ICollection<PersonXMessage> Personxmessages { get; set; } = new List<PersonXMessage>();
 }

@@ -11,5 +11,5 @@ public partial class Reaction
 
     public string? Reaction_PicturePath { get; set; }
 
-    public virtual ICollection<Messagexreactionxperson> Messagexreactionxpeople { get; set; } = new List<Messagexreactionxperson>();
+    public virtual ICollection<MessageXReactionXPerson> Messagexreactionxpeople { get; set; } = new List<MessageXReactionXPerson>();
 }

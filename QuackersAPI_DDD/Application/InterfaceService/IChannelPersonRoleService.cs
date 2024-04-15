@@ -1,4 +1,5 @@
-﻿using QuackersAPI_DDD.Domain.Model;
+﻿using QuackersAPI_DDD.API.DTO.ChannelPersonRoleDTO;
+using QuackersAPI_DDD.Domain.Model;
 
 namespace QuackersAPI_DDD.Application.InterfaceService
 {
@@ -6,8 +7,8 @@ namespace QuackersAPI_DDD.Application.InterfaceService
     {
         Task<IEnumerable<ChannelPersonRole>> GetAllChannelPersonRoles();
         Task<ChannelPersonRole> GetChannelPersonRoleById(int id);
-        Task<ChannelPersonRole> CreateChannelPersonRole(ChannelPersonRole channelPersonRole);
-        Task<ChannelPersonRole> UpdateChannelPersonRole(int id, ChannelPersonRole channelPersonRole);
+        Task<ChannelPersonRole> CreateChannelPersonRole(CreateChannelPersonRoleDTO dto);
+        Task<ChannelPersonRole> UpdateChannelPersonRole(int id, UpdateChannelPersonRoleDTO dto);
         Task<bool> DeleteChannelPersonRole(int id);
     }
 }

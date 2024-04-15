@@ -1,11 +1,11 @@
 ﻿namespace QuackersAPI_DDD.Infrastructure.Repository
 {
+    using global::QuackersAPI_DDD.Domain.Model;
+    using global::QuackersAPI_DDD.Infrastructure.Database;
+    using global::QuackersAPI_DDD.Infrastructure.InterfaceRepository;
     using Microsoft.EntityFrameworkCore;
-    using QuackersAPI_DDD.Domain.Model;
-    using QuackersAPI_DDD.Infrastructure.Database;
     using System.Collections.Generic;
     using System.Threading.Tasks;
-    using QuackersAPI_DDD.Infrastructure.InterfaceRepository;
 
     public class ChannelRepository : IChannelRepository
     {
