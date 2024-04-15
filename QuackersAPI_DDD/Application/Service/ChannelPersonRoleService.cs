@@ -11,7 +11,7 @@ namespace QuackersAPI_DDD.Application.Service
 
         public ChannelPersonRoleService(IChannelPersonRoleRepository channelPersonRoleRepository)
         {
-            _channelPersonRoleRepository = channelPersonRoleRepository ?? throw new ArgumentNullException(nameof(channelPersonRoleRepository));
+            _channelPersonRoleRepository = channelPersonRoleRepository;
         }
 
         public async Task<IEnumerable<ChannelPersonRole>> GetAllChannelPersonRoles()

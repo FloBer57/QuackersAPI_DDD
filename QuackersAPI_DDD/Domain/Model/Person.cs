@@ -43,7 +43,7 @@ public partial class Person
     [JsonIgnore]
     public virtual ICollection<Message> Messages { get; set; } = new List<Message>();
     [JsonIgnore]
-    public virtual ICollection<Messagexreactionxperson> Messagexreactionxpeople { get; set; } = new List<Messagexreactionxperson>();
+    public virtual ICollection<MessageXReactionXPerson> Messagexreactionxpeople { get; set; } = new List<MessageXReactionXPerson>();
 
     public virtual PersonJobTitle PersonJobTitle { get; set; } = null!;
 
@@ -51,9 +51,9 @@ public partial class Person
 
     public virtual PersonStatut PersonStatut { get; set; } = null!;
     [JsonIgnore]
-    public virtual ICollection<Personxchannel> Personxchannels { get; set; } = new List<Personxchannel>();
+    public virtual ICollection<PersonXChannel> Personxchannels { get; set; } = new List<PersonXChannel>();
     [JsonIgnore]
-    public virtual ICollection<Personxmessage> Personxmessages { get; set; } = new List<Personxmessage>();
+    public virtual ICollection<PersonXMessage> Personxmessages { get; set; } = new List<PersonXMessage>();
     [JsonIgnore]
-    public virtual ICollection<Personxnotification> Personxnotifications { get; set; } = new List<Personxnotification>();
+    public virtual ICollection<PersonXNotification> Personxnotifications { get; set; } = new List<PersonXNotification>();
 }

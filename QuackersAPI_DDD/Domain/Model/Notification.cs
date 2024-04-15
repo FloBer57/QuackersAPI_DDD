@@ -17,5 +17,5 @@ public partial class Notification
 
     public virtual NotificationType NotificationType { get; set; } = null!;
 
-    public virtual ICollection<Personxnotification> Personxnotifications { get; set; } = new List<Personxnotification>();
+    public virtual ICollection<PersonXNotification> Personxnotifications { get; set; } = new List<PersonXNotification>();
 }

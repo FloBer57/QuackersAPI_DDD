@@ -29,7 +29,7 @@ public partial class AppDbContext : DbContext
 
     public virtual DbSet<Message> Messages { get; set; }
 
-    public virtual DbSet<Messagexreactionxperson> Messagexreactionxpeople { get; set; }
+    public virtual DbSet<MessageXReactionXPerson> Messagexreactionxpeople { get; set; }
 
     public virtual DbSet<Notification> Notifications { get; set; }
 
@@ -43,11 +43,11 @@ public partial class AppDbContext : DbContext
 
     public virtual DbSet<PersonStatut> Personstatuts { get; set; }
 
-    public virtual DbSet<Personxchannel> Personxchannels { get; set; }
+    public virtual DbSet<PersonXChannel> Personxchannels { get; set; }
 
-    public virtual DbSet<Personxmessage> Personxmessages { get; set; }
+    public virtual DbSet<PersonXMessage> Personxmessages { get; set; }
 
-    public virtual DbSet<Personxnotification> Personxnotifications { get; set; }
+    public virtual DbSet<PersonXNotification> Personxnotifications { get; set; }
 
     public virtual DbSet<Reaction> Reactions { get; set; }
 
@@ -234,7 +234,7 @@ public partial class AppDbContext : DbContext
                 .HasConstraintName("message_ibfk_2");
         });
 
-        modelBuilder.Entity<Messagexreactionxperson>(entity =>
+        modelBuilder.Entity<MessageXReactionXPerson>(entity =>
         {
             entity.HasKey(e => new { e.Person_Id, e.Message_Id, e.Reaction_Id })
                 .HasName("PRIMARY")
@@ -438,7 +438,7 @@ public partial class AppDbContext : DbContext
                 .HasColumnName("PersonStatut_Name");
         });
 
-        modelBuilder.Entity<Personxchannel>(entity =>
+        modelBuilder.Entity<PersonXChannel>(entity =>
         {
             entity.HasKey(e => new { e.Person_Id, e.Channel_Id })
                 .HasName("PRIMARY")
@@ -469,7 +469,7 @@ public partial class AppDbContext : DbContext
                 .HasConstraintName("personxchannel_ibfk_1");
         });
 
-        modelBuilder.Entity<Personxmessage>(entity =>
+        modelBuilder.Entity<PersonXMessage>(entity =>
         {
             entity.HasKey(e => new { e.Person_Id, e.Message_Id })
                 .HasName("PRIMARY")
@@ -500,7 +500,7 @@ public partial class AppDbContext : DbContext
                 .HasConstraintName("personxmessage_ibfk_1");
         });
 
-        modelBuilder.Entity<Personxnotification>(entity =>
+        modelBuilder.Entity<PersonXNotification>(entity =>
         {
             entity.HasKey(e => new { e.Person_Id, e.Notification_Id })
                 .HasName("PRIMARY")

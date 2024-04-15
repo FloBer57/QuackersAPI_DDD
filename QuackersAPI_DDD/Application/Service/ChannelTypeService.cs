@@ -11,7 +11,7 @@ namespace QuackersAPI_DDD.Application.Service
 
         public ChannelTypeService(IChannelTypeRepository channelTypeRepository)
         {
-            _channelTypeRepository = channelTypeRepository ?? throw new ArgumentNullException(nameof(channelTypeRepository));
+            _channelTypeRepository = channelTypeRepository;
         }
 
         public async Task<IEnumerable<ChannelType>> GetAllChannelTypes()
