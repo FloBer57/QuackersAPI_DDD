@@ -49,5 +49,10 @@ namespace QuackersAPI_DDD.Infrastructure.Repository
             }
             return false; 
         }
+
+        public async Task<bool> NotificationTypeNameExists(string name)
+        {
+            return await _context.NotificationTypes.AnyAsync(r => r.NotificationType_Name == name);
+        }
     }
 }

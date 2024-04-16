@@ -37,33 +37,63 @@ namespace QuackersAPI_DDD.API.Controller
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] CreateNotificationDTO dto)
         {
-            var createdNotification = await _notificationService.CreateNotification(dto);
-            return CreatedAtAction(nameof(GetById), new { id = createdNotification.Notification_Id }, createdNotification);
+            try
+            {
+                var createdNotification = await _notificationService.CreateNotification(dto);
+                return CreatedAtAction(nameof(GetById), new { id = createdNotification.Notification_Id }, createdNotification);
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (InvalidOperationException ex)
+            {
+                return Conflict(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "An internal server error has occurred: " + ex.Message);
+            }
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update(int id, [FromBody] UpdateNotificationDTO dto)
+        public async Task<IActionResult> UpdateNotification(int id, [FromBody] UpdateNotificationDTO dto)
         {
             try
             {
                 var updatedNotification = await _notificationService.UpdateNotification(id, dto);
                 return Ok(updatedNotification);
             }
-            catch (Exception e)
+            catch (KeyNotFoundException ex)
             {
-                return StatusCode(500, "Internal server error: " + e.Message);
+                return NotFound(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"An error occurred while updating the notification: {ex.Message}");
             }
         }
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
-            var success = await _notificationService.DeleteNotification(id);
-            if (!success)
+            try
             {
-                return NotFound($"Notification with id {id} not found.");
+                var success = await _notificationService.DeleteNotification(id);
+                if (!success)
+                {
+                    return NotFound($"Notification with id {id} not found.");
+                }
+                return Ok($"Notification with id {id} deleted successfully.");
             }
-            return Ok($"Notification with id {id} deleted successfully.");
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"An error occurred while updating the notification: {ex.Message}");
+            }
         }
     }
 }

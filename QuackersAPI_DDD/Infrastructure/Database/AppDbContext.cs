@@ -96,7 +96,7 @@ public partial class AppDbContext : DbContext
 
             entity.HasOne(d => d.Message).WithMany(p => p.Attachments)
                 .HasForeignKey(d => d.Message_Id)
-                .OnDelete(DeleteBehavior.ClientSetNull)
+                .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("attachment_ibfk_1");
         });
 
@@ -200,6 +200,7 @@ public partial class AppDbContext : DbContext
         {
             entity.HasKey(e => e.Message_Id).HasName("PRIMARY");
 
+
             entity.ToTable("message");
 
             entity.HasIndex(e => e.Channel_Id, "Channel_ID");
@@ -232,6 +233,8 @@ public partial class AppDbContext : DbContext
                 .HasForeignKey(d => d.Person_Id)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("message_ibfk_2");
+
+
         });
 
         modelBuilder.Entity<MessageXReactionXPerson>(entity =>

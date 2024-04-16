@@ -41,19 +41,44 @@ namespace QuackersAPI_DDD.API.Controller
         [HttpPost]
         public async Task<IActionResult> CreateChannelType([FromBody] CreateChannelTypeDTO dto)
         {
-            var createdChannelType = await _channelTypeService.CreateChannelType(dto);
-            return CreatedAtAction(nameof(GetChannelTypeById), new { id = createdChannelType.ChannelType_Id }, createdChannelType);
+            try
+            {
+                var createdChannelType = await _channelTypeService.CreateChannelType(dto);
+                return CreatedAtAction(nameof(GetChannelTypeById), new { id = createdChannelType.ChannelType_Id }, createdChannelType);
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (InvalidOperationException ex)
+            {
+                return Conflict(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "An internal server error has occurred: " + ex.Message);
+            }
         }
 
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateChannelType(int id, [FromBody] UpdateChannelTypeDTO dto)
         {
+            try { 
             var updatedChannelType = await _channelTypeService.UpdateChannelType(id, dto);
-            if (updatedChannelType == null)
-            {
-                return NotFound($"ChannelType with id {id} not found.");
-            }
             return Ok(updatedChannelType);
+            }
+            catch (InvalidOperationException ex)
+            {
+                return Conflict(ex.Message);
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "An internal server error has occurred.");
+            }
         }
 
         [HttpDelete("{id}")]

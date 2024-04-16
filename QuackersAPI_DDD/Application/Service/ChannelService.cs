@@ -107,7 +107,7 @@ namespace QuackersAPI_DDD.Application.Service
             var channel = await _channelRepository.GetChannelById(id);
             if (channel == null)
             {
-                return false;
+                throw new KeyNotFoundException($"Channel with id {id} not found.");
             }
 
             await _channelRepository.DeleteChannel(channel);

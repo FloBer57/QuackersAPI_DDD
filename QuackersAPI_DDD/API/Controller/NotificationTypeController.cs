@@ -36,17 +36,48 @@ namespace QuackersAPI_DDD.API.Controller
         [HttpPost]
         public async Task<IActionResult> CreateNotificationType([FromBody] CreateNotificationTypeDTO dto)
         {
-            var createdType = await _notificationTypeService.CreateNotificationType(dto);
-            return CreatedAtAction(nameof(GetNotificationTypeById), new { id = createdType.NotificationType_Id }, createdType);
+            try
+            {
+                var createdType = await _notificationTypeService.CreateNotificationType(dto);
+                return CreatedAtAction(nameof(GetNotificationTypeById), new { id = createdType.NotificationType_Id }, createdType);
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (InvalidOperationException ex)
+            {
+                return Conflict(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "An internal server error has occurred: " + ex.Message);
+            }
         }
 
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateNotificationType(int id, [FromBody] UpdateNotificationTypeDTO dto)
         {
-            var updatedType = await _notificationTypeService.UpdateNotificationType(id, dto);
-            if (updatedType == null)
-                return NotFound($"NotificationType with id {id} not found.");
-            return Ok(updatedType);
+            try
+            {
+
+                var updatedType = await _notificationTypeService.UpdateNotificationType(id, dto);
+                if (updatedType == null)
+                    return NotFound($"NotificationType with id {id} not found.");
+                return Ok(updatedType);
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (InvalidOperationException ex)
+            {
+                return Conflict(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "An internal server error has occurred: " + ex.Message);
+            }
         }
 
         [HttpDelete("{id}")]

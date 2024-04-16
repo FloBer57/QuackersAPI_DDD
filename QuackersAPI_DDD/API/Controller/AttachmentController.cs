@@ -59,12 +59,23 @@ namespace QuackersAPI_DDD.API.Controller
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
-            var success = await _attachmentService.DeleteAttachment(id);
-            if (!success)
+            try
             {
-                return NotFound($"Attachment with id {id} not found.");
+                var success = await _attachmentService.DeleteAttachment(id);
+                if (!success)
+                {
+                    return NotFound($"Attachment with id {id} not found.");
+                }
+                return Ok($"Attachment with id {id} deleted successfully.");
             }
-            return Ok($"Attachment with id {id} deleted successfully.");
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"An error occurred while updating the notification: {ex.Message}");
+            }
         }
     }
 }

@@ -97,12 +97,23 @@ namespace QuackersAPI_DDD.API.Controller
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteChannel(int id)
         {
-            var success = await _channelService.DeleteChannel(id);
-            if (!success)
+            try
             {
-                return NotFound($"Channel with id {id} not found.");
+                var success = await _channelService.DeleteChannel(id);
+                if (!success)
+                {
+                    return NotFound();
+                }
+                return NoContent();
             }
-            return Ok($"Channel with id {id} deleted successfully.");
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"An error occurred while deleting the Channel: {ex.Message}");
+            }
         }
     }
 }

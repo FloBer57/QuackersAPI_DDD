@@ -1,17 +1,22 @@
-﻿using QuackersAPI_DDD.API.DTO.NotificationDTO;
+﻿using QuackersAPI_DDD.API.DTO.ChannelDTO;
+using QuackersAPI_DDD.API.DTO.NotificationDTO;
 using QuackersAPI_DDD.Application.InterfaceService;
 using QuackersAPI_DDD.Domain.Model;
 using QuackersAPI_DDD.Infrastructure.InterfaceRepository;
+using QuackersAPI_DDD.Infrastructure.Repository;
 
 namespace QuackersAPI_DDD.Application.Service
 {
     public class NotificationService : INotificationService
     {
         private readonly INotificationRepository _notificationRepository;
+        private readonly INotificationTypeRepository _notificationTypeRepository;
 
-        public NotificationService(INotificationRepository notificationRepository)
+
+        public NotificationService(INotificationRepository notificationRepository, INotificationTypeRepository notificationTypeRepository)
         {
             _notificationRepository = notificationRepository;
+            _notificationTypeRepository = notificationTypeRepository;
         }
 
         public async Task<IEnumerable<Notification>> GetAllNotifications()
@@ -31,6 +36,7 @@ namespace QuackersAPI_DDD.Application.Service
 
         public async Task<Notification> CreateNotification(CreateNotificationDTO dto)
         {
+
             var newNotification = new Notification
             {
                 Notification_Name = dto.Notification_Name,
@@ -38,6 +44,11 @@ namespace QuackersAPI_DDD.Application.Service
                 Notification_DatePost = DateOnly.FromDateTime(DateTime.Now),
                 Notification_TypeId = dto.Notification_TypeId
             };
+            var notificationType = await _notificationTypeRepository.GetNotificationTypeById(dto.Notification_TypeId);
+            if (notificationType == null)
+            {
+                throw new KeyNotFoundException($"Notification Type with id {dto.Notification_TypeId} not found.");
+            }
             return await _notificationRepository.CreateNotification(newNotification);
         }
 
@@ -49,10 +60,29 @@ namespace QuackersAPI_DDD.Application.Service
                 throw new KeyNotFoundException($"Notification with id {id} not found.");
             }
 
-            notification.Notification_Name = dto.Notification_Name;
-            notification.Notification_Text = dto.Notification_Text;
+            if (dto.Notification_Name != null)
+            {
+                notification.Notification_Name = dto.Notification_Name;
+            }
+
+            if (dto.Notification_Text != null)
+            {
+                notification.Notification_Text = dto.Notification_Text;
+            }
+
+            if (dto.Notification_TypeId.HasValue)
+            {
+                // Vérifiez si le type de notification avec l'ID spécifié existe dans la base de données
+                var notificationType = await _notificationTypeRepository.GetNotificationTypeById(dto.Notification_TypeId.Value);
+                if (notificationType == null)
+                {
+                    throw new KeyNotFoundException($"Notification Type with id {dto.Notification_TypeId} not found.");
+                }
+
+                notification.Notification_TypeId = dto.Notification_TypeId.Value;
+            }
+
             notification.Notification_DatePost = DateOnly.FromDateTime(DateTime.Now);
-            notification.Notification_TypeId = dto.Notification_TypeId;
 
             return await _notificationRepository.UpdateNotification(notification);
         }

@@ -61,7 +61,7 @@
                 return await _messageRepository.CreateMessage(message);
             }
 
-            public async Task<Message> UpdateMessage(int messageId, Message updatedMessage)
+            public async Task<Message> UpdateMessage(int messageId, UpdateMessageDTO dto)
             {
                 var message = await _messageRepository.GetMessageById(messageId);
                 if (message == null)
@@ -69,9 +69,15 @@
                     throw new KeyNotFoundException($"Message with id {messageId} not found.");
                 }
 
-                message.Message_Text = updatedMessage.Message_Text;
-                message.Message_IsNotArchived = updatedMessage.Message_IsNotArchived;
-                message.Message_Date = updatedMessage.Message_Date ?? message.Message_Date;
+                if (dto.Message_Text != null)
+                {
+                    message.Message_Text = dto.Message_Text;
+                }
+
+                if (dto.Message_IsNotArchived.HasValue)
+                {
+                    message.Message_IsNotArchived = dto.Message_IsNotArchived.Value;
+                }
 
                 return await _messageRepository.UpdateMessage(message);
             }

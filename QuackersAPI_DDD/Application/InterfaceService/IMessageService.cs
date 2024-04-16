@@ -8,7 +8,7 @@ namespace QuackersAPI_DDD.Application.InterfaceService
         Task<IEnumerable<Message>> GetAllMessages();
         Task<Message> GetMessageById(int messageId);
         Task<Message> CreateMessage(CreateMessageDTO dto);
-        Task<Message> UpdateMessage(int messageId, Message message);
+        Task<Message> UpdateMessage(int messageId, UpdateMessageDTO dto);
         Task<bool> DeleteMessage(int messageId);
     }
 }

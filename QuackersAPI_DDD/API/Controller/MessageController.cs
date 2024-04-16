@@ -68,7 +68,7 @@ namespace QuackersAPI_DDD.API.Controller
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateMessage(int id, [FromBody] Message message)
+        public async Task<IActionResult> UpdateMessage(int id, [FromBody] UpdateMessageDTO updateMessageDTO)
         {
             if (!ModelState.IsValid)
             {
@@ -77,16 +77,16 @@ namespace QuackersAPI_DDD.API.Controller
 
             try
             {
-                var updatedMessage = await _messageService.UpdateMessage(id, message);
-                if (updatedMessage == null)
-                {
-                    return NotFound($"Message with id {id} not found.");
-                }
+                var updatedMessage = await _messageService.UpdateMessage(id, updateMessageDTO);
                 return Ok(updatedMessage);
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(ex.Message);
             }
             catch (Exception ex)
             {
-                return BadRequest(ex.Message);
+                return BadRequest(ex.Message);  
             }
         }
 

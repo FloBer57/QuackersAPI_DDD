@@ -27,6 +27,10 @@ namespace QuackersAPI_DDD.Application.Service
         public async Task<ChannelType> CreateChannelType(CreateChannelTypeDTO dto)
         {
             var channelType = new ChannelType { ChannelType_Name = dto.ChannelType_Name };
+            if (await _channelTypeRepository.ChannelTypeNameExists(dto.ChannelType_Name))
+            {
+                throw new InvalidOperationException($"A channel type with the same name '{dto.ChannelType_Name} exist");
+            }
             return await _channelTypeRepository.CreateChannelType(channelType);
         }
 
@@ -36,6 +40,11 @@ namespace QuackersAPI_DDD.Application.Service
             if (channelType == null)
             {
                 throw new InvalidOperationException($"ChannelType with id {id} not found.");
+            }
+
+            if (await _channelTypeRepository.ChannelTypeNameExists(updateChannelTypeDTO.ChannelType_Name))
+            {
+                throw new InvalidOperationException($"A channel type with the same name {updateChannelTypeDTO.ChannelType_Name} exist");
             }
 
             channelType.ChannelType_Name = updateChannelTypeDTO.ChannelType_Name;

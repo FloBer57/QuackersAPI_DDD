@@ -44,7 +44,12 @@ namespace QuackersAPI_DDD.Application.Service
 
         public async Task<bool> DeleteAttachment(int id)
         {
-            return await _attachmentRepository.DeleteAttachment(id);
+            var attachment = _attachmentRepository.DeleteAttachment(id);
+            if (attachment != null)
+            {
+                throw new InvalidOperationException("Attachment with id {id} not found");
+            }
+            return true;
         }
     }
 }

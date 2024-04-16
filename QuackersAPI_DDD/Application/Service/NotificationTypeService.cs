@@ -1,4 +1,5 @@
-﻿using QuackersAPI_DDD.API.DTO.NotificationTypeDTO;
+﻿using QuackersAPI_DDD.API.DTO.ChannelDTO;
+using QuackersAPI_DDD.API.DTO.NotificationTypeDTO;
 using QuackersAPI_DDD.Application.InterfaceService;
 using QuackersAPI_DDD.Domain.Model;
 using QuackersAPI_DDD.Infrastructure.InterfaceRepository;
@@ -31,6 +32,10 @@ namespace QuackersAPI_DDD.Application.Service
             {
                 NotificationType_Name = dto.NotificationType_Name
             };
+            if (await _notificationTypeRepository.NotificationTypeNameExists(dto.NotificationType_Name))
+            {
+                throw new InvalidOperationException($"A Notification Type with the name '{dto.NotificationType_Name}' already exists.");
+            }
             return await _notificationTypeRepository.CreateNotificationType(newNotificationType);
         }
 
@@ -40,6 +45,10 @@ namespace QuackersAPI_DDD.Application.Service
             if (notificationType == null)
             {
                 throw new KeyNotFoundException($"NotificationType with id {id} not found.");
+            }
+            if (await _notificationTypeRepository.NotificationTypeNameExists(dto.NotificationType_Name))
+            {
+                throw new InvalidOperationException($"A Notification Type with the name '{dto.NotificationType_Name}' already exists.");
             }
 
             notificationType.NotificationType_Name = dto.NotificationType_Name;
