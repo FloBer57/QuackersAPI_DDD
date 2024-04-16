@@ -90,6 +90,11 @@ namespace QuackersAPI_DDD.Application.Service
             return await _personRepository.GetPersonById(id);
         }
 
+        public async Task<Person> GetPersonByEmail(string email)
+        {
+            return await _personRepository.GetPersonByEmail(email);
+        }
+
         public async Task<Person> UpdatePerson(int id, UpdatePersonDTO updatePersonDTO)
         {
             var person = await _personRepository.GetPersonById(id);
@@ -98,22 +103,33 @@ namespace QuackersAPI_DDD.Application.Service
                 throw new InvalidOperationException($"Person with id {id} not found.");
             }
 
+            // Mise à jour du numéro de téléphone si fourni
             if (!string.IsNullOrWhiteSpace(updatePersonDTO.PhoneNumber))
             {
                 person.Person_PhoneNumber = updatePersonDTO.PhoneNumber;
             }
 
-            if (updatePersonDTO.Description != null)
+            // Mise à jour de la description si fournie
+            if (!string.IsNullOrWhiteSpace(updatePersonDTO.Description))
             {
                 person.Person_Description = updatePersonDTO.Description;
             }
 
-            if (!string.IsNullOrWhiteSpace(updatePersonDTO.ProfilPicturePath) && updatePersonDTO.ProfilPicturePath != "Path/To/Default/Image")
+            // Mise à jour du chemin de l'image de profil si fourni
+            if (!string.IsNullOrWhiteSpace(updatePersonDTO.ProfilPicturePath))
             {
                 person.Person_ProfilPicturePath = updatePersonDTO.ProfilPicturePath;
             }
 
-            return await _personRepository.UpdatePerson(person);
+            // Mise à jour du mot de passe si fourni
+            if (!string.IsNullOrWhiteSpace(updatePersonDTO.Password))
+            {
+                person.Person_Password = SecurityService.HashPassword(updatePersonDTO.Password);
+                person.Person_IsTemporaryPassword = false; 
+            }
+
+            await _personRepository.UpdatePerson(person);
+            return person;
         }
 
         public async Task<bool> DeletePerson(int id)
