@@ -52,19 +52,45 @@ namespace QuackersAPI_DDD.API.Controller
         [HttpPost]
         public async Task<IActionResult> CreateChannel([FromBody] CreateChannelDTO createChannelDTO)
         {
-            var createdChannel = await _channelService.CreateChannel(createChannelDTO);
-            return CreatedAtAction(nameof(GetChannelById), new { id = createdChannel.Channel_Id }, createdChannel);
+            try
+            {
+                var createdChannel = await _channelService.CreateChannel(createChannelDTO);
+                return CreatedAtAction(nameof(GetChannelById), new { id = createdChannel.Channel_Id }, createdChannel);
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(ex.Message); 
+            }
+            catch (InvalidOperationException ex)
+            {
+                return Conflict(ex.Message); 
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "An internal server error has occurred: " + ex.Message); 
+            }
         }
 
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateChannel(int id, [FromBody] UpdateChannelDTO updateChannelDTO)
         {
-            var updatedChannel = await _channelService.UpdateChannel(id, updateChannelDTO);
-            if (updatedChannel == null)
+            try
             {
-                return NotFound($"Channel with id {id} not found.");
+                var updatedChannel = await _channelService.UpdateChannel(id, updateChannelDTO);
+                return Ok(updatedChannel);
             }
-            return Ok(updatedChannel);
+            catch (InvalidOperationException ex)
+            {
+                return Conflict(ex.Message);
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "An internal server error has occurred.");
+            }
         }
 
 

@@ -22,11 +22,16 @@ namespace QuackersAPI_DDD.Application.Service
 
         public async Task<Channel> CreateChannel(CreateChannelDTO createChannelDTO)
         {
-            var defaultChannelTypeId = 1; // ID du type de canal par défaut
-            var channelType = await _channelTypeService.GetChannelTypeById(defaultChannelTypeId);
+            var channelType = await _channelTypeService.GetChannelTypeById(createChannelDTO.ChannelType_Id);
             if (channelType == null)
             {
-                throw new InvalidOperationException($"ChannelType with id {defaultChannelTypeId} not found.");
+                throw new KeyNotFoundException($"ChannelType with id {createChannelDTO.ChannelType_Id} not found.");
+            }
+
+            // Vérifiez si un canal avec le même nom existe déjà
+            if (await _channelRepository.ChannelNameExists(createChannelDTO.Channel_Name))
+            {
+                throw new InvalidOperationException($"A channel with the name '{createChannelDTO.Channel_Name}' already exists.");
             }
 
             // Créer le nouveau canal
@@ -34,13 +39,12 @@ namespace QuackersAPI_DDD.Application.Service
             {
                 Channel_Name = createChannelDTO.Channel_Name,
                 Channel_ImagePath = createChannelDTO.Channel_ImagePath,
-                ChannelType_Id = defaultChannelTypeId,
+                ChannelType_Id = createChannelDTO.ChannelType_Id, 
                 ChannelType = channelType
             };
 
             var createdChannel = await _channelRepository.CreateChannel(channel);
-
-            channelType.Channels.Add(createdChannel);
+            channelType.Channels.Add(createdChannel); 
 
             return createdChannel;
         }
@@ -62,18 +66,40 @@ namespace QuackersAPI_DDD.Application.Service
             return await _channelRepository.GetChannelById(id);
         }
 
-        public async Task<Channel> UpdateChannel(int id, UpdateChannelDTO updateChannelDTO)
+        public async Task<Channel> UpdateChannel(int id, UpdateChannelDTO dto)
         {
-            var channel = await _channelRepository.GetChannelById(id);
-            if (channel == null)
+            var existingChannel = await _channelRepository.GetChannelById(id);
+
+            if (existingChannel == null)
             {
-                throw new InvalidOperationException($"Channel with id {id} not found.");
+                throw new KeyNotFoundException($"Channel with id {id} not found.");
             }
 
-            channel.Channel_Name = updateChannelDTO.Channel_Name ?? channel.Channel_Name;
-            channel.Channel_ImagePath = updateChannelDTO.Channel_ImagePath ?? channel.Channel_ImagePath;
+            if (dto.Channel_Name != null && dto.Channel_Name != existingChannel.Channel_Name)
+            {
+                if (await _channelRepository.ChannelNameExists(dto.Channel_Name))
+                {
+                    throw new InvalidOperationException($"A channel with the name '{dto.Channel_Name}' already exists.");
+                }
+                existingChannel.Channel_Name = dto.Channel_Name;
+            }
 
-            return await _channelRepository.UpdateChannel(channel);
+            if (dto.Channel_ImagePath != null)
+            {
+                existingChannel.Channel_ImagePath = dto.Channel_ImagePath;
+            }
+
+            if (dto.ChannelType_Id != null)
+            {
+                var channelType = await _channelTypeService.GetChannelTypeById((int)dto.ChannelType_Id);
+                if (channelType == null)
+                {
+                    throw new KeyNotFoundException($"ChannelType with id {dto.ChannelType_Id} not found.");
+                }
+                existingChannel.ChannelType_Id = (int)dto.ChannelType_Id;
+            }
+
+            return await _channelRepository.UpdateChannel(existingChannel);
         }
 
         public async Task<bool> DeleteChannel(int id)

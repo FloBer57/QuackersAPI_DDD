@@ -21,20 +21,24 @@ namespace QuackersAPI_DDD.Application.Service
 
         public async Task<Attachment> GetAttachmentById(int id)
         {
-            var attachment = await _attachmentRepository.GetAttachmentById(id);
-            if (attachment == null)
-                throw new KeyNotFoundException("Attachment not found.");
-            return attachment;
+            return await _attachmentRepository.GetAttachmentById(id);
         }
+
 
         public async Task<Attachment> CreateAttachment(CreateAttachmentDTO dto)
         {
+            if (await _attachmentRepository.AttachmentNameExists(dto.Attachment_Name))
+            {
+                throw new InvalidOperationException("An attachment with the same name already exists.");
+            }
+
             var attachment = new Attachment
             {
                 Attachment_Name = dto.Attachment_Name,
                 AttachmentThing = dto.AttachmentThing,
                 Message_Id = dto.Message_Id
             };
+
             return await _attachmentRepository.CreateAttachment(attachment);
         }
 

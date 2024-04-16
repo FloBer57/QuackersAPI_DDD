@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using QuackersAPI_DDD.API.DTO.AttachmentDTO;
 using QuackersAPI_DDD.Application.InterfaceService;
 
@@ -19,6 +20,10 @@ namespace QuackersAPI_DDD.API.Controller
         public async Task<IActionResult> GetAll()
         {
             var attachments = await _attachmentService.GetAllAttachments();
+            if (attachments == null || !attachments.Any()) 
+            {
+                return NotFound("Attachments not found");
+            }
             return Ok(attachments);
         }
 
@@ -34,10 +39,21 @@ namespace QuackersAPI_DDD.API.Controller
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create([FromBody] CreateAttachmentDTO dto)
+        public async Task<IActionResult> CreateAttachment([FromBody] CreateAttachmentDTO dto)
         {
-            var createdAttachment = await _attachmentService.CreateAttachment(dto);
-            return CreatedAtAction(nameof(GetById), new { id = createdAttachment.Attachment_Id }, createdAttachment);
+            try
+            {
+                var newAttachment = await _attachmentService.CreateAttachment(dto);
+                return CreatedAtAction(nameof(GetById), new { id = newAttachment.Attachment_Id }, newAttachment);
+            }
+            catch (InvalidOperationException ex)
+            {
+                return Conflict(ex.Message); 
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "An error occurred while creating the attachment.");
+            }
         }
 
         [HttpDelete("{id}")]

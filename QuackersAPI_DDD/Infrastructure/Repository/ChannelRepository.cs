@@ -56,5 +56,10 @@
             _context.Channels.Remove(channel);
             await _context.SaveChangesAsync();
         }
+
+        public async Task<bool> ChannelNameExists(string name)
+        {
+            return await _context.Channels.AnyAsync(r => r.Channel_Name == name);
+        }
     }
 }

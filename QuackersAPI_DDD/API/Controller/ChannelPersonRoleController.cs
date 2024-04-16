@@ -49,8 +49,19 @@ namespace QuackersAPI_DDD.API.Controller
                 return BadRequest(ModelState);
             }
 
-            var createdRole = await _channelPersonRoleService.CreateChannelPersonRole(dto);
-            return CreatedAtAction(nameof(GetChannelPersonRoleById), new { id = createdRole.ChannelPersonRole_Id }, createdRole);
+            try
+            {
+                var createdRole = await _channelPersonRoleService.CreateChannelPersonRole(dto);
+                return CreatedAtAction(nameof(GetChannelPersonRoleById), new { id = createdRole.ChannelPersonRole_Id }, createdRole);
+            }
+            catch (InvalidOperationException ex)
+            {
+                return Conflict(ex.Message); 
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "An error occurred while creating the channel person role.");
+            }
         }
 
         [HttpPut("{id}")]
@@ -69,6 +80,10 @@ namespace QuackersAPI_DDD.API.Controller
             catch (KeyNotFoundException)
             {
                 return NotFound($"ChannelPersonRole with id {id} not found.");
+            }
+            catch (InvalidOperationException ex)
+            {
+                return Conflict(ex.Message);
             }
         }
 

@@ -9,5 +9,6 @@ namespace QuackersAPI_DDD.Infrastructure.InterfaceRepository
         Task<ChannelPersonRole> CreateChannelPersonRole(ChannelPersonRole channelPersonRole);
         Task<ChannelPersonRole> UpdateChannelPersonRole(ChannelPersonRole channelPersonRole);
         Task DeleteChannelPersonRole(int id);
+        Task<bool> ChannelPersonRoleNameExists(string channelPersonRoleName);
     }
 }

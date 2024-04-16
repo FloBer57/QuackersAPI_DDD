@@ -44,11 +44,11 @@ public partial class Person
     public virtual ICollection<Message> Messages { get; set; } = new List<Message>();
     [JsonIgnore]
     public virtual ICollection<MessageXReactionXPerson> Messagexreactionxpeople { get; set; } = new List<MessageXReactionXPerson>();
-
+    [JsonIgnore]
     public virtual PersonJobTitle PersonJobTitle { get; set; } = null!;
-
+    [JsonIgnore]
     public virtual PersonRole PersonRole { get; set; } = null!;
-
+    [JsonIgnore]
     public virtual PersonStatut PersonStatut { get; set; } = null!;
     [JsonIgnore]
     public virtual ICollection<PersonXChannel> Personxchannels { get; set; } = new List<PersonXChannel>();

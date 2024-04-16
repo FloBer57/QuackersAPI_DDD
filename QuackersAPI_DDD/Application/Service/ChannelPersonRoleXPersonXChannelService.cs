@@ -33,8 +33,7 @@ namespace QuackersAPI_DDD.Application.Service
 
         public async Task<ChannelPersonRoleXPersonXChannel> GetAssociationByIds(int personId, int channelId)
         {
-            return await _repository.GetAssociationByIds(personId, channelId)
-                ?? throw new KeyNotFoundException("Association not found with the specified IDs.");
+            return await _repository.GetAssociationByIds(personId, channelId);
         }
 
         public async Task<ChannelPersonRoleXPersonXChannel> CreateAssociation(CreateChannelPersonRoleXPersonXChannelDTO dto)
@@ -44,7 +43,9 @@ namespace QuackersAPI_DDD.Application.Service
             var role = await _roleRepository.GetChannelPersonRoleById(dto.ChannelPersonRole_Id);
 
             if (person == null || channel == null || role == null)
-                throw new KeyNotFoundException("One or more entities not found.");
+            {
+                return null;
+            }
 
             var association = new ChannelPersonRoleXPersonXChannel
             {
@@ -61,11 +62,11 @@ namespace QuackersAPI_DDD.Application.Service
         {
             var association = await _repository.GetAssociationByIds(personId, channelId);
             if (association == null)
-                throw new KeyNotFoundException("Association not found with the specified IDs.");
+                return null;
 
             var role = await _roleRepository.GetChannelPersonRoleById(dto.ChannelPersonRoleId);
             if (role == null)
-                throw new KeyNotFoundException("ChannelPersonRole not found with the specified ID.");
+                return null;
 
             association.ChannelPersonRole = role;
 

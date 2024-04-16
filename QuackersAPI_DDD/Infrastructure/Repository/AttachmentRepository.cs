@@ -42,5 +42,10 @@ namespace QuackersAPI_DDD.Infrastructure.Repository
             }
             return false;
         }
+
+        public async Task<bool> AttachmentNameExists(string attachmentName)
+        {
+            return await _context.Attachments.AnyAsync(a => a.Attachment_Name == attachmentName);
+        }
     }
 }

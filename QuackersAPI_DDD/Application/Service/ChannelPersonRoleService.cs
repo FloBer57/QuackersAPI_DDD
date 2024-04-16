@@ -21,18 +21,22 @@ namespace QuackersAPI_DDD.Application.Service
 
         public async Task<ChannelPersonRole> GetChannelPersonRoleById(int id)
         {
-            var role = await _channelPersonRoleRepository.GetChannelPersonRoleById(id);
-            if (role == null)
-            {
-                throw new KeyNotFoundException($"ChannelPersonRole with id {id} not found.");
-            }
-            return role;
+            return await _channelPersonRoleRepository.GetChannelPersonRoleById(id);
         }
 
         public async Task<ChannelPersonRole> CreateChannelPersonRole(CreateChannelPersonRoleDTO dto)
         {
-            var channelPersonRole = new ChannelPersonRole { ChannelPersonRole_Name = dto.ChannelPersonRole_Name };
-            return await _channelPersonRoleRepository.CreateChannelPersonRole(channelPersonRole);
+            if (await _channelPersonRoleRepository.ChannelPersonRoleNameExists(dto.ChannelPersonRole_Name))
+            {
+                throw new InvalidOperationException("A channel person role with the same name already exists.");
+            }
+
+            var newRole = new ChannelPersonRole
+            {
+                ChannelPersonRole_Name = dto.ChannelPersonRole_Name
+            };
+
+            return await _channelPersonRoleRepository.CreateChannelPersonRole(newRole);
         }
 
         public async Task<ChannelPersonRole> UpdateChannelPersonRole(int id, UpdateChannelPersonRoleDTO dto)
@@ -40,7 +44,11 @@ namespace QuackersAPI_DDD.Application.Service
             var channelPersonRole = await _channelPersonRoleRepository.GetChannelPersonRoleById(id);
             if (channelPersonRole == null)
             {
-                throw new KeyNotFoundException($"ChannelPersonRole with id {id} not found.");
+                return null;
+            }
+            if (await _channelPersonRoleRepository.ChannelPersonRoleNameExists(dto.ChannelPersonRole_Name))
+            {
+                throw new InvalidOperationException("A channel person role with the same name already exists.");
             }
             channelPersonRole.ChannelPersonRole_Name = dto.ChannelPersonRole_Name;
             return await _channelPersonRoleRepository.UpdateChannelPersonRole(channelPersonRole);
