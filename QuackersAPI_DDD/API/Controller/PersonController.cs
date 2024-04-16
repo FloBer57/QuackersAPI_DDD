@@ -76,6 +76,16 @@ namespace QuackersAPI_DDD.API.Controller
             return Ok(channels);
         }
 
+        [HttpGet("{email}/Login")]
+        public async Task<IActionResult> GetPersonByEmail(string email)
+        {
+            var person = await _personService.GetPersonByEmail(email);
+            if (person == null)
+            {
+                return NotFound($"Person with Email {email} not found");
+            }
+            return Ok(person);
+        }
         [HttpPost]
         public async Task<IActionResult> CreatePerson([FromBody] CreatePersonDTO createPersonDTO)
         {

@@ -33,6 +33,11 @@
             return await _context.Persons.FindAsync(id);
         }
 
+        public async Task<Person> GetPersonByEmail(string email)
+        {
+            return await _context.Persons.FindAsync(email);
+        }
+
         public async Task<Person> UpdatePerson(Person person)
         {
             _context.Entry(person).State = EntityState.Modified;

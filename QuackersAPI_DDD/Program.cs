@@ -25,6 +25,12 @@ namespace QuackersAPI_DDD
     options.UseMySql(builder.Configuration.GetConnectionString("DefaultConnection"), new MySqlServerVersion(new Version(8, 0, 21))));
             builder.Services.AddDomainServices();
             builder.Services.AddControllers();
+            /* builder.Services.AddSingleton<AuthConfiguration>();*/
+            builder.Services.AddControllers().AddJsonOptions(x =>
+            {
+                x.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.Preserve;
+            });
+
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
