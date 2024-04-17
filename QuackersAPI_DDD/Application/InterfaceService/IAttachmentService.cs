@@ -1,4 +1,5 @@
-﻿using QuackersAPI_DDD.API.DTO.AttachmentDTO;
+﻿using Microsoft.EntityFrameworkCore;
+using QuackersAPI_DDD.API.DTO.AttachmentDTO;
 using QuackersAPI_DDD.Domain.Model;
 
 namespace QuackersAPI_DDD.Application.InterfaceService

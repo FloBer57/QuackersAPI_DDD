@@ -28,6 +28,10 @@ namespace QuackersAPI_DDD.API.Controller
             try
             {
                 var reaction = await _service.GetReactionById(personId, messageId, reactionId);
+                if (reaction == null)
+                {
+                    throw new KeyNotFoundException($"Reaction not found with person ID {personId}, message ID {messageId}, and reaction ID {reactionId}.");
+                }
                 return Ok(reaction);
             }
             catch (KeyNotFoundException e)
@@ -39,20 +43,32 @@ namespace QuackersAPI_DDD.API.Controller
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] CreateMessageXReactionXPersonDTO dto)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
             try
             {
                 var createdReaction = await _service.CreateReaction(dto);
                 return CreatedAtAction(nameof(GetById), new { personId = dto.PersonId, messageId = dto.MessageId, reactionId = dto.ReactionId }, createdReaction);
             }
-            catch (Exception e)
+            catch (InvalidOperationException ex)
             {
-                return StatusCode(500, "Internal server error: " + e.Message);
+                return Conflict(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Internal server error: " + ex.Message);
             }
         }
 
         [HttpPut("{personId}/{messageId}/{reactionId}")]
         public async Task<IActionResult> Update(int personId, int messageId, int reactionId, [FromBody] UpdateMessageXReactionXPersonDTO dto)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
             try
             {
                 var updatedReaction = await _service.UpdateReaction(personId, messageId, reactionId, dto);
@@ -73,12 +89,16 @@ namespace QuackersAPI_DDD.API.Controller
         {
             try
             {
-                var success = await _service.DeleteReaction(personId, messageId, reactionId);
-                if (!success)
+                bool deleted = await _service.DeleteReaction(personId, messageId, reactionId);
+                if (!deleted)
                 {
-                    return NotFound($"Reaction not found with person ID {personId}, message ID {messageId}, and reaction ID {reactionId}.");
+                    throw new KeyNotFoundException($"Reaction not found with person ID {personId}, message ID {messageId}, and reaction ID {reactionId}.");
                 }
-                return Ok($"Reaction deleted successfully.");
+                return NoContent();
+            }
+            catch (KeyNotFoundException e)
+            {
+                return NotFound(e.Message);
             }
             catch (Exception e)
             {

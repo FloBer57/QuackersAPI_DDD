@@ -26,13 +26,18 @@
 
             public async Task<IEnumerable<Message>> GetAllMessages()
             {
-                return await _messageRepository.GetAllMessages();
+                var message = await _messageRepository.GetAllMessages();
+                return message ?? new List<Message>();
             }
 
             public async Task<Message> GetMessageById(int messageId)
             {
-                return await _messageRepository.GetMessageById(messageId)
-                    ?? throw new KeyNotFoundException($"Message with id {messageId} not found.");
+                var message = await _messageRepository.GetMessageById(messageId);
+                if (message == null)
+                {
+                    throw new KeyNotFoundException($"Message with id {messageId} not found.");
+                }
+                return message;
             }
 
             public async Task<Message> CreateMessage(CreateMessageDTO dto)
@@ -61,7 +66,7 @@
                 return await _messageRepository.CreateMessage(message);
             }
 
-            public async Task<Message> UpdateMessage(int messageId, Message updatedMessage)
+            public async Task<Message> UpdateMessage(int messageId, UpdateMessageDTO dto)
             {
                 var message = await _messageRepository.GetMessageById(messageId);
                 if (message == null)
@@ -69,9 +74,11 @@
                     throw new KeyNotFoundException($"Message with id {messageId} not found.");
                 }
 
-                message.Message_Text = updatedMessage.Message_Text;
-                message.Message_IsNotArchived = updatedMessage.Message_IsNotArchived;
-                message.Message_Date = updatedMessage.Message_Date ?? message.Message_Date;
+                message.Message_Text = dto.Message_Text ?? message.Message_Text;
+                if (dto.Message_IsNotArchived.HasValue)
+                {
+                    message.Message_IsNotArchived = dto.Message_IsNotArchived.Value;
+                }
 
                 return await _messageRepository.UpdateMessage(message);
             }
@@ -81,7 +88,7 @@
                 var message = await _messageRepository.GetMessageById(messageId);
                 if (message == null)
                 {
-                    return false;
+                    throw new KeyNotFoundException($"Message with id {messageId} not found.");
                 }
 
                 await _messageRepository.DeleteMessage(messageId);

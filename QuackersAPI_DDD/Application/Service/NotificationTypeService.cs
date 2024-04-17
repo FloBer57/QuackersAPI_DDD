@@ -1,4 +1,5 @@
-﻿using QuackersAPI_DDD.API.DTO.NotificationTypeDTO;
+﻿using QuackersAPI_DDD.API.DTO.ChannelDTO;
+using QuackersAPI_DDD.API.DTO.NotificationTypeDTO;
 using QuackersAPI_DDD.Application.InterfaceService;
 using QuackersAPI_DDD.Domain.Model;
 using QuackersAPI_DDD.Infrastructure.InterfaceRepository;
@@ -17,20 +18,32 @@ namespace QuackersAPI_DDD.Application.Service
 
         public async Task<IEnumerable<NotificationType>> GetAllNotificationTypes()
         {
-            return await _notificationTypeRepository.GetAllNotificationTypes();
+            var notification = await _notificationTypeRepository.GetAllNotificationTypes();
+            return notification ?? new List<NotificationType>();
         }
 
         public async Task<NotificationType> GetNotificationTypeById(int id)
         {
-            return await _notificationTypeRepository.GetNotificationTypeById(id);
+            var notificationType = await _notificationTypeRepository.GetNotificationTypeById(id);
+            if (notificationType == null)
+            {
+                throw new KeyNotFoundException($"NotificationType with id {id} not found.");
+            }
+            return notificationType;
         }
 
         public async Task<NotificationType> CreateNotificationType(CreateNotificationTypeDTO dto)
         {
+            if (await _notificationTypeRepository.NotificationTypeNameExists(dto.NotificationType_Name))
+            {
+                throw new InvalidOperationException($"A Notification Type with the name '{dto.NotificationType_Name}' already exists.");
+            }
+
             var newNotificationType = new NotificationType
             {
                 NotificationType_Name = dto.NotificationType_Name
             };
+
             return await _notificationTypeRepository.CreateNotificationType(newNotificationType);
         }
 
@@ -51,8 +64,9 @@ namespace QuackersAPI_DDD.Application.Service
             var notificationType = await _notificationTypeRepository.GetNotificationTypeById(id);
             if (notificationType == null)
             {
-                throw new KeyNotFoundException($"Notification with id {id} not found.");
+                throw new KeyNotFoundException($"NotificationType with id {id} not found.");
             }
+
             return await _notificationTypeRepository.DeleteNotificationType(id);
         }
     }

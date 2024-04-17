@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using QuackersAPI_DDD.API.DTO.AttachmentDTO;
 using QuackersAPI_DDD.Application.InterfaceService;
 
@@ -18,37 +19,66 @@ namespace QuackersAPI_DDD.API.Controller
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            var attachments = await _attachmentService.GetAllAttachments();
-            return Ok(attachments);
+                var attachments = await _attachmentService.GetAllAttachments();
+                return Ok(attachments);
         }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id)
         {
-            var attachment = await _attachmentService.GetAttachmentById(id);
-            if (attachment == null)
+            try
             {
-                return NotFound($"Attachment with id {id} not found.");
+                var attachment = await _attachmentService.GetAttachmentById(id);
+                return Ok(attachment);
             }
-            return Ok(attachment);
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"An error occurred while get the attachment: {ex.Message}");
+            }
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create([FromBody] CreateAttachmentDTO dto)
+        public async Task<IActionResult> CreateAttachment([FromBody] CreateAttachmentDTO dto)
         {
-            var createdAttachment = await _attachmentService.CreateAttachment(dto);
-            return CreatedAtAction(nameof(GetById), new { id = createdAttachment.Attachment_Id }, createdAttachment);
+            try
+            {
+                var newAttachment = await _attachmentService.CreateAttachment(dto);
+                return CreatedAtAction(nameof(GetById), new { id = newAttachment.Attachment_Id }, newAttachment);
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (InvalidOperationException ex)
+            {
+                return Conflict(ex.Message); 
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "An error occurred while creating the attachment.");
+            }
         }
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
-            var success = await _attachmentService.DeleteAttachment(id);
-            if (!success)
+            try
             {
-                return NotFound($"Attachment with id {id} not found.");
+                var success = await _attachmentService.DeleteAttachment(id);
+                return Ok($"Attachment with id {id} deleted successfully.");
             }
-            return Ok($"Attachment with id {id} deleted successfully.");
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"An error occurred while deleting the attachment: {ex.Message}");
+            }
         }
     }
 }

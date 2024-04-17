@@ -9,5 +9,6 @@ namespace QuackersAPI_DDD.Infrastructure.InterfaceRepository
         Task<NotificationType> CreateNotificationType(NotificationType notificationType);
         Task<NotificationType> UpdateNotificationType(NotificationType notificationType);
         Task <bool> DeleteNotificationType(int id);
+        Task<bool> NotificationTypeNameExists(string name);
     }
 }

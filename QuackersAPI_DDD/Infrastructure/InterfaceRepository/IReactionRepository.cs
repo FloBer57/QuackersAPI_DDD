@@ -9,5 +9,6 @@ namespace QuackersAPI_DDD.Infrastructure.InterfaceRepository
         Task<Reaction> CreateReaction(Reaction reaction);
         Task<Reaction> UpdateReaction(Reaction reaction);
         Task<bool> DeleteReaction(int id);
+        Task<bool> ReactionNameExist(string name);
     }
 }

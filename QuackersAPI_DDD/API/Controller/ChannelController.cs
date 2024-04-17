@@ -19,64 +19,106 @@ namespace QuackersAPI_DDD.API.Controller
         [HttpGet]
         public async Task<IActionResult> GetAllChannels()
         {
-            var channels = await _channelService.GetAllChannels();
-            if (channels == null)
-            {
-                return NotFound("No channel can be found");
-            }
-            return Ok(channels);
+                var channels = await _channelService.GetAllChannels();
+                return Ok(channels);
         }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetChannelById(int id)
         {
-            var channel = await _channelService.GetChannelById(id);
-            if (channel == null)
+            try
             {
-                return NotFound($"Channel with id {id} not found.");
+                var channel = await _channelService.GetChannelById(id);
+                return Ok(channel);
             }
-            return Ok(channel);
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"An error occurred while retrieving the channel with ID {id}: {ex.Message}");
+            }
         }
 
         [HttpGet("{id}/channels")]
         public async Task<IActionResult> GetChannelsByChannelType(int id)
         {
-            var channels = await _channelService.GetChannelsByChannelType(id);
-            if (channels == null)
+            try
             {
-                return NotFound($"No channel with ChannelTypeId = {id} can be found");
+                var channels = await _channelService.GetChannelsByChannelType(id);
+                return Ok(channels);
             }
-            return Ok(channels);
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"An error occurred while retrieving channels for channel type {id}: {ex.Message}");
+            }
         }
 
         [HttpPost]
         public async Task<IActionResult> CreateChannel([FromBody] CreateChannelDTO createChannelDTO)
         {
-            var createdChannel = await _channelService.CreateChannel(createChannelDTO);
-            return CreatedAtAction(nameof(GetChannelById), new { id = createdChannel.Channel_Id }, createdChannel);
+            try
+            {
+                var createdChannel = await _channelService.CreateChannel(createChannelDTO);
+                return CreatedAtAction(nameof(GetChannelById), new { id = createdChannel.Channel_Id }, createdChannel);
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (InvalidOperationException ex)
+            {
+                return Conflict(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"An internal server error has occurred while creating the channel: {ex.Message}");
+            }
         }
 
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateChannel(int id, [FromBody] UpdateChannelDTO updateChannelDTO)
         {
-            var updatedChannel = await _channelService.UpdateChannel(id, updateChannelDTO);
-            if (updatedChannel == null)
+            try
             {
-                return NotFound($"Channel with id {id} not found.");
+                var updatedChannel = await _channelService.UpdateChannel(id, updateChannelDTO);
+                return Ok(updatedChannel);
             }
-            return Ok(updatedChannel);
+            catch (InvalidOperationException ex)
+            {
+                return Conflict(ex.Message);
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"An internal server error has occurred while updating the channel: {ex.Message}");
+            }
         }
-
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteChannel(int id)
         {
-            var success = await _channelService.DeleteChannel(id);
-            if (!success)
+            try
             {
-                return NotFound($"Channel with id {id} not found.");
+                await _channelService.DeleteChannel(id);
+                return NoContent();
             }
-            return Ok($"Channel with id {id} deleted successfully.");
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"An error occurred while deleting the channel: {ex.Message}");
+            }
         }
     }
 }

@@ -25,10 +25,6 @@ namespace QuackersAPI_DDD.API.Controller
         public async Task<IActionResult> GetAllPersons()
         {
             var persons = await _personService.GetAllPersons();
-            if (persons == null)
-            {
-                return NotFound($"No person have been created");
-            }
             return Ok(persons);
         }
 

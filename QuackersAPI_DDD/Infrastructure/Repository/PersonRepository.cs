@@ -75,5 +75,15 @@
                 .Where(p => p.PersonRole_Id == roleId)
                 .ToListAsync();
         }
+
+        public async Task<bool> PersonEmailExists(string email)
+        {
+            return await _context.Persons.AnyAsync(r => r.Person_Email == email);
+        }
+
+        public async Task<bool> PersonPhoneNumberExists(string phoneNumber)
+        {
+            return await _context.Persons.AnyAsync(r => r.Person_PhoneNumber == phoneNumber);
+        }
     }
 }

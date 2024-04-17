@@ -19,43 +19,87 @@ namespace QuackersAPI_DDD.API.Controller
         public async Task<IActionResult> GetAllNotificationTypes()
         {
             var types = await _notificationTypeService.GetAllNotificationTypes();
-            if (types == null)
-                return NotFound("No notification types found.");
             return Ok(types);
         }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetNotificationTypeById(int id)
         {
-            var type = await _notificationTypeService.GetNotificationTypeById(id);
-            if (type == null)
-                return NotFound($"NotificationType with id {id} not found.");
-            return Ok(type);
+            try
+            {
+                var type = await _notificationTypeService.GetNotificationTypeById(id);
+                if (type == null)
+                    throw new KeyNotFoundException($"NotificationType with id {id} not found.");
+                return Ok(type);
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Internal server error: " + ex.Message);
+            }
         }
 
         [HttpPost]
         public async Task<IActionResult> CreateNotificationType([FromBody] CreateNotificationTypeDTO dto)
         {
-            var createdType = await _notificationTypeService.CreateNotificationType(dto);
-            return CreatedAtAction(nameof(GetNotificationTypeById), new { id = createdType.NotificationType_Id }, createdType);
+            try
+            {
+                var createdType = await _notificationTypeService.CreateNotificationType(dto);
+                return CreatedAtAction(nameof(GetNotificationTypeById), new { id = createdType.NotificationType_Id }, createdType);
+            }
+            catch (InvalidOperationException ex)
+            {
+                return Conflict(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "An internal server error has occurred: " + ex.Message);
+            }
         }
 
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateNotificationType(int id, [FromBody] UpdateNotificationTypeDTO dto)
         {
-            var updatedType = await _notificationTypeService.UpdateNotificationType(id, dto);
-            if (updatedType == null)
-                return NotFound($"NotificationType with id {id} not found.");
-            return Ok(updatedType);
+            try
+            {
+                var updatedType = await _notificationTypeService.UpdateNotificationType(id, dto);
+                return Ok(updatedType);
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (InvalidOperationException ex)
+            {
+                return Conflict(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "An internal server error has occurred: " + ex.Message);
+            }
         }
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteNotificationType(int id)
         {
-            var success = await _notificationTypeService.DeleteNotificationType(id);
-            if (!success)
-                return NotFound($"NotificationType with id {id} not found.");
-            return Ok($"NotificationType with id {id} deleted successfully.");
+            try
+            {
+                var success = await _notificationTypeService.DeleteNotificationType(id);
+                if (!success)
+                    throw new KeyNotFoundException($"NotificationType with id {id} not found.");
+                return Ok($"NotificationType with id {id} deleted successfully.");
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Internal server error: " + ex.Message);
+            }
         }
     }
 }

@@ -9,5 +9,6 @@ namespace QuackersAPI_DDD.Infrastructure.InterfaceRepository
         Task<PersonJobTitle> GetPersonJobTitleById(int id);
         Task<PersonJobTitle> UpdatePersonJobTitle(PersonJobTitle personJobTitle);
         Task DeletePersonJobTitle(PersonJobTitle personJobTitle);
+        Task<bool> PersonJobTitleNameExists(string name);
     }
 }

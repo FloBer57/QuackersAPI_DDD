@@ -50,5 +50,10 @@ namespace QuackersAPI_DDD.Infrastructure.Repository
             await _context.SaveChangesAsync();
             return true;
         }
+
+        public async Task<bool> ReactionNameExist(string name)
+        {
+            return await _context.Reactions.AnyAsync(r => r.Reaction_Name == name);
+        }
     }
 }

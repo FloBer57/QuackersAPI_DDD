@@ -16,7 +16,8 @@ namespace QuackersAPI_DDD.Application.Service
 
         public async Task<IEnumerable<ChannelPersonRole>> GetAllChannelPersonRoles()
         {
-            return await _channelPersonRoleRepository.GetAllChannelPersonRoles();
+            var roles = await _channelPersonRoleRepository.GetAllChannelPersonRoles();
+            return roles ?? new List<ChannelPersonRole>(); 
         }
 
         public async Task<ChannelPersonRole> GetChannelPersonRoleById(int id)
@@ -31,8 +32,17 @@ namespace QuackersAPI_DDD.Application.Service
 
         public async Task<ChannelPersonRole> CreateChannelPersonRole(CreateChannelPersonRoleDTO dto)
         {
-            var channelPersonRole = new ChannelPersonRole { ChannelPersonRole_Name = dto.ChannelPersonRole_Name };
-            return await _channelPersonRoleRepository.CreateChannelPersonRole(channelPersonRole);
+            if (await _channelPersonRoleRepository.ChannelPersonRoleNameExists(dto.ChannelPersonRole_Name))
+            {
+                throw new InvalidOperationException("A channel person role with the same name already exists.");
+            }
+
+            var newRole = new ChannelPersonRole
+            {
+                ChannelPersonRole_Name = dto.ChannelPersonRole_Name
+            };
+
+            return await _channelPersonRoleRepository.CreateChannelPersonRole(newRole);
         }
 
         public async Task<ChannelPersonRole> UpdateChannelPersonRole(int id, UpdateChannelPersonRoleDTO dto)
@@ -42,18 +52,22 @@ namespace QuackersAPI_DDD.Application.Service
             {
                 throw new KeyNotFoundException($"ChannelPersonRole with id {id} not found.");
             }
+            if (await _channelPersonRoleRepository.ChannelPersonRoleNameExists(dto.ChannelPersonRole_Name))
+            {
+                throw new InvalidOperationException("A channel person role with the same name already exists.");
+            }
             channelPersonRole.ChannelPersonRole_Name = dto.ChannelPersonRole_Name;
             return await _channelPersonRoleRepository.UpdateChannelPersonRole(channelPersonRole);
         }
+
 
         public async Task<bool> DeleteChannelPersonRole(int id)
         {
             var role = await _channelPersonRoleRepository.GetChannelPersonRoleById(id);
             if (role == null)
             {
-                return false;
+                throw new KeyNotFoundException($"ChannelPersonRole with id {id} not found.");
             }
-
             await _channelPersonRoleRepository.DeleteChannelPersonRole(id);
             return true;
         }

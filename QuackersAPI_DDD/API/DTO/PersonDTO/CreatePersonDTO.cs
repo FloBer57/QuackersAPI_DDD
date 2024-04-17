@@ -19,6 +19,7 @@ namespace QuackersAPI_DDD.API.DTO.PersonDTO
 
         [Phone(ErrorMessage = "Invalid phone number format.")]
         public string? PhoneNumber { get; set; }
+        public int JobTitle_Id { get; set; }
     }
 
 }

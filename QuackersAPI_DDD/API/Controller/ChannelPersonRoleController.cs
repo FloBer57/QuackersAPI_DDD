@@ -19,12 +19,8 @@ namespace QuackersAPI_DDD.API.Controller
         [HttpGet]
         public async Task<IActionResult> GetAllChannelPersonRoles()
         {
-            var roles = await _channelPersonRoleService.GetAllChannelPersonRoles();
-            if (roles == null)
-            {
-                return NotFound("No channel person roles found.");
-            }
-            return Ok(roles);
+                var roles = await _channelPersonRoleService.GetAllChannelPersonRoles();
+                return Ok(roles);
         }
 
         [HttpGet("{id}")]
@@ -49,8 +45,19 @@ namespace QuackersAPI_DDD.API.Controller
                 return BadRequest(ModelState);
             }
 
-            var createdRole = await _channelPersonRoleService.CreateChannelPersonRole(dto);
-            return CreatedAtAction(nameof(GetChannelPersonRoleById), new { id = createdRole.ChannelPersonRole_Id }, createdRole);
+            try
+            {
+                var createdRole = await _channelPersonRoleService.CreateChannelPersonRole(dto);
+                return CreatedAtAction(nameof(GetChannelPersonRoleById), new { id = createdRole.ChannelPersonRole_Id }, createdRole);
+            }
+            catch (InvalidOperationException ex)
+            {
+                return Conflict(ex.Message); 
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "An error occurred while creating the channel person role.");
+            }
         }
 
         [HttpPut("{id}")]
@@ -66,22 +73,38 @@ namespace QuackersAPI_DDD.API.Controller
                 var updatedRole = await _channelPersonRoleService.UpdateChannelPersonRole(id, dto);
                 return Ok(updatedRole);
             }
-            catch (KeyNotFoundException)
+            catch (InvalidOperationException ex)
             {
-                return NotFound($"ChannelPersonRole with id {id} not found.");
+                return Conflict(ex.Message);
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "An error occurred while updating the channel person role: " + ex.Message);
             }
         }
+
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteChannelPersonRole(int id)
         {
-            bool deleted = await _channelPersonRoleService.DeleteChannelPersonRole(id);
-            if (!deleted)
+            try
             {
-                return NotFound($"ChannelPersonRole with id {id} not found.");
+                bool deleted = await _channelPersonRoleService.DeleteChannelPersonRole(id);
+                return Ok($"ChannelPersonRole with id {id} has been deleted.");
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "An error occurred while deleting the channel person role: " + ex.Message);
             }
 
-            return Ok($"ChannelPersonRole with id {id} has been deleted.");
         }
     }
 }

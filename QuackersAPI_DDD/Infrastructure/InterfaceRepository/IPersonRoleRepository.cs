@@ -9,5 +9,6 @@ namespace QuackersAPI_DDD.Infrastructure.InterfaceRepository
         Task<PersonRole> GetPersonRoleById(int id);
         Task<PersonRole> UpdatePersonRole(PersonRole personRole);
         Task DeletePersonRole(int id);
+        Task<bool> PersonRoleNameExists(string phoneNumber);
     }
 }
