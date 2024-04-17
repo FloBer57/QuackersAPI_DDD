@@ -16,7 +16,7 @@ namespace QuackersAPI_DDD.Application.Service
         private readonly IPersonStatutService _personStatutService;
         private readonly IPersonRoleService _personRoleService;
 
-        public PersonService(IPersonRepository personRepository, IPersonJobTitleService personJobTitleService, IPersonStatutService personStatutService, IPersonRoleService personRoleService )
+        public PersonService(IPersonRepository personRepository, IPersonJobTitleService personJobTitleService, IPersonStatutService personStatutService, IPersonRoleService personRoleService)
         {
             _personRepository = personRepository;
             _personJobTitleService = personJobTitleService;
@@ -28,13 +28,12 @@ namespace QuackersAPI_DDD.Application.Service
         {
             var defaultPersonRoleId = 1;
             var defaultPersonStatutId = 1;
-            var defaultPersonJobTitle = 1;
             var defaultPersonDescription = $"Je suis {createPersonDTO.FirstName} {createPersonDTO.LastName} nouveau de Quacker!";
             var defaultPersonTokenResetPassword = SecurityService.GenerateToken();
             var defaultPersonCreatedTime = DateTime.Now;
             var defaultProfilePicturePath = "Path/To/Default/Image";
 
-            var personJobTitleType = await _personJobTitleService.GetPersonJobTitleById(defaultPersonJobTitle);
+            var personJobTitleType = await _personJobTitleService.GetPersonJobTitleById(createPersonDTO.JobTitle_Id);
             if (personJobTitleType == null)
             {
                 throw new InvalidOperationException("PersonJobTitle with this ID can't be found");
@@ -51,6 +50,17 @@ namespace QuackersAPI_DDD.Application.Service
             {
                 throw new InvalidOperationException("PersonRoleType with this ID can't be found");
             }
+            var personEmail = await _personRepository.PersonEmailExists(createPersonDTO.Email);
+            if (personEmail == null)
+            {
+                throw new InvalidOperationException("A Person with this email already exist.");
+            }
+
+            var personPhone = await _personRepository.PersonPhoneNumberExists(createPersonDTO.PhoneNumber);
+            if ( personPhone == null)
+            {
+                throw new InvalidOperationException("A Person with this phone number already exist.");
+            }
 
             var person = new Person
             {
@@ -63,14 +73,14 @@ namespace QuackersAPI_DDD.Application.Service
                 Person_CreatedTimePerson = defaultPersonCreatedTime,
                 Person_ProfilPicturePath = defaultProfilePicturePath,
                 Person_Password = PasswordGenerator.GeneratePassword(12),
-                PersonJobTitle_Id = defaultPersonJobTitle,
+                PersonJobTitle_Id = createPersonDTO.JobTitle_Id,
                 PersonStatut_Id = defaultPersonStatutId,
                 PersonRole_Id = defaultPersonRoleId,
 
                 PersonJobTitle = personJobTitleType,
                 PersonStatut = personStatutType,
                 PersonRole = personRoleType,
-                
+
             };
 
             personJobTitleType.People.Add(person);
@@ -82,7 +92,8 @@ namespace QuackersAPI_DDD.Application.Service
 
         public async Task<IEnumerable<Person>> GetAllPersons()
         {
-            return await _personRepository.GetAllPersons();
+            var persons = await _personRepository.GetAllPersons();
+            return persons ?? new List<Person>();
         }
 
         public async Task<Person> GetPersonById(int id)
@@ -125,7 +136,7 @@ namespace QuackersAPI_DDD.Application.Service
             if (!string.IsNullOrWhiteSpace(updatePersonDTO.Password))
             {
                 person.Person_Password = SecurityService.HashPassword(updatePersonDTO.Password);
-                person.Person_IsTemporaryPassword = false; 
+                person.Person_IsTemporaryPassword = false;
             }
 
             await _personRepository.UpdatePerson(person);

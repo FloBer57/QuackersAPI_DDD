@@ -11,6 +11,5 @@ namespace QuackersAPI_DDD.Application.InterfaceService
         Task<ChannelPersonRoleXPersonXChannel> CreateAssociation(CreateChannelPersonRoleXPersonXChannelDTO dto);
         Task<ChannelPersonRoleXPersonXChannel> UpdateAssociation(int personId, int channelId, UpdateChannelPersonRoleXPersonXChannelDTO dto);
         Task<bool> DeleteAssociation(int personId, int channelId);
-        Task AddPersonRoleToChannel(int personId, int channelId);
     }
 }

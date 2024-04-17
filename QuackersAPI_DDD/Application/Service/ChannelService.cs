@@ -52,19 +52,36 @@ namespace QuackersAPI_DDD.Application.Service
 
         public async Task<IEnumerable<Channel>> GetAllChannels()
         {
-            return await _channelRepository.GetAllChannels();
+            var channels = await _channelRepository.GetAllChannels();
+            return channels ?? new List<Channel>(); 
         }
+
 
         public async Task<IEnumerable<Channel>> GetChannelsByChannelType(int channelTypeId)
         {
-            return await _channelRepository.GetChannelsByChannelType(channelTypeId);
+            // Assurez-vous que le type de canal existe
+            var channelType = await _channelTypeService.GetChannelTypeById(channelTypeId);
+            if (channelType == null)
+            {
+                throw new KeyNotFoundException($"ChannelType with id {channelTypeId} not found.");
+            }
+
+            var channels = await _channelRepository.GetChannelsByChannelType(channelTypeId);
+            return channels ?? new List<Channel>(); // Retourner une liste vide est acceptable ici
         }
+
 
 
         public async Task<Channel> GetChannelById(int id)
         {
-            return await _channelRepository.GetChannelById(id);
+            var channel = await _channelRepository.GetChannelById(id);
+            if (channel == null)
+            {
+                throw new KeyNotFoundException($"Channel with id {id} not found.");
+            }
+            return channel;
         }
+
 
         public async Task<Channel> UpdateChannel(int id, UpdateChannelDTO dto)
         {

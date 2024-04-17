@@ -26,17 +26,32 @@ namespace QuackersAPI_DDD.API.Controller
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id)
         {
-            var notification = await _notificationService.GetNotificationById(id);
-            if (notification == null)
+            try
             {
-                return NotFound($"Notification with id {id} not found.");
+                var notification = await _notificationService.GetNotificationById(id);
+                if (notification == null)
+                {
+                    throw new KeyNotFoundException($"Notification with id {id} not found.");
+                }
+                return Ok(notification);
             }
-            return Ok(notification);
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
         }
 
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] CreateNotificationDTO dto)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
             try
             {
                 var createdNotification = await _notificationService.CreateNotification(dto);
@@ -52,13 +67,17 @@ namespace QuackersAPI_DDD.API.Controller
             }
             catch (Exception ex)
             {
-                return StatusCode(500, "An internal server error has occurred: " + ex.Message);
+                return StatusCode(500, ex.Message);
             }
         }
 
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateNotification(int id, [FromBody] UpdateNotificationDTO dto)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
             try
             {
                 var updatedNotification = await _notificationService.UpdateNotification(id, dto);
@@ -70,7 +89,7 @@ namespace QuackersAPI_DDD.API.Controller
             }
             catch (Exception ex)
             {
-                return StatusCode(500, $"An error occurred while updating the notification: {ex.Message}");
+                return StatusCode(500, ex.Message);
             }
         }
 
@@ -82,7 +101,7 @@ namespace QuackersAPI_DDD.API.Controller
                 var success = await _notificationService.DeleteNotification(id);
                 if (!success)
                 {
-                    return NotFound($"Notification with id {id} not found.");
+                    throw new KeyNotFoundException($"Notification with id {id} not found.");
                 }
                 return Ok($"Notification with id {id} deleted successfully.");
             }
@@ -92,7 +111,7 @@ namespace QuackersAPI_DDD.API.Controller
             }
             catch (Exception ex)
             {
-                return StatusCode(500, $"An error occurred while updating the notification: {ex.Message}");
+                return StatusCode(500, ex.Message);
             }
         }
     }

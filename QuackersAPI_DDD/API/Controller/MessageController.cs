@@ -19,15 +19,8 @@ namespace QuackersAPI_DDD.API.Controller
         [HttpGet]
         public async Task<IActionResult> GetAllMessages()
         {
-            try
-            {
-                var messages = await _messageService.GetAllMessages();
-                return Ok(messages);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
+            var messages = await _messageService.GetAllMessages();
+            return Ok(messages);
         }
 
         [HttpGet("{id}")]
@@ -36,15 +29,11 @@ namespace QuackersAPI_DDD.API.Controller
             try
             {
                 var message = await _messageService.GetMessageById(id);
-                if (message == null)
-                {
-                    return NotFound($"Message with id {id} not found.");
-                }
                 return Ok(message);
             }
-            catch (Exception ex)
+            catch (KeyNotFoundException ex)
             {
-                return BadRequest(ex.Message);
+                return NotFound(ex.Message);
             }
         }
 
@@ -55,15 +44,22 @@ namespace QuackersAPI_DDD.API.Controller
             {
                 return BadRequest(ModelState);
             }
-
             try
             {
                 var createdMessage = await _messageService.CreateMessage(messageDto);
                 return CreatedAtAction(nameof(GetMessageById), new { id = createdMessage.Message_Id }, createdMessage);
             }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (InvalidOperationException ex)
+            {
+                return Conflict(ex.Message);
+            }
             catch (Exception ex)
             {
-                return BadRequest(ex.Message);
+                return StatusCode(500, "An internal server error has occurred: " + ex.Message);
             }
         }
 
@@ -74,7 +70,6 @@ namespace QuackersAPI_DDD.API.Controller
             {
                 return BadRequest(ModelState);
             }
-
             try
             {
                 var updatedMessage = await _messageService.UpdateMessage(id, updateMessageDTO);
@@ -86,7 +81,7 @@ namespace QuackersAPI_DDD.API.Controller
             }
             catch (Exception ex)
             {
-                return BadRequest(ex.Message);  
+                return StatusCode(500, "An internal server error has occurred: " + ex.Message);
             }
         }
 
@@ -95,16 +90,20 @@ namespace QuackersAPI_DDD.API.Controller
         {
             try
             {
-                var success = await _messageService.DeleteMessage(id);
-                if (!success)
+                bool deleted = await _messageService.DeleteMessage(id);
+                if (!deleted)
                 {
-                    return NotFound($"Message with id {id} not found.");
+                    throw new KeyNotFoundException($"Message with id {id} not found.");
                 }
-                return Ok($"Message with id {id} deleted successfully.");
+                return NoContent();
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(ex.Message);
             }
             catch (Exception ex)
             {
-                return BadRequest(ex.Message);
+                return StatusCode(500, "An error occurred while deleting the message: " + ex.Message);
             }
         }
     }

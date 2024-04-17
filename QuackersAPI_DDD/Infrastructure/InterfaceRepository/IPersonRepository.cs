@@ -12,8 +12,10 @@
         Task<IEnumerable<Person>> GetPersonByJobTitle(int jobTitleId);
         Task<IEnumerable<Person>> GetPersonByStatut(int statutId);
         Task<IEnumerable<Person>> GetPersonByRole(int roleId);
-        Task <Person> GetPersonByEmail(string email);
+        Task<Person> GetPersonByEmail(string email);
         Task<Person> UpdatePerson(Person person);
         Task DeletePerson(int id);
+        Task<bool> PersonPhoneNumberExists(string phoneNumber);
+        Task<bool> PersonEmailExists(string phoneNumber);
     }
 }

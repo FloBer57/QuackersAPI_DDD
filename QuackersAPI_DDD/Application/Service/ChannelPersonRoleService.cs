@@ -16,12 +16,18 @@ namespace QuackersAPI_DDD.Application.Service
 
         public async Task<IEnumerable<ChannelPersonRole>> GetAllChannelPersonRoles()
         {
-            return await _channelPersonRoleRepository.GetAllChannelPersonRoles();
+            var roles = await _channelPersonRoleRepository.GetAllChannelPersonRoles();
+            return roles ?? new List<ChannelPersonRole>(); 
         }
 
         public async Task<ChannelPersonRole> GetChannelPersonRoleById(int id)
         {
-            return await _channelPersonRoleRepository.GetChannelPersonRoleById(id);
+            var role = await _channelPersonRoleRepository.GetChannelPersonRoleById(id);
+            if (role == null)
+            {
+                throw new KeyNotFoundException($"ChannelPersonRole with id {id} not found.");
+            }
+            return role;
         }
 
         public async Task<ChannelPersonRole> CreateChannelPersonRole(CreateChannelPersonRoleDTO dto)
@@ -44,7 +50,7 @@ namespace QuackersAPI_DDD.Application.Service
             var channelPersonRole = await _channelPersonRoleRepository.GetChannelPersonRoleById(id);
             if (channelPersonRole == null)
             {
-                return null;
+                throw new KeyNotFoundException($"ChannelPersonRole with id {id} not found.");
             }
             if (await _channelPersonRoleRepository.ChannelPersonRoleNameExists(dto.ChannelPersonRole_Name))
             {
@@ -54,14 +60,14 @@ namespace QuackersAPI_DDD.Application.Service
             return await _channelPersonRoleRepository.UpdateChannelPersonRole(channelPersonRole);
         }
 
+
         public async Task<bool> DeleteChannelPersonRole(int id)
         {
             var role = await _channelPersonRoleRepository.GetChannelPersonRoleById(id);
             if (role == null)
             {
-                return false;
+                throw new KeyNotFoundException($"ChannelPersonRole with id {id} not found.");
             }
-
             await _channelPersonRoleRepository.DeleteChannelPersonRole(id);
             return true;
         }

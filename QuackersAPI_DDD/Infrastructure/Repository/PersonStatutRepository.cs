@@ -58,5 +58,10 @@ namespace QuackersAPI_DDD.Infrastructure.Repository
 
             return true;
         }
+
+        public async Task<bool> PersonStatutNameExists(string name)
+        {
+            return await _context.Personroles.AnyAsync(r => r.PersonRole_Name == name);
+        }
     }
 }

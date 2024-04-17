@@ -18,52 +18,82 @@ namespace QuackersAPI_DDD.API.Controller
         [HttpPost]
         public async Task<IActionResult> CreatePersonJobTitle([FromBody] CreatePersonJobTitleDTO createPersonJobTitleDTO)
         {
-            var createdPersonJobTitle = await _personJobTitleService.CreatePersonJobTitle(createPersonJobTitleDTO);
-            return CreatedAtAction(nameof(GetPersonJobTitleById), new { id = createdPersonJobTitle.PersonJob_TitleId }, createdPersonJobTitle);
+            try
+            {
+                var createdPersonJobTitle = await _personJobTitleService.CreatePersonJobTitle(createPersonJobTitleDTO);
+                return CreatedAtAction(nameof(GetPersonJobTitleById), new { id = createdPersonJobTitle.PersonJob_TitleId }, createdPersonJobTitle);
+            }
+            catch (InvalidOperationException ex)
+            {
+                return Conflict(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
         }
 
         [HttpGet]
         public async Task<IActionResult> GetAllPersonJobTitle()
         {
             var personJobTitles = await _personJobTitleService.GetAllPersonJobTitle();
-            if (personJobTitles == null)
-            {
-                return NotFound("No PersonJobTitle can be found");
-            }
             return Ok(personJobTitles);
         }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetPersonJobTitleById(int id)
         {
-            var personJobTitle = await _personJobTitleService.GetPersonJobTitleById(id);
-            if (personJobTitle == null)
+            try
             {
-                return NotFound($"Person job title with id {id} not found.");
+                var personJobTitle = await _personJobTitleService.GetPersonJobTitleById(id);
+                if (personJobTitle == null)
+                    throw new KeyNotFoundException($"Person job title with id {id} not found.");
+                return Ok(personJobTitle);
             }
-            return Ok(personJobTitle);
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
         }
 
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdatePersonJobTitle(int id, [FromBody] UpdatePersonJobTitleDTO updatePersonJobTitleDTO)
         {
-            var updatedPersonJobTitle = await _personJobTitleService.UpdatePersonJobTitle(id, updatePersonJobTitleDTO);
-            if (updatedPersonJobTitle == null)
+            try
             {
-                return NotFound($"Person job title with id {id} not found.");
+                var updatedPersonJobTitle = await _personJobTitleService.UpdatePersonJobTitle(id, updatePersonJobTitleDTO);
+                return Ok(updatedPersonJobTitle);
             }
-            return Ok(updatedPersonJobTitle);
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
         }
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeletePersonJobTitle(int id)
         {
-            var success = await _personJobTitleService.DeletePersonJobTitle(id);
-            if (!success)
+            try
             {
-                return NotFound($"Person job title with id {id} not found.");
+                var success = await _personJobTitleService.DeletePersonJobTitle(id);
+                return Ok($"Person job title with id {id} deleted successfully.");
             }
-            return Ok($"Person job title with id {id} deleted successfully.");
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
         }
     }
 }

@@ -16,39 +16,45 @@ namespace QuackersAPI_DDD.Application.Service
 
         public async Task<IEnumerable<ChannelType>> GetAllChannelTypes()
         {
-            return await _channelTypeRepository.GetAllChannelTypes();
+            var channelType = await _channelTypeRepository.GetAllChannelTypes();
+            return channelType ?? new List<ChannelType>();
         }
 
         public async Task<ChannelType> GetChannelTypeById(int id)
         {
-            return await _channelTypeRepository.GetChannelTypeById(id);
+            var channelType = await _channelTypeRepository.GetChannelTypeById(id);
+            if (channelType == null)
+            {
+                throw new KeyNotFoundException($"ChannelType with id {id} not found.");
+            }
+            return channelType;
         }
 
         public async Task<ChannelType> CreateChannelType(CreateChannelTypeDTO dto)
         {
-            var channelType = new ChannelType { ChannelType_Name = dto.ChannelType_Name };
             if (await _channelTypeRepository.ChannelTypeNameExists(dto.ChannelType_Name))
             {
-                throw new InvalidOperationException($"A channel type with the same name '{dto.ChannelType_Name} exist");
+                throw new InvalidOperationException($"A channel type with the same name '{dto.ChannelType_Name}' already exists.");
             }
+
+            var channelType = new ChannelType { ChannelType_Name = dto.ChannelType_Name };
             return await _channelTypeRepository.CreateChannelType(channelType);
         }
 
-        public async Task<ChannelType> UpdateChannelType(int id, UpdateChannelTypeDTO updateChannelTypeDTO)
+        public async Task<ChannelType> UpdateChannelType(int id, UpdateChannelTypeDTO dto)
         {
             var channelType = await _channelTypeRepository.GetChannelTypeById(id);
             if (channelType == null)
             {
-                throw new InvalidOperationException($"ChannelType with id {id} not found.");
+                throw new KeyNotFoundException($"ChannelType with id {id} not found.");
             }
 
-            if (await _channelTypeRepository.ChannelTypeNameExists(updateChannelTypeDTO.ChannelType_Name))
+            if (await _channelTypeRepository.ChannelTypeNameExists(dto.ChannelType_Name) && dto.ChannelType_Name != channelType.ChannelType_Name)
             {
-                throw new InvalidOperationException($"A channel type with the same name {updateChannelTypeDTO.ChannelType_Name} exist");
+                throw new InvalidOperationException($"A channel type with the same name '{dto.ChannelType_Name}' already exists.");
             }
 
-            channelType.ChannelType_Name = updateChannelTypeDTO.ChannelType_Name;
-
+            channelType.ChannelType_Name = dto.ChannelType_Name;
             return await _channelTypeRepository.UpdateChannelType(channelType);
         }
 
@@ -57,12 +63,13 @@ namespace QuackersAPI_DDD.Application.Service
             var channelType = await _channelTypeRepository.GetChannelTypeById(id);
             if (channelType == null)
             {
-                return false;
+                throw new KeyNotFoundException($"ChannelType with id {id} not found.");
             }
 
             await _channelTypeRepository.DeleteChannelType(id);
             return true;
         }
+
     }
 
 }

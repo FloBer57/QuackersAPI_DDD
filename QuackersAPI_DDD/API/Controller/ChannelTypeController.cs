@@ -20,35 +20,38 @@ namespace QuackersAPI_DDD.API.Controller
         public async Task<IActionResult> GetAllChannelTypes()
         {
             var channelTypes = await _channelTypeService.GetAllChannelTypes();
-            if (channelTypes == null)
-            {
-                return NotFound("No channel type can be found");
-            }
-            return Ok(channelTypes);
+            return Ok(channelTypes);  
         }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetChannelTypeById(int id)
         {
-            var channelType = await _channelTypeService.GetChannelTypeById(id);
-            if (channelType == null)
+            try
             {
-                return NotFound($"ChannelType with id {id} not found.");
+                var channelType = await _channelTypeService.GetChannelTypeById(id);
+                if (channelType == null)
+                {
+                    throw new KeyNotFoundException($"ChannelType with id {id} not found.");
+                }
+                return Ok(channelType);
             }
-            return Ok(channelType);
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
         }
 
         [HttpPost]
         public async Task<IActionResult> CreateChannelType([FromBody] CreateChannelTypeDTO dto)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
             try
             {
                 var createdChannelType = await _channelTypeService.CreateChannelType(dto);
                 return CreatedAtAction(nameof(GetChannelTypeById), new { id = createdChannelType.ChannelType_Id }, createdChannelType);
-            }
-            catch (KeyNotFoundException ex)
-            {
-                return NotFound(ex.Message);
             }
             catch (InvalidOperationException ex)
             {
@@ -63,9 +66,14 @@ namespace QuackersAPI_DDD.API.Controller
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateChannelType(int id, [FromBody] UpdateChannelTypeDTO dto)
         {
-            try { 
-            var updatedChannelType = await _channelTypeService.UpdateChannelType(id, dto);
-            return Ok(updatedChannelType);
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            try
+            {
+                var updatedChannelType = await _channelTypeService.UpdateChannelType(id, dto);
+                return Ok(updatedChannelType);
             }
             catch (InvalidOperationException ex)
             {
@@ -84,12 +92,23 @@ namespace QuackersAPI_DDD.API.Controller
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteChannelType(int id)
         {
-            var success = await _channelTypeService.DeleteChannelType(id);
-            if (!success)
+            try
             {
-                return NotFound($"ChannelType with id {id} not found.");
+                var success = await _channelTypeService.DeleteChannelType(id);
+                if (!success)
+                {
+                    throw new KeyNotFoundException($"ChannelType with id {id} not found.");
+                }
+                return NoContent();
             }
-            return Ok($"ChannelType with id {id} deleted successfully.");
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"An error occurred while deleting the ChannelType: {ex.Message}");
+            }
         }
     }
 }

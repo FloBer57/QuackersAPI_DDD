@@ -19,34 +19,44 @@ namespace QuackersAPI_DDD.API.Controller
         [HttpGet]
         public async Task<IActionResult> GetAllChannels()
         {
-            var channels = await _channelService.GetAllChannels();
-            if (channels == null)
-            {
-                return NotFound("No channel can be found");
-            }
-            return Ok(channels);
+                var channels = await _channelService.GetAllChannels();
+                return Ok(channels);
         }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetChannelById(int id)
         {
-            var channel = await _channelService.GetChannelById(id);
-            if (channel == null)
+            try
             {
-                return NotFound($"Channel with id {id} not found.");
+                var channel = await _channelService.GetChannelById(id);
+                return Ok(channel);
             }
-            return Ok(channel);
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"An error occurred while retrieving the channel with ID {id}: {ex.Message}");
+            }
         }
 
         [HttpGet("{id}/channels")]
         public async Task<IActionResult> GetChannelsByChannelType(int id)
         {
-            var channels = await _channelService.GetChannelsByChannelType(id);
-            if (channels == null)
+            try
             {
-                return NotFound($"No channel with ChannelTypeId = {id} can be found");
+                var channels = await _channelService.GetChannelsByChannelType(id);
+                return Ok(channels);
             }
-            return Ok(channels);
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"An error occurred while retrieving channels for channel type {id}: {ex.Message}");
+            }
         }
 
         [HttpPost]
@@ -59,15 +69,15 @@ namespace QuackersAPI_DDD.API.Controller
             }
             catch (KeyNotFoundException ex)
             {
-                return NotFound(ex.Message); 
+                return NotFound(ex.Message);
             }
             catch (InvalidOperationException ex)
             {
-                return Conflict(ex.Message); 
+                return Conflict(ex.Message);
             }
             catch (Exception ex)
             {
-                return StatusCode(500, "An internal server error has occurred: " + ex.Message); 
+                return StatusCode(500, $"An internal server error has occurred while creating the channel: {ex.Message}");
             }
         }
 
@@ -89,21 +99,16 @@ namespace QuackersAPI_DDD.API.Controller
             }
             catch (Exception ex)
             {
-                return StatusCode(500, "An internal server error has occurred.");
+                return StatusCode(500, $"An internal server error has occurred while updating the channel: {ex.Message}");
             }
         }
-
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteChannel(int id)
         {
             try
             {
-                var success = await _channelService.DeleteChannel(id);
-                if (!success)
-                {
-                    return NotFound();
-                }
+                await _channelService.DeleteChannel(id);
                 return NoContent();
             }
             catch (KeyNotFoundException ex)
@@ -112,7 +117,7 @@ namespace QuackersAPI_DDD.API.Controller
             }
             catch (Exception ex)
             {
-                return StatusCode(500, $"An error occurred while deleting the Channel: {ex.Message}");
+                return StatusCode(500, $"An error occurred while deleting the channel: {ex.Message}");
             }
         }
     }

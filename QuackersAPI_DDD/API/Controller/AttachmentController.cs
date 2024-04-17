@@ -19,23 +19,26 @@ namespace QuackersAPI_DDD.API.Controller
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            var attachments = await _attachmentService.GetAllAttachments();
-            if (attachments == null || !attachments.Any()) 
-            {
-                return NotFound("Attachments not found");
-            }
-            return Ok(attachments);
+                var attachments = await _attachmentService.GetAllAttachments();
+                return Ok(attachments);
         }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id)
         {
-            var attachment = await _attachmentService.GetAttachmentById(id);
-            if (attachment == null)
+            try
             {
-                return NotFound($"Attachment with id {id} not found.");
+                var attachment = await _attachmentService.GetAttachmentById(id);
+                return Ok(attachment);
             }
-            return Ok(attachment);
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"An error occurred while get the attachment: {ex.Message}");
+            }
         }
 
         [HttpPost]
@@ -45,6 +48,10 @@ namespace QuackersAPI_DDD.API.Controller
             {
                 var newAttachment = await _attachmentService.CreateAttachment(dto);
                 return CreatedAtAction(nameof(GetById), new { id = newAttachment.Attachment_Id }, newAttachment);
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(ex.Message);
             }
             catch (InvalidOperationException ex)
             {
@@ -62,10 +69,6 @@ namespace QuackersAPI_DDD.API.Controller
             try
             {
                 var success = await _attachmentService.DeleteAttachment(id);
-                if (!success)
-                {
-                    return NotFound($"Attachment with id {id} not found.");
-                }
                 return Ok($"Attachment with id {id} deleted successfully.");
             }
             catch (KeyNotFoundException ex)
@@ -74,7 +77,7 @@ namespace QuackersAPI_DDD.API.Controller
             }
             catch (Exception ex)
             {
-                return StatusCode(500, $"An error occurred while updating the notification: {ex.Message}");
+                return StatusCode(500, $"An error occurred while deleting the attachment: {ex.Message}");
             }
         }
     }
