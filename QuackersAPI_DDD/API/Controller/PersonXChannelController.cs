@@ -50,20 +50,6 @@ namespace QuackersAPI_DDD.API.Controller
             }
         }
 
-        [HttpPost("addPersonToChannel/{personId}/{channelId}")]  // Corrected route
-        public async Task<IActionResult> AddPersonToChannel(int personId, int channelId)
-        {
-            try
-            {
-                await _service.AddPersonToChannel(personId, channelId);  
-                return CreatedAtAction(nameof(GetById), new { personId, channelId }, null);  
-            }
-            catch (Exception e)
-            {
-                return StatusCode(500, "Internal server error: " + e.Message);
-            }
-        }
-
         [HttpPut("{personId}/{channelId}")]
         public async Task<IActionResult> Update(int personId, int channelId, [FromBody] UpdatePersonXChannelDTO dto)
         {
@@ -88,25 +74,11 @@ namespace QuackersAPI_DDD.API.Controller
             try
             {
                 var success = await _service.DeleteAssociation(personId, channelId);
-                if (!success)
-                {
-                    return NotFound($"Association not found with person ID {personId} and channel ID {channelId}.");
-                }
                 return Ok($"Association successfully deleted.");
             }
-            catch (Exception e)
+            catch (KeyNotFoundException e)
             {
-                return StatusCode(500, "Internal server error: " + e.Message);
-            }
-        }
-
-        [HttpPost("addPersonToChannel")]
-        public async Task<IActionResult> AddPersonToChannel([FromBody] CreatePersonXChannelDTO dto)
-        {
-            try
-            {
-                await _service.AddPersonToChannel(dto.PersonId, dto.ChannelId);
-                return CreatedAtAction(nameof(GetById), new { personId = dto.PersonId, channelId = dto.ChannelId }, null);
+                return NotFound(e.Message);
             }
             catch (Exception e)
             {

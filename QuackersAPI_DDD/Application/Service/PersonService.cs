@@ -1,11 +1,12 @@
-﻿using QuackersAPI_DDD.API.DTO.ChannelTypeDTO;
-using QuackersAPI_DDD.API.DTO.PersonDTO;
+﻿using QuackersAPI_DDD.API.DTO.PersonDTO;
 using QuackersAPI_DDD.Application.Interface;
 using QuackersAPI_DDD.Application.InterfaceService;
 using QuackersAPI_DDD.Domain.Model;
 using QuackersAPI_DDD.Domain.Utilitie;
 using QuackersAPI_DDD.Infrastructure.InterfaceRepository;
-using QuackersAPI_DDD.Infrastructure.Repository;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace QuackersAPI_DDD.Application.Service
 {
@@ -18,121 +19,70 @@ namespace QuackersAPI_DDD.Application.Service
 
         public PersonService(IPersonRepository personRepository, IPersonJobTitleService personJobTitleService, IPersonStatutService personStatutService, IPersonRoleService personRoleService)
         {
-            _personRepository = personRepository;
-            _personJobTitleService = personJobTitleService;
-            _personStatutService = personStatutService;
-            _personRoleService = personRoleService;
+            _personRepository = personRepository ?? throw new ArgumentNullException(nameof(personRepository));
+            _personJobTitleService = personJobTitleService ?? throw new ArgumentNullException(nameof(personJobTitleService));
+            _personStatutService = personStatutService ?? throw new ArgumentNullException(nameof(personStatutService));
+            _personRoleService = personRoleService ?? throw new ArgumentNullException(nameof(personRoleService));
         }
 
         public async Task<Person> CreatePerson(CreatePersonDTO createPersonDTO)
         {
-            var defaultPersonRoleId = 1;
-            var defaultPersonStatutId = 1;
-            var defaultPersonDescription = $"Je suis {createPersonDTO.FirstName} {createPersonDTO.LastName} nouveau de Quacker!";
-            var defaultPersonTokenResetPassword = SecurityService.GenerateToken();
-            var defaultPersonCreatedTime = DateTime.Now;
-            var defaultProfilePicturePath = "Path/To/Default/Image";
+            // Validate existence of related entities before creating a person
+            var jobTitle = await _personJobTitleService.GetPersonJobTitleById(createPersonDTO.JobTitle_Id);
+            if (jobTitle == null)
+                throw new KeyNotFoundException("Job title not found.");
 
-            var personJobTitleType = await _personJobTitleService.GetPersonJobTitleById(createPersonDTO.JobTitle_Id);
-            if (personJobTitleType == null)
-            {
-                throw new InvalidOperationException("PersonJobTitle with this ID can't be found");
-            }
+            var personExists = await _personRepository.GetPersonByEmail(createPersonDTO.Email);
+            if (personExists != null)
+                throw new InvalidOperationException("A person with this email already exists.");
 
-            var personStatutType = await _personStatutService.GetPersonStatutById(defaultPersonStatutId);
-            if (personStatutType == null)
-            {
-                throw new InvalidOperationException("PersonStatutType with this ID can't be found");
-            }
+            var personPhoneExists = await _personRepository.PersonPhoneNumberExists(createPersonDTO.PhoneNumber);
+            if (personPhoneExists)
+                throw new InvalidOperationException("A person with this phone number already exists.");
 
-            var personRoleType = await _personRoleService.GetPersonRoleById(defaultPersonRoleId);
-            if (personRoleType == null)
-            {
-                throw new InvalidOperationException("PersonRoleType with this ID can't be found");
-            }
-            var personEmail = await _personRepository.PersonEmailExists(createPersonDTO.Email);
-            if (personEmail == null)
-            {
-                throw new InvalidOperationException("A Person with this email already exist.");
-            }
-
-            var personPhone = await _personRepository.PersonPhoneNumberExists(createPersonDTO.PhoneNumber);
-            if ( personPhone == null)
-            {
-                throw new InvalidOperationException("A Person with this phone number already exist.");
-            }
-
-            var person = new Person
+            var newPerson = new Person
             {
                 Person_Email = createPersonDTO.Email,
                 Person_FirstName = createPersonDTO.FirstName,
                 Person_LastName = createPersonDTO.LastName,
                 Person_PhoneNumber = createPersonDTO.PhoneNumber,
-                Person_Description = defaultPersonDescription,
-                Person_TokenResetPassword = defaultPersonTokenResetPassword,
-                Person_CreatedTimePerson = defaultPersonCreatedTime,
-                Person_ProfilPicturePath = defaultProfilePicturePath,
+                Person_Description = $"Je suis {createPersonDTO.FirstName} {createPersonDTO.LastName}, nouveau chez Quacker!",
+                Person_TokenResetPassword = SecurityService.GenerateToken(),
+                Person_CreatedTimePerson = DateTime.Now,
+                Person_ProfilPicturePath = "Path/To/Default/Image",
                 Person_Password = PasswordGenerator.GeneratePassword(12),
                 PersonJobTitle_Id = createPersonDTO.JobTitle_Id,
-                PersonStatut_Id = defaultPersonStatutId,
-                PersonRole_Id = defaultPersonRoleId,
-
-                PersonJobTitle = personJobTitleType,
-                PersonStatut = personStatutType,
-                PersonRole = personRoleType,
-
+                PersonStatut_Id = 1,
+                PersonRole_Id = 1
             };
 
-            personJobTitleType.People.Add(person);
-            personRoleType.People.Add(person);
-            personStatutType.People.Add(person);
-
-            return await _personRepository.CreatePerson(person);
+            await _personRepository.CreatePerson(newPerson);
+            return newPerson;
         }
 
         public async Task<IEnumerable<Person>> GetAllPersons()
         {
-            var persons = await _personRepository.GetAllPersons();
-            return persons ?? new List<Person>();
+            return await _personRepository.GetAllPersons() ?? new List<Person>();
         }
 
         public async Task<Person> GetPersonById(int id)
         {
-            return await _personRepository.GetPersonById(id);
-        }
-
-        public async Task<Person> GetPersonByEmail(string email)
-        {
-            return await _personRepository.GetPersonByEmail(email);
+            var person = await _personRepository.GetPersonById(id);
+            if (person == null)
+                throw new KeyNotFoundException($"No person found with ID {id}.");
+            return person;
         }
 
         public async Task<Person> UpdatePerson(int id, UpdatePersonDTO updatePersonDTO)
         {
-            var person = await _personRepository.GetPersonById(id);
+            var person = await GetPersonById(id); 
             if (person == null)
             {
-                throw new InvalidOperationException($"Person with id {id} not found.");
+                throw new KeyNotFoundException($"Person with id {id} not found)");
             }
 
-            // Mise à jour du numéro de téléphone si fourni
-            if (!string.IsNullOrWhiteSpace(updatePersonDTO.PhoneNumber))
-            {
-                person.Person_PhoneNumber = updatePersonDTO.PhoneNumber;
-            }
-
-            // Mise à jour de la description si fournie
-            if (!string.IsNullOrWhiteSpace(updatePersonDTO.Description))
-            {
-                person.Person_Description = updatePersonDTO.Description;
-            }
-
-            // Mise à jour du chemin de l'image de profil si fourni
-            if (!string.IsNullOrWhiteSpace(updatePersonDTO.ProfilPicturePath))
-            {
-                person.Person_ProfilPicturePath = updatePersonDTO.ProfilPicturePath;
-            }
-
-            // Mise à jour du mot de passe si fourni
+            person.Person_Description = updatePersonDTO.Description ?? person.Person_Description;
+            person.Person_ProfilPicturePath = updatePersonDTO.ProfilPicturePath ?? person.Person_ProfilPicturePath;
             if (!string.IsNullOrWhiteSpace(updatePersonDTO.Password))
             {
                 person.Person_Password = SecurityService.HashPassword(updatePersonDTO.Password);
@@ -145,11 +95,9 @@ namespace QuackersAPI_DDD.Application.Service
 
         public async Task<bool> DeletePerson(int id)
         {
-            var person = await _personRepository.GetPersonById(id);
+            var person = await GetPersonById(id);
             if (person == null)
-            {
-                return false;
-            }
+                throw new KeyNotFoundException($"No person found with ID {id}.");
 
             await _personRepository.DeletePerson(id);
             return true;
@@ -157,17 +105,38 @@ namespace QuackersAPI_DDD.Application.Service
 
         public async Task<IEnumerable<Person>> GetPersonsByJobTitle(int jobTitleId)
         {
+            var jobTitle = await _personJobTitleService.GetPersonJobTitleById(jobTitleId);
+            if (jobTitle == null)
+                throw new KeyNotFoundException($"Job title with ID {jobTitleId} does not exist.");
+
             return await _personRepository.GetPersonByJobTitle(jobTitleId);
         }
 
         public async Task<IEnumerable<Person>> GetPersonsByStatut(int statutId)
         {
+            var statut = await _personStatutService.GetPersonStatutById(statutId);
+            if (statut == null)
+                throw new KeyNotFoundException($"Statut with ID {statutId} does not exist.");
+
             return await _personRepository.GetPersonByStatut(statutId);
         }
 
         public async Task<IEnumerable<Person>> GetPersonsByRole(int roleId)
         {
+            var role = await _personRoleService.GetPersonRoleById(roleId);
+            if (role == null)
+                throw new KeyNotFoundException($"Role with ID {roleId} does not exist.");
+
             return await _personRepository.GetPersonByRole(roleId);
+        }
+
+        public async Task<Person> GetPersonByEmail(string email)
+        {
+            var person = await _personRepository.GetPersonByEmail(email);
+            if (person == null)
+                throw new KeyNotFoundException($"No person found with email {email}.");
+
+            return person;
         }
     }
 }

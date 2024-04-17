@@ -59,7 +59,6 @@ namespace QuackersAPI_DDD.Application.Service
 
         public async Task<IEnumerable<Channel>> GetChannelsByChannelType(int channelTypeId)
         {
-            // Assurez-vous que le type de canal existe
             var channelType = await _channelTypeService.GetChannelTypeById(channelTypeId);
             if (channelType == null)
             {
@@ -67,7 +66,7 @@ namespace QuackersAPI_DDD.Application.Service
             }
 
             var channels = await _channelRepository.GetChannelsByChannelType(channelTypeId);
-            return channels ?? new List<Channel>(); // Retourner une liste vide est acceptable ici
+            return channels ?? new List<Channel>(); 
         }
 
 

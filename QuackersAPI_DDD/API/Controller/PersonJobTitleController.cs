@@ -29,15 +29,17 @@ namespace QuackersAPI_DDD.API.Controller
             }
             catch (Exception ex)
             {
-                return StatusCode(500, ex.Message);
+                return StatusCode(500, $"An internal server error has occurred: {ex.Message}");
             }
         }
 
         [HttpGet]
         public async Task<IActionResult> GetAllPersonJobTitle()
         {
-            var personJobTitles = await _personJobTitleService.GetAllPersonJobTitle();
-            return Ok(personJobTitles);
+
+                var personJobTitles = await _personJobTitleService.GetAllPersonJobTitle();
+                return Ok(personJobTitles);
+
         }
 
         [HttpGet("{id}")]
@@ -46,8 +48,6 @@ namespace QuackersAPI_DDD.API.Controller
             try
             {
                 var personJobTitle = await _personJobTitleService.GetPersonJobTitleById(id);
-                if (personJobTitle == null)
-                    throw new KeyNotFoundException($"Person job title with id {id} not found.");
                 return Ok(personJobTitle);
             }
             catch (KeyNotFoundException ex)
@@ -56,7 +56,7 @@ namespace QuackersAPI_DDD.API.Controller
             }
             catch (Exception ex)
             {
-                return StatusCode(500, ex.Message);
+                return StatusCode(500, $"An error occurred while retrieving the person job title with ID {id}: {ex.Message}");
             }
         }
 
@@ -72,9 +72,13 @@ namespace QuackersAPI_DDD.API.Controller
             {
                 return NotFound(ex.Message);
             }
+            catch (InvalidOperationException ex)
+            {
+                return Conflict(ex.Message);
+            }
             catch (Exception ex)
             {
-                return StatusCode(500, ex.Message);
+                return StatusCode(500, $"An internal server error has occurred while updating the person job title: {ex.Message}");
             }
         }
 
@@ -84,7 +88,7 @@ namespace QuackersAPI_DDD.API.Controller
             try
             {
                 var success = await _personJobTitleService.DeletePersonJobTitle(id);
-                return Ok($"Person job title with id {id} deleted successfully.");
+                return NoContent();
             }
             catch (KeyNotFoundException ex)
             {
@@ -92,7 +96,7 @@ namespace QuackersAPI_DDD.API.Controller
             }
             catch (Exception ex)
             {
-                return StatusCode(500, ex.Message);
+                return StatusCode(500, $"An error occurred while deleting the person job title: {ex.Message}");
             }
         }
     }

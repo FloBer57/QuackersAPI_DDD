@@ -55,19 +55,6 @@
                 }
                 return false;
             }
-
-            public async Task AddPersonToChannel(int personId, int channelId)
-            {
-                var personXChannel = new PersonXChannel
-                {
-                    Person_Id = personId,
-                    Channel_Id = channelId,
-                    PersonXchannelSignInDate = DateTime.Now
-                };
-
-                _context.Personxchannels.Add(personXChannel);
-                await _context.SaveChangesAsync();
-            }
         }
     }
 

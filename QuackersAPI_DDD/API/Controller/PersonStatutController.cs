@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using QuackersAPI_DDD.API.DTO.PersonStatutDTO;
 using QuackersAPI_DDD.Application.InterfaceService;
-using QuackersAPI_DDD.Domain.Model;
 
 namespace QuackersAPI_DDD.API.Controller
 {
@@ -16,56 +15,83 @@ namespace QuackersAPI_DDD.API.Controller
             _personStatutService = personStatutService ?? throw new ArgumentNullException(nameof(personStatutService));
         }
 
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<PersonStatut>>> GetAllPersonStatuts()
+        [HttpPost]
+        public async Task<IActionResult> CreatePersonStatut([FromBody] CreatePersonStatutDTO personStatutDTO)
         {
-            var personStatuts = await _personStatutService.GetAllPersonStatuts();
-            if (personStatuts == null)
+            try
             {
-                return NotFound("No PersonStatus can be found");
+                var createdPersonStatut = await _personStatutService.CreatePersonStatut(personStatutDTO);
+                return CreatedAtAction(nameof(GetPersonStatutById), new { id = createdPersonStatut.PersonStatut_Id }, createdPersonStatut);
             }
-            return Ok(personStatuts);
+            catch (InvalidOperationException ex)
+            {
+                return Conflict(ex.Message); 
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"An error occurred while creating the person status: {ex.Message}");
+            }
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetAllPersonStatuts()
+        {
+                var personStatuts = await _personStatutService.GetAllPersonStatuts();
+                return Ok(personStatuts);
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<PersonStatut>> GetPersonStatutById(int id)
+        public async Task<IActionResult> GetPersonStatutById(int id)
         {
-            var personStatut = await _personStatutService.GetPersonStatutById(id);
-            if (personStatut == null)
+            try
             {
-                return NotFound();
+                var personStatut = await _personStatutService.GetPersonStatutById(id);
+                return Ok(personStatut);
             }
-            return Ok(personStatut);
-        }
-
-        [HttpPost]
-        public async Task<ActionResult<PersonStatut>> CreatePersonStatut([FromBody] CreatePersonStatutDTO personStatut)
-        {
-            var createdPersonStatut = await _personStatutService.CreatePersonStatut(personStatut);
-            return CreatedAtAction(nameof(GetPersonStatutById), new { id = createdPersonStatut.PersonStatut_Id }, createdPersonStatut);
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"An error occurred while retrieving the person status with ID {id}: {ex.Message}");
+            }
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdatePersonStatut(int id, [FromBody] UpdatePersonStatutDTO personStatut)
+        public async Task<IActionResult> UpdatePersonStatut(int id, [FromBody] UpdatePersonStatutDTO personStatutDTO)
         {
-
-            var updatedPersonStatut = await _personStatutService.UpdatePersonStatut(id, personStatut);
-            if (updatedPersonStatut == null)
+            try
             {
-                return NotFound();
+                var updatedPersonStatut = await _personStatutService.UpdatePersonStatut(id, personStatutDTO);
+                return Ok(updatedPersonStatut);
             }
-            return NoContent();
+            catch (InvalidOperationException ex)
+            {
+                return NotFound(ex.Message);  // Assuming the message explains the conflict
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"An error occurred while updating the person status: {ex.Message}");
+            }
         }
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeletePersonStatut(int id)
         {
-            var result = await _personStatutService.DeletePersonStatut(id);
-            if (!result)
+            try
             {
-                return NotFound();
+                var success = await _personStatutService.DeletePersonStatut(id);
+                return NoContent();
             }
-            return NoContent();
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"An error occurred while deleting the person status: {ex.Message}");
+            }
         }
     }
 }

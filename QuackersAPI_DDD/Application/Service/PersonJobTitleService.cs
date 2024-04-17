@@ -27,8 +27,8 @@ namespace QuackersAPI_DDD.Application.Service
 
         public async Task<IEnumerable<PersonJobTitle>> GetAllPersonJobTitle()
         {
-            var personJobTitle =  await _personJobTitleRepository.GetAllPersonJobTitle();
-            return personJobTitle ?? new List<PersonJobTitle>();
+            var personJobTitles = await _personJobTitleRepository.GetAllPersonJobTitle();
+            return personJobTitles ?? new List<PersonJobTitle>();
         }
 
         public async Task<PersonJobTitle> GetPersonJobTitleById(int id)
@@ -47,6 +47,10 @@ namespace QuackersAPI_DDD.Application.Service
             if (personJobTitle == null)
             {
                 throw new KeyNotFoundException($"Person job title with id {id} not found.");
+            }
+            if (await _personJobTitleRepository.PersonJobTitleNameExists(updatePersonJobTitleDTO.JobTitle_Name))
+            {
+                throw new InvalidOperationException($"A person job title with the name '{updatePersonJobTitleDTO.JobTitle_Name}' already exists.");
             }
 
             personJobTitle.PersonJobTitle_Name = updatePersonJobTitleDTO.JobTitle_Name;

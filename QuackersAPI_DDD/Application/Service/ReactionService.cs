@@ -11,21 +11,28 @@ namespace QuackersAPI_DDD.Application.Service
 
         public ReactionService(IReactionRepository reactionRepository)
         {
-            _reactionRepository = reactionRepository;
+            _reactionRepository = reactionRepository ?? throw new ArgumentNullException(nameof(reactionRepository));
         }
 
         public async Task<IEnumerable<Reaction>> GetAllReactions()
         {
-            return await _reactionRepository.GetAllReactions();
+            var reactions = await _reactionRepository.GetAllReactions();
+            return reactions ?? new List <Reaction>(); 
         }
 
         public async Task<Reaction> GetReactionById(int id)
         {
-            return await _reactionRepository.GetReactionById(id);
+            var reaction = await _reactionRepository.GetReactionById(id);
+            if (reaction == null)
+                throw new KeyNotFoundException($"Reaction with ID {id} not found.");
+            return reaction;
         }
 
         public async Task<Reaction> CreateReaction(CreateReactionDTO reactionDto)
         {
+            if (await _reactionRepository.ReactionNameExist(reactionDto.ReactionName))
+                throw new InvalidOperationException($"A reaction with the name '{reactionDto.ReactionName}' already exists.");
+
             var reaction = new Reaction
             {
                 Reaction_Name = reactionDto.ReactionName,
@@ -39,9 +46,10 @@ namespace QuackersAPI_DDD.Application.Service
         {
             var reaction = await _reactionRepository.GetReactionById(id);
             if (reaction == null)
-            {
-                throw new KeyNotFoundException("Reaction not found.");
-            }
+                throw new KeyNotFoundException($"Reaction with ID {id} not found.");
+
+            if (await _reactionRepository.ReactionNameExist(reactionDto.ReactionName))
+                throw new InvalidOperationException($"Another reaction with the name '{reactionDto.ReactionName}' already exists.");
 
             reaction.Reaction_Name = reactionDto.ReactionName;
             reaction.Reaction_PicturePath = reactionDto.ReactionPicturePath;
@@ -51,7 +59,12 @@ namespace QuackersAPI_DDD.Application.Service
 
         public async Task<bool> DeleteReaction(int id)
         {
-            return await _reactionRepository.DeleteReaction(id);
+            var reaction = await _reactionRepository.GetReactionById(id);
+            if (reaction == null)
+                throw new KeyNotFoundException($"Reaction with ID {id} not found.");
+
+            await _reactionRepository.DeleteReaction(id);
+            return true;
         }
     }
 }

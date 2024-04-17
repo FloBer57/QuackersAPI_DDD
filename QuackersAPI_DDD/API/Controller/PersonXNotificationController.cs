@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using QuackersAPI_DDD.API.DTO.PersonXNotificationDTO;
 using QuackersAPI_DDD.Application.InterfaceService;
+using System.Threading.Tasks;
 
 namespace QuackersAPI_DDD.API.Controller
 {
@@ -12,14 +13,14 @@ namespace QuackersAPI_DDD.API.Controller
 
         public PersonXNotificationController(IPersonXNotificationService service)
         {
-            _service = service;
+            _service = service ?? throw new ArgumentNullException(nameof(service));
         }
 
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            var associations = await _service.GetAllAssociations();
-            return Ok(associations);
+                var associations = await _service.GetAllAssociations();
+                return Ok(associations);
         }
 
         [HttpGet("{personId}/{notificationId}")]
@@ -34,6 +35,10 @@ namespace QuackersAPI_DDD.API.Controller
             {
                 return NotFound(e.Message);
             }
+            catch (Exception e)
+            {
+                return StatusCode(500, "Internal server error: " + e.Message);
+            }
         }
 
         [HttpPost]
@@ -43,6 +48,14 @@ namespace QuackersAPI_DDD.API.Controller
             {
                 var createdAssociation = await _service.CreateAssociation(dto);
                 return CreatedAtAction(nameof(GetById), new { personId = dto.PersonId, notificationId = dto.NotificationId }, createdAssociation);
+            }
+            catch (KeyNotFoundException e)
+            {
+                return NotFound(e.Message);
+            }
+            catch (InvalidOperationException e)
+            {
+                return Conflict(e.Message);
             }
             catch (Exception e)
             {
@@ -74,11 +87,11 @@ namespace QuackersAPI_DDD.API.Controller
             try
             {
                 var success = await _service.DeleteAssociation(personId, notificationId);
-                if (!success)
-                {
-                    return NotFound($"Association not found with person ID {personId} and notification ID {notificationId}.");
-                }
-                return Ok($"Association successfully deleted.");
+                return NoContent();
+            }
+            catch (KeyNotFoundException e)
+            {
+                return NotFound(e.Message);
             }
             catch (Exception e)
             {

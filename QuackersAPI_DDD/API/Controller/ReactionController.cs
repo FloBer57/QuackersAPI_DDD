@@ -12,54 +12,90 @@ namespace QuackersAPI_DDD.API.Controller
 
         public ReactionController(IReactionService reactionService)
         {
-            _reactionService = reactionService;
+            _reactionService = reactionService ?? throw new ArgumentNullException(nameof(reactionService));
         }
 
         [HttpGet]
         public async Task<IActionResult> GetAllReactions()
         {
-            var reactions = await _reactionService.GetAllReactions();
-            return Ok(reactions);
+                var reactions = await _reactionService.GetAllReactions();
+                return Ok(reactions);
         }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetReactionById(int id)
         {
-            var reaction = await _reactionService.GetReactionById(id);
-            if (reaction == null)
+            try
             {
-                return NotFound($"Reaction with id {id} not found.");
+                var reaction = await _reactionService.GetReactionById(id);
+                return Ok(reaction);
             }
-            return Ok(reaction);
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"An error occurred while retrieving the reaction with ID {id}: {ex.Message}");
+            }
         }
 
         [HttpPost]
         public async Task<IActionResult> CreateReaction([FromBody] CreateReactionDTO dto)
         {
-            var createdReaction = await _reactionService.CreateReaction(dto);
-            return CreatedAtAction(nameof(GetReactionById), new { id = createdReaction.Reaction_Id }, createdReaction);
+            try
+            {
+                var createdReaction = await _reactionService.CreateReaction(dto);
+                return CreatedAtAction(nameof(GetReactionById), new { id = createdReaction.Reaction_Id }, createdReaction);
+            }
+            catch (InvalidOperationException ex)
+            {
+                return Conflict(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"An error occurred while creating the reaction: {ex.Message}");
+            }
         }
 
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateReaction(int id, [FromBody] UpdateReactionDTO dto)
         {
-            var updatedReaction = await _reactionService.UpdateReaction(id, dto);
-            if (updatedReaction == null)
+            try
             {
-                return NotFound($"Reaction with id {id} not found.");
+                var updatedReaction = await _reactionService.UpdateReaction(id, dto);
+                return Ok(updatedReaction);
             }
-            return Ok(updatedReaction);
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (InvalidOperationException ex)
+            {
+                return Conflict(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"An error occurred while updating the reaction: {ex.Message}");
+            }
         }
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteReaction(int id)
         {
-            var success = await _reactionService.DeleteReaction(id);
-            if (!success)
+            try
             {
-                return NotFound($"Reaction with id {id} not found.");
+                var success = await _reactionService.DeleteReaction(id);
+                return NoContent(); 
             }
-            return Ok($"Reaction with id {id} deleted successfully.");
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"An error occurred while deleting the reaction: {ex.Message}");
+            }
         }
     }
 }
