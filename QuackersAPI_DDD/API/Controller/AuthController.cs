@@ -3,6 +3,7 @@ using QuackersAPI_DDD.API.DTO.AuthDTO;
 using QuackersAPI_DDD.API.DTO.LoginDTO;
 using QuackersAPI_DDD.API.DTO.PersonDTO;
 using QuackersAPI_DDD.Application.Interface;
+using QuackersAPI_DDD.Domain.Model;
 using QuackersAPI_DDD.Domain.Utilitie;
 
 namespace QuackersAPI_DDD.API.Controller
@@ -19,7 +20,7 @@ namespace QuackersAPI_DDD.API.Controller
         }
 
         [HttpPost("login")]
-        public async Task<IActionResult> Login([FromBody] LoginDTO loginDTO)
+        public async Task<IActionResult> Login([FromBody] LoginDTO loginDTO, TokenService tokenService)
         {
             if (string.IsNullOrWhiteSpace(loginDTO.Email) || string.IsNullOrWhiteSpace(loginDTO.Password))
             {
@@ -50,7 +51,7 @@ namespace QuackersAPI_DDD.API.Controller
             return Ok(new
             {
                 Message = "Login successful",
-                Token = SecurityService.GenerateToken()
+                Token = tokenService.GenerateToken(person)
             });
         }
 

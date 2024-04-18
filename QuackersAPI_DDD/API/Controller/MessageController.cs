@@ -37,6 +37,28 @@ namespace QuackersAPI_DDD.API.Controller
             }
         }
 
+        [HttpGet("{id}/attachments")]
+        public async Task<IActionResult> GetMessageAttachments(int id)
+        {
+            try
+            {
+                var attachments = await _messageService.GetMessageAttachments(id);
+                if (attachments == null || !attachments.Any())
+                {
+                    return NotFound($"No attachments found for message with id {id}.");
+                }
+                return Ok(attachments);
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "An internal server error has occurred: " + ex.Message);
+            }
+        }
+
         [HttpPost]
         public async Task<IActionResult> CreateMessage([FromBody] CreateMessageDTO messageDto)
         {

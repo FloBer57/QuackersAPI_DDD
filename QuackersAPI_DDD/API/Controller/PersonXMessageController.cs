@@ -31,10 +31,6 @@ namespace QuackersAPI_DDD.API.Controller
             try
             {
                 var association = await _service.GetAssociationById(personId, messageId);
-                if (association == null)
-                {
-                    return NotFound($"Association not found with person ID {personId} and message ID {messageId}.");
-                }
                 return Ok(association);
             }
             catch (KeyNotFoundException e)
@@ -102,6 +98,42 @@ namespace QuackersAPI_DDD.API.Controller
             catch (Exception e)
             {
                 return StatusCode(500, $"Internal server error: {e.Message}");
+            }
+        }
+
+        [HttpGet("channels/{messageId}/persons")]
+        public async Task<IActionResult> GetPersonsByMessageId(int messageId)
+        {
+            try
+            {
+                var persons = await _service.GetPersonsByMessageId(messageId);
+                return Ok(persons);
+            }
+            catch (KeyNotFoundException e)
+            {
+                return NotFound(e.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "An internal server error has occurred: " + ex.Message);
+            }
+        }
+
+        [HttpGet("persons/{personId}/messages")]
+        public async Task<IActionResult> GetMessagesByPersonId(int personId)
+        {
+            try
+            {
+                var messages = await _service.GetMessagesByPersonId(personId);
+                return Ok(messages);
+            }
+            catch (KeyNotFoundException e)
+            {
+                return NotFound(e.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "An internal server error has occurred: " + ex.Message);
             }
         }
     }

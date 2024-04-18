@@ -34,6 +34,14 @@ namespace QuackersAPI_DDD.Infrastructure.Repository
                 .FirstOrDefaultAsync(m => m.Message_Id == messageId);
         }
 
+        public async Task<IEnumerable<Attachment>> GetAttachmentsByMessageId(int messageId)
+        {
+            return await _context.Attachments
+                                 .Where(a => a.Message_Id == messageId)
+                                 .ToListAsync();
+        }
+
+
         public async Task<Message> CreateMessage(Message message)
         {
             _context.Messages.Add(message);
@@ -56,6 +64,14 @@ namespace QuackersAPI_DDD.Infrastructure.Repository
                 _context.Messages.Remove(message);
                 await _context.SaveChangesAsync();
             }
+        }
+
+        public async Task<IEnumerable<Message>> GetMessagesByChannelId(int channelId)
+        {
+            var messages = await _context.Messages
+                .Where(m => m.Channel_Id == channelId)  
+                .ToListAsync();
+            return messages;
         }
     }
 }

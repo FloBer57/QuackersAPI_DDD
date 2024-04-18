@@ -13,7 +13,7 @@ namespace QuackersAPI_DDD.Application.Service
     {
         private readonly IChannelRepository _channelRepository;
         private readonly IChannelTypeService _channelTypeService;
-
+        private readonly IMessageService _messageService;
         public ChannelService(IChannelRepository channelRepository, IChannelTypeService channelTypeService)
         {
             _channelRepository = channelRepository;
@@ -68,8 +68,6 @@ namespace QuackersAPI_DDD.Application.Service
             var channels = await _channelRepository.GetChannelsByChannelType(channelTypeId);
             return channels ?? new List<Channel>(); 
         }
-
-
 
         public async Task<Channel> GetChannelById(int id)
         {
@@ -128,6 +126,17 @@ namespace QuackersAPI_DDD.Application.Service
 
             await _channelRepository.DeleteChannel(channel);
             return true;
+        }
+
+        public async Task<IEnumerable<Message>> GetAllMessagesFromChannel(int channelId)
+        {
+
+            var messages = await _messageService.GetMessagesByChannelId(channelId);
+            if (messages == null)
+            {
+                throw new KeyNotFoundException($"Messages on this channel not found");
+            }
+            return messages;
         }
     }
 }

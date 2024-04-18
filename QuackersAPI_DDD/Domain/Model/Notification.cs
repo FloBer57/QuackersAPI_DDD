@@ -12,7 +12,7 @@ public partial class Notification
 
     public string? Notification_Text { get; set; }
 
-    public DateOnly Notification_DatePost { get; set; }
+    public DateTime Notification_DatePost { get; set; }
 
     public int Notification_TypeId { get; set; }
     [JsonIgnore]

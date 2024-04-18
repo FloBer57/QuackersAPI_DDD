@@ -6,6 +6,7 @@
     using global::QuackersAPI_DDD.Infrastructure.InterfaceRepository;
     using global::QuackersAPI_DDD.Domain.Model;
     using global::QuackersAPI_DDD.Infrastructure.Database;
+    using System.ComponentModel.DataAnnotations;
 
     public class PersonRepository : IPersonRepository
     {
@@ -35,7 +36,8 @@
 
         public async Task<Person> GetPersonByEmail(string email)
         {
-            return await _context.Persons.FindAsync(email);
+            return await _context.Persons
+                .FirstOrDefaultAsync(p => p.Person_Email == email);
         }
 
         public async Task<Person> UpdatePerson(Person person)

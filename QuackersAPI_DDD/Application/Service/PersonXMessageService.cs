@@ -35,6 +35,27 @@ namespace QuackersAPI_DDD.Application.Service
             return association;
         }
 
+        public async Task<IEnumerable<Message>> GetMessagesByPersonId(int personId)
+        {
+            var messageByPerson =  await _repository.GetMessagesByPersonId(personId);
+            if (messageByPerson == null)
+            {
+                throw new KeyNotFoundException("No message found with this person.");
+            }
+            return messageByPerson;
+        }
+
+        public async Task<IEnumerable<Person>> GetPersonsByMessageId(int personId)
+        {
+           var personByMessage = await _repository.GetPersonsByMessageId(personId);
+            if (personByMessage == null)
+            {
+                throw new KeyNotFoundException("No person found with this message.");
+            }
+            return personByMessage;
+        }
+
+
         public async Task<PersonXMessage> CreateAssociation(CreatePersonXMessageDTO dto)
         {
 

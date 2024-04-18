@@ -10,5 +10,7 @@ namespace QuackersAPI_DDD.Application.InterfaceService
         Task<PersonXChannel> CreateAssociation(CreatePersonXChannelDTO dto);
         Task<PersonXChannel> UpdateAssociation(int personId, int channelId, UpdatePersonXChannelDTO dto);
         Task<bool> DeleteAssociation(int personId, int channelId);
+        Task<IEnumerable<Person>> GetPersonsByChannelId(int channelId);
+        Task<IEnumerable<Channel>> GetChannelsByPersonId(int personId);
     }
 }

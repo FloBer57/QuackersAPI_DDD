@@ -9,5 +9,6 @@ namespace QuackersAPI_DDD.Infrastructure.InterfaceRepository
         Task<Message> CreateMessage(Message message);
         Task<Message> UpdateMessage(Message message);
         Task DeleteMessage(int messageId);
+        Task<IEnumerable<Message>> GetMessagesByChannelId(int channelId);
     }
 }

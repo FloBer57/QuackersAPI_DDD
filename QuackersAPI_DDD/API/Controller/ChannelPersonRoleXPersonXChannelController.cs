@@ -36,11 +36,51 @@ namespace QuackersAPI_DDD.API.Controller
             try
             {
                 var association = await _service.GetAssociationByIds(personId, channelId);
-                if (association == null)
-                {
-                    return NotFound($"No association found for person ID {personId} and channel ID {channelId}.");
-                }
                 return Ok(association);
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, "Internal server error: " + e.Message);
+            }
+        }
+
+        [HttpGet("channels/{channelId}/roles/{roleId}/persons")]
+        public async Task<IActionResult> GetPersonsByRoleInChannel(int channelId, int roleId)
+        {
+            try
+            {
+                var persons = await _service.GetPersonsByRoleInChannel(channelId, roleId);
+                return Ok(persons);
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, "Internal server error: " + e.Message);
+            }
+        }
+
+        [HttpGet("persons/{personId}/roles")]
+        public async Task<IActionResult> GetRolesByPersonInChannels(int personId)
+        {
+            try
+            {
+                var roles = await _service.GetRolesByPersonInChannels(personId);
+                if (roles == null || !roles.Any())
+                {
+                    return NotFound("No roles found for this person in any channels.");
+                }
+                return Ok(roles);
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(ex.Message);
             }
             catch (Exception e)
             {
@@ -55,6 +95,14 @@ namespace QuackersAPI_DDD.API.Controller
             {
                 var createdAssociation = await _service.CreateAssociation(association);
                 return CreatedAtAction(nameof(GetAssociationById), new { personId = createdAssociation.Person_Id, channelId = createdAssociation.Channel_Id }, createdAssociation);
+            }
+            catch (InvalidOperationException e)
+            {
+                return BadRequest(e.Message);
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(ex.Message);
             }
             catch (Exception e)
             {
@@ -74,6 +122,10 @@ namespace QuackersAPI_DDD.API.Controller
             {
                 return NotFound(e.Message);
             }
+            catch (InvalidOperationException e)
+            {
+                return BadRequest(e.Message);
+            }
             catch (Exception e)
             {
                 return StatusCode(500, "Internal server error: " + e.Message);
@@ -86,11 +138,11 @@ namespace QuackersAPI_DDD.API.Controller
             try
             {
                 var success = await _service.DeleteAssociation(personId, channelId);
-                if (!success)
-                {
-                    return NotFound($"No association found for person ID {personId} and channel ID {channelId}.");
-                }
                 return Ok($"Association between person ID {personId} and channel ID {channelId} has been deleted successfully.");
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(ex.Message);
             }
             catch (Exception e)
             {

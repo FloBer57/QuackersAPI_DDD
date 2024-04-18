@@ -33,6 +33,24 @@ namespace QuackersAPI_DDD.Application.Service
             return association;
         }
 
+        public async Task<IEnumerable<Person>> GetPersonsByNotificationId(int notificationId)
+        {
+            var personByNotification = await _repository.GetPersonsByNotificationId(notificationId);
+            if (personByNotification == null)
+                throw new KeyNotFoundException("No Person with this Notification");
+            return personByNotification;
+        }
+
+        public async Task<IEnumerable<Notification>> GetNotificationsByPersonId(int personId)
+        {
+            var notificationByPerson = await _repository.GetNotificationsByPersonId(personId);
+            if (notificationByPerson == null)
+            {
+                throw new KeyNotFoundException("No notification with this person");
+            }
+            return notificationByPerson;
+        }
+
         public async Task<PersonXNotification> CreateAssociation(CreatePersonXNotificationDTO dto)
         {
             var checkPerson = await _personService.GetPersonById(dto.PersonId);

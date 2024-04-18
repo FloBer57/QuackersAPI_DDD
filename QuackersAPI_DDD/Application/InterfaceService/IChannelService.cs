@@ -13,5 +13,6 @@
         Task<Channel> GetChannelById(int id);
         Task<Channel> UpdateChannel(int id, UpdateChannelDTO channel);
         Task<bool> DeleteChannel(int id);
+        Task<IEnumerable<Message>> GetAllMessagesFromChannel(int channelId);
     }
 }

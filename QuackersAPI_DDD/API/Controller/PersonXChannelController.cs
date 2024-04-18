@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using QuackersAPI_DDD.API.DTO.PersonXChannelDTO;
 using QuackersAPI_DDD.Application.InterfaceService;
+using QuackersAPI_DDD.Application.Service;
 
 namespace QuackersAPI_DDD.API.Controller
 {
@@ -16,14 +17,14 @@ namespace QuackersAPI_DDD.API.Controller
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAll()
+        public async Task<IActionResult> GetAllAssociations()
         {
             var associations = await _service.GetAllAssociations();
             return Ok(associations);
         }
 
         [HttpGet("{personId}/{channelId}")]
-        public async Task<IActionResult> GetById(int personId, int channelId)
+        public async Task<IActionResult> GetAssociationById(int personId, int channelId)
         {
             try
             {
@@ -37,12 +38,16 @@ namespace QuackersAPI_DDD.API.Controller
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create([FromBody] CreatePersonXChannelDTO dto)
+        public async Task<IActionResult> CreateAssociation([FromBody] CreatePersonXChannelDTO dto)
         {
             try
             {
                 var createdAssociation = await _service.CreateAssociation(dto);
-                return CreatedAtAction(nameof(GetById), new { personId = dto.PersonId, channelId = dto.ChannelId }, createdAssociation);
+                return CreatedAtAction(nameof(GetAssociationById), new { personId = dto.PersonId, channelId = dto.ChannelId }, createdAssociation);
+            }
+            catch (KeyNotFoundException e)
+            {
+                return NotFound(e.Message);
             }
             catch (Exception e)
             {
@@ -51,7 +56,7 @@ namespace QuackersAPI_DDD.API.Controller
         }
 
         [HttpPut("{personId}/{channelId}")]
-        public async Task<IActionResult> Update(int personId, int channelId, [FromBody] UpdatePersonXChannelDTO dto)
+        public async Task<IActionResult> UpdateAssociation(int personId, int channelId, [FromBody] UpdatePersonXChannelDTO dto)
         {
             try
             {
@@ -85,5 +90,42 @@ namespace QuackersAPI_DDD.API.Controller
                 return StatusCode(500, "Internal server error: " + e.Message);
             }
         }
+
+        [HttpGet("channels/{channelId}/persons")]
+        public async Task<IActionResult> GetPersonsByChannelId(int channelId)
+        {
+            try
+            {
+                var persons = await _service.GetPersonsByChannelId(channelId);
+                if (!persons.Any())
+                {
+                    return NotFound($"No persons found for channel with ID {channelId}.");
+                }
+                return Ok(persons);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "An internal server error has occurred: " + ex.Message);
+            }
+        }
+
+        [HttpGet("persons/{personId}/channels")]
+        public async Task<IActionResult> GetChannelsByPersonId(int personId)
+        {
+            try
+            {
+                var channels = await _service.GetChannelsByPersonId(personId);
+                if (channels == null || !channels.Any())
+                {
+                    return NotFound($"No channels found for person with ID {personId}.");
+                }
+                return Ok(channels);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "An internal server error has occurred: " + ex.Message);
+            }
+        }
+
     }
 }

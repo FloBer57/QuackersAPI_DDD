@@ -17,14 +17,14 @@ namespace QuackersAPI_DDD.API.Controller
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAll()
+        public async Task<IActionResult> GetAllAssociation()
         {
                 var associations = await _service.GetAllAssociations();
                 return Ok(associations);
         }
 
         [HttpGet("{personId}/{notificationId}")]
-        public async Task<IActionResult> GetById(int personId, int notificationId)
+        public async Task<IActionResult> GetAssociationById(int personId, int notificationId)
         {
             try
             {
@@ -42,12 +42,12 @@ namespace QuackersAPI_DDD.API.Controller
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create([FromBody] CreatePersonXNotificationDTO dto)
+        public async Task<IActionResult> CreateAssociation([FromBody] CreatePersonXNotificationDTO dto)
         {
             try
             {
                 var createdAssociation = await _service.CreateAssociation(dto);
-                return CreatedAtAction(nameof(GetById), new { personId = dto.PersonId, notificationId = dto.NotificationId }, createdAssociation);
+                return CreatedAtAction(nameof(GetAssociationById), new { personId = dto.PersonId, notificationId = dto.NotificationId }, createdAssociation);
             }
             catch (KeyNotFoundException e)
             {
@@ -64,7 +64,7 @@ namespace QuackersAPI_DDD.API.Controller
         }
 
         [HttpPut("{personId}/{notificationId}")]
-        public async Task<IActionResult> Update(int personId, int notificationId, [FromBody] UpdatePersonXNotificationDTO dto)
+        public async Task<IActionResult> UpdateAssociation(int personId, int notificationId, [FromBody] UpdatePersonXNotificationDTO dto)
         {
             try
             {
@@ -82,7 +82,7 @@ namespace QuackersAPI_DDD.API.Controller
         }
 
         [HttpDelete("{personId}/{notificationId}")]
-        public async Task<IActionResult> Delete(int personId, int notificationId)
+        public async Task<IActionResult> DeleteAssociation(int personId, int notificationId)
         {
             try
             {
@@ -96,6 +96,42 @@ namespace QuackersAPI_DDD.API.Controller
             catch (Exception e)
             {
                 return StatusCode(500, "Internal server error: " + e.Message);
+            }
+        }
+
+        [HttpGet("channels/{channelId}/persons")]
+        public async Task<IActionResult> GetNotificationsByPersonId(int personId)
+        {
+            try
+            {
+                var persons = await _service.GetNotificationsByPersonId(personId);
+                return Ok(persons);
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "An internal server error has occurred: " + ex.Message);
+            }
+        }
+
+        [HttpGet("persons/{personId}/channels")]
+        public async Task<IActionResult> GetPersonsByNotificationId(int notificationId)
+        {
+            try
+            {
+                var channels = await _service.GetPersonsByNotificationId(notificationId);
+                return Ok(channels);
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "An internal server error has occurred: " + ex.Message);
             }
         }
     }

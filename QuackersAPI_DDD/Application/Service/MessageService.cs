@@ -16,12 +16,14 @@
             private readonly IMessageRepository _messageRepository;
             private readonly IChannelRepository _channelRepository;
             private readonly IPersonRepository _personRepository;
+            private readonly IAttachmentRepository _attachmentRepository;
 
-            public MessageService(IMessageRepository messageRepository, IChannelRepository channelRepository, IPersonRepository personRepository)
+            public MessageService(IMessageRepository messageRepository, IChannelRepository channelRepository, IPersonRepository personRepository, IAttachmentRepository attachmentRepository)
             {
                 _messageRepository = messageRepository;
                 _channelRepository = channelRepository;
                 _personRepository = personRepository;
+                _attachmentRepository = attachmentRepository;
             }
 
             public async Task<IEnumerable<Message>> GetAllMessages()
@@ -38,6 +40,15 @@
                     throw new KeyNotFoundException($"Message with id {messageId} not found.");
                 }
                 return message;
+            }
+            public async Task<IEnumerable<Attachment>> GetMessageAttachments(int messageId)
+            {
+                var message = await _messageRepository.GetMessageById(messageId);
+                if (message == null)
+                {
+                    throw new KeyNotFoundException($"Message with id {messageId} not found.");
+                }
+                return await _attachmentRepository.GetAttachmentsByMessageId(messageId);
             }
 
             public async Task<Message> CreateMessage(CreateMessageDTO dto)
@@ -93,6 +104,16 @@
 
                 await _messageRepository.DeleteMessage(messageId);
                 return true;
+            }
+
+            public async Task<IEnumerable<Message>> GetMessagesByChannelId(int channelId)
+            {
+                var messages = await _messageRepository.GetMessagesByChannelId(channelId);
+                if (messages == null)
+                {
+                    throw new KeyNotFoundException($"no message found in the channel with id {channelId}");
+                }
+                return messages;
             }
         }
     }

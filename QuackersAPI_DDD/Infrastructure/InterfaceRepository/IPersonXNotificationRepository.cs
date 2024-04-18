@@ -9,5 +9,8 @@ namespace QuackersAPI_DDD.Infrastructure.InterfaceRepository
         Task<PersonXNotification> CreateAssociation(PersonXNotification association);
         Task<PersonXNotification> UpdateAssociation(PersonXNotification association);
         Task<bool> DeleteAssociation(int personId, int notificationId);
+        Task<IEnumerable<Person>> GetPersonsByNotificationId(int notificationId);
+        Task<IEnumerable<Notification>> GetNotificationsByPersonId(int personId);
+
     }
 }

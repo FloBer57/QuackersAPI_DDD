@@ -25,6 +25,23 @@ namespace QuackersAPI_DDD.Infrastructure.Repository
                                  .FirstOrDefaultAsync(x => x.Person_Id == personId && x.Notification_Id == notificationId);
         }
 
+        public async Task<IEnumerable<Person>> GetPersonsByNotificationId(int notificationId)
+        {
+            return await _context.Personxnotifications
+                .Where(px => px.Notification_Id == notificationId)
+                .Include(px => px.Person)
+                .Select(pxc => pxc.Person)
+                .ToListAsync();
+        }
+        public async Task<IEnumerable<Notification>> GetNotificationsByPersonId(int personId)
+        {
+            return await _context.Personxnotifications
+                .Where(pxc => pxc.Person_Id== personId)
+                .Include(pxc => pxc.Notification)
+                .Select(pxc => pxc.Notification)
+                .ToListAsync();
+        }
+
         public async Task<PersonXNotification> CreateAssociation(PersonXNotification association)
         {
             _context.Personxnotifications.Add(association);
