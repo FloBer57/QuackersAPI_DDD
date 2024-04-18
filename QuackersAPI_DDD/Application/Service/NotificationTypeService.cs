@@ -49,6 +49,11 @@ namespace QuackersAPI_DDD.Application.Service
 
         public async Task<NotificationType> UpdateNotificationType(int id, UpdateNotificationTypeDTO dto)
         {
+            if (await _notificationTypeRepository.NotificationTypeNameExists(dto.NotificationType_Name))
+            {
+                throw new InvalidOperationException($"A Notification Type with the name '{dto.NotificationType_Name}' already exists.");
+            }
+
             var notificationType = await _notificationTypeRepository.GetNotificationTypeById(id);
             if (notificationType == null)
             {

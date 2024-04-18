@@ -1,7 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using QuackersAPI_DDD.API.DTO.AttachmentDTO;
 using QuackersAPI_DDD.Application.InterfaceService;
+using QuackersAPI_DDD.Domain.Model;
 
 namespace QuackersAPI_DDD.API.Controller
 {
@@ -42,24 +44,31 @@ namespace QuackersAPI_DDD.API.Controller
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateAttachment([FromBody] CreateAttachmentDTO dto)
+        [Consumes("multipart/form-data")]
+        
+        public async Task<IActionResult> CreateAttachments([FromForm] CreateAttachmentDTO dto, [FromForm] List<IFormFile> files)
         {
+            if (files == null || files.Count == 0)
+            {
+                return BadRequest("No files received.");
+            }
+
             try
             {
-                var newAttachment = await _attachmentService.CreateAttachment(dto);
-                return CreatedAtAction(nameof(GetById), new { id = newAttachment.Attachment_Id }, newAttachment);
+                var newAttachments = await _attachmentService.CreateAttachments(dto, files);
+                if (newAttachments.Count == 0)
+                {
+                    return BadRequest("No attachments were created. All files failed to process.");
+                }
+                return CreatedAtAction(nameof(GetById), new { ids = newAttachments.Select(a => a.Attachment_Id).ToList() }, newAttachments);
             }
             catch (KeyNotFoundException ex)
             {
                 return NotFound(ex.Message);
             }
-            catch (InvalidOperationException ex)
-            {
-                return Conflict(ex.Message); 
-            }
             catch (Exception ex)
             {
-                return StatusCode(500, "An error occurred while creating the attachment.");
+                return StatusCode(500, "An error occurred while creating attachments: " + ex.Message);
             }
         }
 

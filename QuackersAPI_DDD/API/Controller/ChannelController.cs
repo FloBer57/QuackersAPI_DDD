@@ -120,5 +120,23 @@ namespace QuackersAPI_DDD.API.Controller
                 return StatusCode(500, $"An error occurred while deleting the channel: {ex.Message}");
             }
         }
+
+        [HttpGet("{id}/messages")]
+        public async Task<IActionResult> GetAllMessagesFromChannel(int id)
+        {
+            try
+            {
+                var messages = await _channelService.GetAllMessagesFromChannel(id);
+                return Ok(messages);
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"An error occurred while retrieving messages for the channel with ID {id}: {ex.Message}");
+            }
+        }
     }
 }

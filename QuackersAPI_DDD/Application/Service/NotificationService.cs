@@ -42,8 +42,7 @@ namespace QuackersAPI_DDD.Application.Service
                 throw new KeyNotFoundException($"Notification Type with id {dto.Notification_TypeId} not found.");
             }
 
-            // Assuming dto.Notification_DateTime is the DateTime property you need to convert to DateOnly.
-            var notificationDateOnly = DateOnly.FromDateTime(DateTime.Now);
+            var notificationDateOnly = DateTime.Now;
 
             var newNotification = new Notification
             {

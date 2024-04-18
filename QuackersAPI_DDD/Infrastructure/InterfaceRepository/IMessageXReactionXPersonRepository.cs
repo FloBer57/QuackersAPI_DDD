@@ -9,5 +9,6 @@ namespace QuackersAPI_DDD.Infrastructure.InterfaceRepository
         Task<MessageXReactionXPerson> CreateReaction(MessageXReactionXPerson reaction);
         Task<MessageXReactionXPerson> UpdateReaction(MessageXReactionXPerson reaction);
         Task<bool> DeleteReaction(int personId, int messageId, int reactionId);
+        Task<IEnumerable<MessageXReactionXPerson>> GetReactionsByMessageId(int messageId);
     }
 }

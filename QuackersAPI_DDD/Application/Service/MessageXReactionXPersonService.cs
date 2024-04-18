@@ -84,5 +84,20 @@ namespace QuackersAPI_DDD.Application.Service
             await _repository.DeleteReaction(personId, messageId, reactionId);
             return true;
         }
+
+        public async Task<Dictionary<string, int>> GetReactionCountsByMessageId(int messageId)
+        {
+            var reactions = await _repository.GetReactionsByMessageId(messageId);
+            if (!reactions.Any())
+            {
+                throw new KeyNotFoundException($"No reactions found for message ID {messageId}.");
+            }
+
+            var reactionCounts = reactions.GroupBy(r => r.Reaction.Reaction_Name)
+                                          .ToDictionary(group => group.Key, group => group.Count());
+
+            return reactionCounts;
+        }
+
     }
 }

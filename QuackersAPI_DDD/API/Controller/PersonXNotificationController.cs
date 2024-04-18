@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using QuackersAPI_DDD.API.DTO.PersonXNotificationDTO;
 using QuackersAPI_DDD.Application.InterfaceService;
+using System.Threading.Tasks;
 
 namespace QuackersAPI_DDD.API.Controller
 {
@@ -12,18 +13,18 @@ namespace QuackersAPI_DDD.API.Controller
 
         public PersonXNotificationController(IPersonXNotificationService service)
         {
-            _service = service;
+            _service = service ?? throw new ArgumentNullException(nameof(service));
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAll()
+        public async Task<IActionResult> GetAllAssociation()
         {
-            var associations = await _service.GetAllAssociations();
-            return Ok(associations);
+                var associations = await _service.GetAllAssociations();
+                return Ok(associations);
         }
 
         [HttpGet("{personId}/{notificationId}")]
-        public async Task<IActionResult> GetById(int personId, int notificationId)
+        public async Task<IActionResult> GetAssociationById(int personId, int notificationId)
         {
             try
             {
@@ -34,15 +35,27 @@ namespace QuackersAPI_DDD.API.Controller
             {
                 return NotFound(e.Message);
             }
+            catch (Exception e)
+            {
+                return StatusCode(500, "Internal server error: " + e.Message);
+            }
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create([FromBody] CreatePersonXNotificationDTO dto)
+        public async Task<IActionResult> CreateAssociation([FromBody] CreatePersonXNotificationDTO dto)
         {
             try
             {
                 var createdAssociation = await _service.CreateAssociation(dto);
-                return CreatedAtAction(nameof(GetById), new { personId = dto.PersonId, notificationId = dto.NotificationId }, createdAssociation);
+                return CreatedAtAction(nameof(GetAssociationById), new { personId = dto.PersonId, notificationId = dto.NotificationId }, createdAssociation);
+            }
+            catch (KeyNotFoundException e)
+            {
+                return NotFound(e.Message);
+            }
+            catch (InvalidOperationException e)
+            {
+                return Conflict(e.Message);
             }
             catch (Exception e)
             {
@@ -51,7 +64,7 @@ namespace QuackersAPI_DDD.API.Controller
         }
 
         [HttpPut("{personId}/{notificationId}")]
-        public async Task<IActionResult> Update(int personId, int notificationId, [FromBody] UpdatePersonXNotificationDTO dto)
+        public async Task<IActionResult> UpdateAssociation(int personId, int notificationId, [FromBody] UpdatePersonXNotificationDTO dto)
         {
             try
             {
@@ -69,20 +82,56 @@ namespace QuackersAPI_DDD.API.Controller
         }
 
         [HttpDelete("{personId}/{notificationId}")]
-        public async Task<IActionResult> Delete(int personId, int notificationId)
+        public async Task<IActionResult> DeleteAssociation(int personId, int notificationId)
         {
             try
             {
                 var success = await _service.DeleteAssociation(personId, notificationId);
-                if (!success)
-                {
-                    return NotFound($"Association not found with person ID {personId} and notification ID {notificationId}.");
-                }
-                return Ok($"Association successfully deleted.");
+                return NoContent();
+            }
+            catch (KeyNotFoundException e)
+            {
+                return NotFound(e.Message);
             }
             catch (Exception e)
             {
                 return StatusCode(500, "Internal server error: " + e.Message);
+            }
+        }
+
+        [HttpGet("channels/{channelId}/persons")]
+        public async Task<IActionResult> GetNotificationsByPersonId(int personId)
+        {
+            try
+            {
+                var persons = await _service.GetNotificationsByPersonId(personId);
+                return Ok(persons);
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "An internal server error has occurred: " + ex.Message);
+            }
+        }
+
+        [HttpGet("persons/{personId}/channels")]
+        public async Task<IActionResult> GetPersonsByNotificationId(int notificationId)
+        {
+            try
+            {
+                var channels = await _service.GetPersonsByNotificationId(notificationId);
+                return Ok(channels);
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "An internal server error has occurred: " + ex.Message);
             }
         }
     }

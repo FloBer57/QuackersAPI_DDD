@@ -50,5 +50,14 @@ namespace QuackersAPI_DDD.Infrastructure.Repository
             }
             return false;
         }
+
+        public async Task<IEnumerable<MessageXReactionXPerson>> GetReactionsByMessageId(int messageId)
+        {
+            return await _context.Messagexreactionxpeople
+                                 .Include(mrp => mrp.Reaction) 
+                                 .Where(mrp => mrp.Message_Id == messageId)
+                                 .ToListAsync();
+        }
+
     }
 }

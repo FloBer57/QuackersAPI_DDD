@@ -16,16 +16,23 @@ namespace QuackersAPI_DDD.Application.Service
 
         public async Task<IEnumerable<PersonStatut>> GetAllPersonStatuts()
         {
-            return await _personStatutRepository.GetAllPersonStatuts();
+            var statuts = await _personStatutRepository.GetAllPersonStatuts();
+            return statuts ?? new List<PersonStatut>();
         }
 
         public async Task<PersonStatut> GetPersonStatutById(int id)
         {
-            return await _personStatutRepository.GetPersonStatutById(id);
+            var statut = await _personStatutRepository.GetPersonStatutById(id);
+            if (statut == null)
+                throw new KeyNotFoundException($"Person status with ID {id} not found.");
+            return statut;
         }
 
         public async Task<PersonStatut> CreatePersonStatut(CreatePersonStatutDTO personStatutDto)
         {
+            if (await _personStatutRepository.PersonStatutNameExists(personStatutDto.PersonStatut_Name))
+                throw new InvalidOperationException($"A person status with the name '{personStatutDto.PersonStatut_Name}' already exists.");
+
             var personStatut = new PersonStatut
             {
                 PersonStatut_Name = personStatutDto.PersonStatut_Name
@@ -35,16 +42,25 @@ namespace QuackersAPI_DDD.Application.Service
 
         public async Task<PersonStatut> UpdatePersonStatut(int id, UpdatePersonStatutDTO personStatutDto)
         {
-            var personStatut = new PersonStatut
-            {
-                PersonStatut_Name = personStatutDto.PersonStatut_Name
-            };
-            return await _personStatutRepository.UpdatePersonStatut(id, personStatut);
+            var existingStatut = await _personStatutRepository.GetPersonStatutById(id);
+            if (existingStatut == null)
+                throw new KeyNotFoundException($"Person status with ID {id} not found.");
+
+            if (await _personStatutRepository.PersonStatutNameExists(personStatutDto.PersonStatut_Name))
+                throw new InvalidOperationException($"A person status with the name '{personStatutDto.PersonStatut_Name}' already exists.");
+
+            existingStatut.PersonStatut_Name = personStatutDto.PersonStatut_Name;
+            return await _personStatutRepository.UpdatePersonStatut(id, existingStatut);
         }
 
         public async Task<bool> DeletePersonStatut(int id)
         {
-            return await _personStatutRepository.DeletePersonStatut(id);
+            var statut = await _personStatutRepository.GetPersonStatutById(id);
+            if (statut == null)
+                throw new KeyNotFoundException($"Person status with ID {id} not found.");
+
+            await _personStatutRepository.DeletePersonStatut(id);
+            return true;
         }
     }
 }

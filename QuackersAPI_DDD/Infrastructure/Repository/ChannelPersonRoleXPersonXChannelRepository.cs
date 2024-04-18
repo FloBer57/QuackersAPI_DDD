@@ -32,6 +32,36 @@ namespace QuackersAPI_DDD.Infrastructure.Repository
                 .FirstOrDefaultAsync(x => x.Person_Id == personId && x.Channel_Id == channelId);
         }
 
+        public async Task<List<ChannelPersonRoleXPersonXChannel>> GetAssociationsByChannelSortedByRole(int channelId)
+        {
+            return await _context.Channelpersonrolexpersonxchannels
+                .Include(x => x.Person)
+                .Include(x => x.Channel)
+                .Include(x => x.ChannelPersonRole)
+                .Where(x => x.Channel_Id == channelId)
+                .OrderBy(x => x.ChannelPersonRole.ChannelPersonRole_Id) 
+                .ToListAsync(); 
+        }
+
+        public async Task<IEnumerable<Person>> GetPersonsByRoleInChannel(int channelId, int roleId)
+        {
+            return await _context.Channelpersonrolexpersonxchannels
+                .Where(a => a.Channel_Id == channelId && a.ChannelPersonRole_Id == roleId)
+                .Include(a => a.Person)
+                .Select(a => a.Person)
+                .ToListAsync();
+            
+        }
+
+        public async Task<IEnumerable<ChannelPersonRole>> GetRolesByPersonInChannels(int personId)
+        {
+            var associations = await _context.Channelpersonrolexpersonxchannels
+                .Where(a => a.Person_Id == personId)
+                .Include(a => a.ChannelPersonRole)
+                .Select(a => a.ChannelPersonRole)
+                .ToListAsync();
+            return associations;
+        }
         public async Task<ChannelPersonRoleXPersonXChannel> CreateAssociation(ChannelPersonRoleXPersonXChannel association)
         {
             _context.Channelpersonrolexpersonxchannels.Add(association);

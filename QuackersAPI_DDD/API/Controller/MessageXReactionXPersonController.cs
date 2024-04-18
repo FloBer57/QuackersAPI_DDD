@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using QuackersAPI_DDD.API.DTO.MessagexreactionxpersonDTO;
 using QuackersAPI_DDD.Application.InterfaceService;
+using QuackersAPI_DDD.Application.Service;
 
 namespace QuackersAPI_DDD.API.Controller
 {
@@ -105,5 +106,24 @@ namespace QuackersAPI_DDD.API.Controller
                 return StatusCode(500, "Internal server error: " + e.Message);
             }
         }
+
+        [HttpGet("{messageId}/reactions/count")]
+        public async Task<IActionResult> GetMessageReactionCounts(int messageId)
+        {
+            try
+            {
+                var reactionCounts = await _service.GetReactionCountsByMessageId(messageId);
+                return Ok(reactionCounts);
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "An internal server error has occurred: " + ex.Message);
+            }
+        }
+
     }
 }

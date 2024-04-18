@@ -23,6 +23,13 @@ namespace QuackersAPI_DDD.Infrastructure.Repository
         {
             return await _context.Attachments.FindAsync(id);
         }
+        public async Task<IEnumerable<Attachment>> GetAttachmentsByMessageId(int messageId)
+        {
+            return await _context.Attachments
+                                 .Where(a => a.Message_Id == messageId)
+                                 .ToListAsync();
+        }
+
 
         public async Task<Attachment> CreateAttachment(Attachment attachment)
         {

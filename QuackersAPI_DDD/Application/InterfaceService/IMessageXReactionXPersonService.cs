@@ -10,5 +10,6 @@ namespace QuackersAPI_DDD.Application.InterfaceService
         Task<MessageXReactionXPerson> CreateReaction(CreateMessageXReactionXPersonDTO dto);
         Task<MessageXReactionXPerson> UpdateReaction(int personId, int messageId, int reactionId, UpdateMessageXReactionXPersonDTO dto);
         Task<bool> DeleteReaction(int personId, int messageId, int reactionId);
+        Task<Dictionary<string, int>> GetReactionCountsByMessageId(int messageId);
     }
 }

@@ -1,4 +1,5 @@
-﻿using QuackersAPI_DDD.Application.Interface;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using QuackersAPI_DDD.Application.Interface;
 using QuackersAPI_DDD.Application.InterfaceService;
 using QuackersAPI_DDD.Application.Service;
 using QuackersAPI_DDD.Application.Service.QuackersAPI_DDD.Application.Service;

@@ -30,6 +30,24 @@
                 .FirstOrDefaultAsync(p => p.Person_Id == personId && p.Channel_Id == channelId);
             }
 
+            public async Task<IEnumerable<Person>> GetPersonsByChannelId(int channelId)
+            {
+                return await _context.Personxchannels
+                    .Where(px => px.Channel_Id == channelId)
+                    .Include(px => px.Person)
+                    .Select(pxc => pxc.Person)
+                    .ToListAsync();
+            }
+            public async Task<IEnumerable<Channel>> GetChannelsByPersonId(int personId)
+            {
+                return await _context.Personxchannels
+                    .Where(pxc => pxc.Person_Id == personId)
+                    .Include(pxc => pxc.Channel)
+                    .Select(pxc => pxc.Channel)
+                    .ToListAsync();
+            }
+
+
             public async Task<PersonXChannel> CreateAssociation(PersonXChannel association)
             {
                 _context.Personxchannels.Add(association);
@@ -54,19 +72,6 @@
                     return true;
                 }
                 return false;
-            }
-
-            public async Task AddPersonToChannel(int personId, int channelId)
-            {
-                var personXChannel = new PersonXChannel
-                {
-                    Person_Id = personId,
-                    Channel_Id = channelId,
-                    PersonXchannelSignInDate = DateTime.Now
-                };
-
-                _context.Personxchannels.Add(personXChannel);
-                await _context.SaveChangesAsync();
             }
         }
     }

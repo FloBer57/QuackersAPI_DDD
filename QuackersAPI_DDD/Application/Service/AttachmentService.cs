@@ -1,6 +1,7 @@
 ﻿using QuackersAPI_DDD.API.DTO.AttachmentDTO;
 using QuackersAPI_DDD.Application.InterfaceService;
 using QuackersAPI_DDD.Domain.Model;
+using QuackersAPI_DDD.Domain.Utilitie;
 using QuackersAPI_DDD.Infrastructure.InterfaceRepository;
 using QuackersAPI_DDD.Infrastructure.Repository;
 
@@ -33,30 +34,40 @@ namespace QuackersAPI_DDD.Application.Service
             return attachment;
         }
 
-        public async Task<Attachment> CreateAttachment(CreateAttachmentDTO dto)
+        public async Task<List<Attachment>> CreateAttachments(CreateAttachmentDTO dto, IEnumerable<IFormFile> files)
         {
-
-            if (await _attachmentRepository.AttachmentNameExists(dto.Attachment_Name))
-            {
-                throw new InvalidOperationException("An attachment with the same name already exists.");
-            }
-
-
             var message = await _messageRepository.GetMessageById(dto.Message_Id);
             if (message == null)
             {
                 throw new KeyNotFoundException("The specified message ID does not exist.");
             }
 
+            List<Attachment> attachments = new List<Attachment>();
 
-            var attachment = new Attachment
+            foreach (var file in files)
             {
-                Attachment_Name = dto.Attachment_Name,
-                AttachmentThing = dto.AttachmentThing, 
-                Message_Id = dto.Message_Id
-            };
+                if (file.Length > 0)
+                {
+                    string uniqueName = NameGenerator.GenerateUniqueAttachmentName(file.FileName);
+                    var filePath = Path.Combine("C:\\Users\\Florent\\Documents\\GitHub\\QuackersAPI_DDD\\QuackersAPI_DDD\\DownloadTemporary\\", uniqueName);
 
-            return await _attachmentRepository.CreateAttachment(attachment);
+                    using (var stream = new FileStream(filePath, FileMode.Create))
+                    {
+                        await file.CopyToAsync(stream);
+                    }
+
+                    var attachment = new Attachment
+                    {
+                        Attachment_Name = uniqueName,
+                        AttachmentThing = filePath, 
+                        Message_Id = dto.Message_Id
+                    };
+
+                    attachments.Add(await _attachmentRepository.CreateAttachment(attachment));
+                }
+            }
+
+            return attachments;
         }
 
 
