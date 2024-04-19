@@ -99,7 +99,7 @@ namespace QuackersAPI_DDD.API.Controller
             }
         }
 
-        [HttpGet("channels/{channelId}/persons")]
+        [HttpGet("person/{personId}/notification")]
         public async Task<IActionResult> GetNotificationsByPersonId(int personId)
         {
             try
@@ -117,7 +117,7 @@ namespace QuackersAPI_DDD.API.Controller
             }
         }
 
-        [HttpGet("persons/{personId}/channels")]
+        [HttpGet("notification/{notificationId}/person")]
         public async Task<IActionResult> GetPersonsByNotificationId(int notificationId)
         {
             try

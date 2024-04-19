@@ -1,7 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using QuackersAPI_DDD.API.DTO.ChannelDTO;
 using QuackersAPI_DDD.Application.Interface;
-using QuackersAPI_DDD.Domain.Model;
 
 namespace QuackersAPI_DDD.API.Controller
 {
@@ -16,6 +16,7 @@ namespace QuackersAPI_DDD.API.Controller
             _channelService = channelService;
         }
 
+        [Authorize]
         [HttpGet]
         public async Task<IActionResult> GetAllChannels()
         {

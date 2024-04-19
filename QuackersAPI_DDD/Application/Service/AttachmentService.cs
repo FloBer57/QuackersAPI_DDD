@@ -1,7 +1,9 @@
 ﻿using QuackersAPI_DDD.API.DTO.AttachmentDTO;
 using QuackersAPI_DDD.Application.InterfaceService;
+using QuackersAPI_DDD.Application.Utilitie;
+using QuackersAPI_DDD.Application.Utilitie.InterfaceUtilitiesServices;
+using QuackersAPI_DDD.Application.Utilitie.UtilitiesServices;
 using QuackersAPI_DDD.Domain.Model;
-using QuackersAPI_DDD.Domain.Utilitie;
 using QuackersAPI_DDD.Infrastructure.InterfaceRepository;
 using QuackersAPI_DDD.Infrastructure.Repository;
 
@@ -11,11 +13,13 @@ namespace QuackersAPI_DDD.Application.Service
     {
         private readonly IAttachmentRepository _attachmentRepository;
         private readonly IMessageRepository _messageRepository;
+        private readonly ISecurityService _securityService;
 
-        public AttachmentService(IAttachmentRepository attachmentRepository , IMessageRepository messageRepository)
+        public AttachmentService(IAttachmentRepository attachmentRepository , IMessageRepository messageRepository, ISecurityService securityService)
         {
             _attachmentRepository = attachmentRepository;
             _messageRepository = messageRepository;
+            _securityService = securityService;
         }
 
         public async Task<IEnumerable<Attachment>> GetAllAttachments()
@@ -48,7 +52,7 @@ namespace QuackersAPI_DDD.Application.Service
             {
                 if (file.Length > 0)
                 {
-                    string uniqueName = NameGenerator.GenerateUniqueAttachmentName(file.FileName);
+                    string uniqueName = _securityService.GenerateUniqueAttachmentName(file.FileName);
                     var filePath = Path.Combine("C:\\Users\\Florent\\Documents\\GitHub\\QuackersAPI_DDD\\QuackersAPI_DDD\\DownloadTemporary\\", uniqueName);
 
                     using (var stream = new FileStream(filePath, FileMode.Create))

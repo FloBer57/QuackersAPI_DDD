@@ -1,9 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using QuackersAPI_DDD.API.DTO.PersonDTO;
 using QuackersAPI_DDD.Application.Interface;
-using QuackersAPI_DDD.Application.InterfaceService;
-using System;
-using System.Threading.Tasks;
 
 namespace QuackersAPI_DDD.API.Controller
 {
@@ -56,6 +53,24 @@ namespace QuackersAPI_DDD.API.Controller
             try
             {
                 var person = await _personService.CreatePerson(createPersonDTO);
+                return CreatedAtAction(nameof(GetPersonById), new { id = person.Person_Id }, person);
+            }
+            catch (InvalidOperationException e)
+            {
+                return Conflict(e.Message);
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, "Internal server error: " + e.Message);
+            }
+        }
+
+        [HttpPost("test")]
+        public async Task<IActionResult> CreatePerson([FromBody] CreatePersonTestDTO createPersonTestDTO)
+        {
+            try
+            {
+                var person = await _personService.CreatePersonTest(createPersonTestDTO);
                 return CreatedAtAction(nameof(GetPersonById), new { id = person.Person_Id }, person);
             }
             catch (InvalidOperationException e)

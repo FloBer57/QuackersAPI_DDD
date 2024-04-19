@@ -5,7 +5,8 @@ using Microsoft.IdentityModel.Tokens;
 using QuackersAPI_DDD.Application.Interface;
 using QuackersAPI_DDD.Application.InterfaceService;
 using QuackersAPI_DDD.Application.Service;
-using QuackersAPI_DDD.Domain.Utilitie;
+using QuackersAPI_DDD.Application.Utilitie.InterfaceUtilitiesServices;
+using QuackersAPI_DDD.Application.Utilitie.UtilitiesServices;
 using QuackersAPI_DDD.Infrastructure.Database;
 using QuackersAPI_DDD.Infrastructure.InterfaceRepository;
 using QuackersAPI_DDD.Infrastructure.Repository;
@@ -20,33 +21,34 @@ namespace QuackersAPI_DDD
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            // Add services to the container.
-
+            // Ajout des services au conteneur.
             builder.Services.AddControllers();
-            // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
             builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseMySql(builder.Configuration.GetConnectionString("DefaultConnection"), new MySqlServerVersion(new Version(8, 0, 21))));
+                options.UseMySql(builder.Configuration.GetConnectionString("DefaultConnection"), new MySqlServerVersion(new Version(8, 0, 21))));
             builder.Services.AddDomainServices();
-            builder.Services.AddControllers();
 
-            /* JWT TOKEN */
+            // JWT TOKEN Setup
             var secretKey = builder.Configuration["Jwt:Key"];
             var issuer = builder.Configuration["Jwt:Issuer"];
             var audience = builder.Configuration["Jwt:Audience"];
 
-            // Enregistrement du TokenService avec les paramètres
-            builder.Services.AddSingleton(new TokenService(secretKey, issuer, audience));
 
-            // Configuration de l'authentification et de l'autorisation
+            // Ensure the secret key is correctly converted from Base64
+            var keyBytes = Encoding.UTF8.GetBytes(secretKey);
+            var signingKey = new SymmetricSecurityKey(keyBytes);
+
+            // Enregistrement du TokenService avec les paramètres
+            builder.Services.AddSingleton<ITokenService>(new TokenService(secretKey, issuer, audience));
+
             builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>
                 {
                     options.TokenValidationParameters = new TokenValidationParameters
                     {
                         ValidateIssuerSigningKey = true,
-                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey)),
+                        IssuerSigningKey = signingKey,
                         ValidateIssuer = true,
                         ValidateAudience = true,
                         ValidIssuer = issuer,
@@ -59,11 +61,10 @@ namespace QuackersAPI_DDD
             {
                 options.AddPolicy("RequireAdminRole", policy => policy.RequireRole("Admin"));
             });
-            /* JWT TOKEN */
 
             var app = builder.Build();
 
-            // Configure the HTTP request pipeline.
+            // Configuration du pipeline HTTP.
             if (app.Environment.IsDevelopment())
             {
                 app.UseSwagger();
@@ -71,11 +72,8 @@ namespace QuackersAPI_DDD
             }
 
             app.UseHttpsRedirection();
-
             app.UseAuthentication();
             app.UseAuthorization();
-
-
             app.MapControllers();
 
             app.Run();

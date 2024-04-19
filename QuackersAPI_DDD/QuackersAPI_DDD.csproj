@@ -28,7 +28,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Application\Utilitie\" />
+    <Folder Include="Domain\Utilitie\" />
     <Folder Include="DownloadTemporary\" />
   </ItemGroup>
 

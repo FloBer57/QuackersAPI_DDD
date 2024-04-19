@@ -1,8 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using QuackersAPI_DDD.API.DTO.PersonXMessageDTO;
 using QuackersAPI_DDD.Application.InterfaceService;
-using System;
-using System.Threading.Tasks;
 
 namespace QuackersAPI_DDD.API.Controller
 {
@@ -101,7 +99,7 @@ namespace QuackersAPI_DDD.API.Controller
             }
         }
 
-        [HttpGet("channels/{messageId}/persons")]
+        [HttpGet("message/{messageId}/persons")]
         public async Task<IActionResult> GetPersonsByMessageId(int messageId)
         {
             try

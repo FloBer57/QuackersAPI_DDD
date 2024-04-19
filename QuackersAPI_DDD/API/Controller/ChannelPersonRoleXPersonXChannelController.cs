@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using QuackersAPI_DDD.API.DTO.ChannelPersonRoleXPersonXChannel;
 using QuackersAPI_DDD.Application.InterfaceService;
-using QuackersAPI_DDD.Domain.Model;
 
 namespace QuackersAPI_DDD.API.Controller
 {

@@ -56,7 +56,7 @@ namespace QuackersAPI_DDD.API.Controller
             }
             catch (Exception ex)
             {
-                return StatusCode(500, "An error occurred while creating the channel person role.");
+                return StatusCode(500, "An error occurred while creating the channel person role." + ex.Message);
             }
         }
 

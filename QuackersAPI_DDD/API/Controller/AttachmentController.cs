@@ -1,9 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using QuackersAPI_DDD.API.DTO.AttachmentDTO;
 using QuackersAPI_DDD.Application.InterfaceService;
-using QuackersAPI_DDD.Domain.Model;
 
 namespace QuackersAPI_DDD.API.Controller
 {

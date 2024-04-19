@@ -358,12 +358,6 @@ public partial class AppDbContext : DbContext
             entity.Property(e => e.Person_LastName)
                 .HasMaxLength(50)
                 .HasColumnName("Person_LastName");
-            entity.Property(e => e.Person_LoggedInToken)
-                .HasMaxLength(255)
-                .HasColumnName("Person_LoggedInToken");
-            entity.Property(e => e.Person_LoggedInTokenExpirationDate)
-                .HasColumnType("datetime")
-                .HasColumnName("Person_LoggedInTokenExpirationDate");
             entity.Property(e => e.Person_Password)
                 .HasMaxLength(255)
                 .HasColumnName("Person_Password");

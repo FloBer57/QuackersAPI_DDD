@@ -1,5 +1,4 @@
-﻿using QuackersAPI_DDD.Domain.Utilitie;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Text.Json.Serialization;
 
@@ -9,9 +8,9 @@ public partial class Person
 {
     public int Person_Id { get; set; }
 
-    public string Person_Password { get; set; }
+    public string? Person_Password { get; set; }
 
-    public string Person_Email { get; set; }
+    public string? Person_Email { get; set; }
 
     public string? Person_PhoneNumber { get; set; }
 
@@ -28,10 +27,6 @@ public partial class Person
     public string? Person_TokenResetPassword { get; set; }
 
     public bool Person_IsTemporaryPassword { get; set; } = true;
-
-    public string? Person_LoggedInToken { get; set; }
-
-    public DateTime? Person_LoggedInTokenExpirationDate { get; set; }
 
     public int PersonJobTitle_Id { get; set; }
 

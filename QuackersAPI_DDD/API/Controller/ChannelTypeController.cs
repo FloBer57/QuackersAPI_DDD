@@ -85,7 +85,7 @@ namespace QuackersAPI_DDD.API.Controller
             }
             catch (Exception ex)
             {
-                return StatusCode(500, "An internal server error has occurred.");
+                return StatusCode(500, $"An internal server error has occurred.: {ex.Message}");
             }
         }
 

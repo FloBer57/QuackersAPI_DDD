@@ -8,6 +8,7 @@
     public interface IPersonService
     {
         Task<Person> CreatePerson(CreatePersonDTO createPersonDTO);
+        Task<Person> CreatePersonTest(CreatePersonTestDTO createPersonTestDTO);
         Task<IEnumerable<Person>> GetAllPersons();
         Task<IEnumerable<Person>> GetPersonsByJobTitle(int jobTitleId);
         Task<IEnumerable<Person>> GetPersonsByStatut(int statutId);
