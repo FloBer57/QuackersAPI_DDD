@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
 using QuackersAPI_DDD.Application.Interface;
 using QuackersAPI_DDD.Application.InterfaceService;
 using QuackersAPI_DDD.Application.Service;
@@ -9,6 +10,7 @@ using QuackersAPI_DDD.Domain.Model;
 using QuackersAPI_DDD.Infrastructure.InterfaceRepository;
 using QuackersAPI_DDD.Infrastructure.Repository;
 using QuackersAPI_DDD.Infrastructure.Repository.QuackersAPI_DDD.Infrastructure.Repository;
+using System.Text;
 
 namespace QuackersAPI_DDD.Infrastructure.Database
 {
@@ -51,6 +53,7 @@ namespace QuackersAPI_DDD.Infrastructure.Database
             services.AddScoped<IAttachmentService, AttachmentService>();
             services.AddScoped<IAttachmentRepository, AttachmentRepository>();
             services.AddScoped<ISecurityService, SecurityService>();
+        
             return services;
         }
     }

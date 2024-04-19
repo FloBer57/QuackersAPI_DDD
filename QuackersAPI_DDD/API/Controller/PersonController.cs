@@ -59,6 +59,10 @@ namespace QuackersAPI_DDD.API.Controller
             {
                 return Conflict(e.Message);
             }
+            catch (KeyNotFoundException e)
+            {
+                return NotFound(e.Message);
+            }
             catch (Exception e)
             {
                 return StatusCode(500, "Internal server error: " + e.Message);
@@ -66,12 +70,16 @@ namespace QuackersAPI_DDD.API.Controller
         }
 
         [HttpPost("test")]
-        public async Task<IActionResult> CreatePerson([FromBody] CreatePersonTestDTO createPersonTestDTO)
+        public async Task<IActionResult> CreatePersonTest([FromBody] CreatePersonTestDTO createPersonTestDTO)
         {
             try
             {
                 var person = await _personService.CreatePersonTest(createPersonTestDTO);
                 return CreatedAtAction(nameof(GetPersonById), new { id = person.Person_Id }, person);
+            }
+            catch (KeyNotFoundException e)
+            {
+                return NotFound(e.Message);
             }
             catch (InvalidOperationException e)
             {

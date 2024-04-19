@@ -4,6 +4,6 @@ namespace QuackersAPI_DDD.Application.Utilitie.InterfaceUtilitiesServices
 {
     public interface ITokenService
     {
-        string GenerateToken(Person user);
+        string GenerateToken(Person person);
     }
 }

@@ -29,18 +29,14 @@ namespace QuackersAPI_DDD
                 options.UseMySql(builder.Configuration.GetConnectionString("DefaultConnection"), new MySqlServerVersion(new Version(8, 0, 21))));
             builder.Services.AddDomainServices();
 
-            // JWT TOKEN Setup
-            var secretKey = builder.Configuration["Jwt:Key"];
-            var issuer = builder.Configuration["Jwt:Issuer"];
-            var audience = builder.Configuration["Jwt:Audience"];
-
-
-            // Ensure the secret key is correctly converted from Base64
-            var keyBytes = Encoding.UTF8.GetBytes(secretKey);
-            var signingKey = new SymmetricSecurityKey(keyBytes);
-
-            // Enregistrement du TokenService avec les paramètres
-            builder.Services.AddSingleton<ITokenService>(new TokenService(secretKey, issuer, audience));
+            // Configuration de l'authentification JWT
+            var jwtSettings = builder.Configuration.GetSection("Jwt");
+            builder.Services.AddSingleton<ITokenService>(provider =>
+                new TokenService(
+                    jwtSettings["Key"],
+                    jwtSettings["Issuer"],
+                    jwtSettings["Audience"]
+                ));
 
             builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>
@@ -48,19 +44,15 @@ namespace QuackersAPI_DDD
                     options.TokenValidationParameters = new TokenValidationParameters
                     {
                         ValidateIssuerSigningKey = true,
-                        IssuerSigningKey = signingKey,
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings["Key"])),
                         ValidateIssuer = true,
                         ValidateAudience = true,
-                        ValidIssuer = issuer,
-                        ValidAudience = audience,
+                        ValidIssuer = jwtSettings["Issuer"],
+                        ValidAudience = jwtSettings["Audience"],
                         ValidateLifetime = true,
                         ClockSkew = TimeSpan.Zero
                     };
                 });
-            builder.Services.AddAuthorization(options =>
-            {
-                options.AddPolicy("RequireAdminRole", policy => policy.RequireRole("Admin"));
-            });
 
             var app = builder.Build();
 

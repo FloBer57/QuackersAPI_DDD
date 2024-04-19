@@ -12,21 +12,33 @@ namespace QuackersAPI_DDD.Application.Utilitie.UtilitiesServices
         private readonly string _secretKey;
         private readonly string _issuer;
         private readonly string _audience;
-
         public TokenService(string secretKey, string issuer, string audience)
         {
             _secretKey = secretKey;
             _issuer = issuer;
             _audience = audience;
         }
-
         public string GenerateToken(Person user)
         {
+            if (user == null)
+            {
+                throw new ArgumentNullException(nameof(user), "User object is null");
+            }
+
+            if (string.IsNullOrEmpty(_secretKey) || string.IsNullOrEmpty(_issuer) || string.IsNullOrEmpty(_audience))
+            {
+                throw new InvalidOperationException("JWT configuration settings are not properly initialized.");
+            }
+
+            // Log des valeurs pour le débogage
+            Console.WriteLine($"Generating token for user: {user.Person_Id}");
+            Console.WriteLine($"Issuer: {_issuer}, Audience: {_audience}, Key: {_secretKey.Substring(0, 5)}...");  // Show only a part of the key for security
+
             var claims = new List<Claim>
     {
         new Claim(ClaimTypes.NameIdentifier, user.Person_Id.ToString()),
-        new Claim(ClaimTypes.Email, user.Person_Email),
-        new Claim(ClaimTypes.Role, user.PersonRole.PersonRole_Name)
+        new Claim(ClaimTypes.Email, user.Person_Email ?? "default@email.com"),
+        new Claim(ClaimTypes.Role, user.PersonRole?.PersonRole_Name ?? "DefaultRole")
     };
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_secretKey));
