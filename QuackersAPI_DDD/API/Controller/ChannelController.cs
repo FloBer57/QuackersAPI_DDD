@@ -16,7 +16,7 @@ namespace QuackersAPI_DDD.API.Controller
             _channelService = channelService;
         }
 
-        [Authorize]
+
         [HttpGet]
         public async Task<IActionResult> GetAllChannels()
         {
@@ -41,6 +41,7 @@ namespace QuackersAPI_DDD.API.Controller
                 return StatusCode(500, $"An error occurred while retrieving the channel with ID {id}: {ex.Message}");
             }
         }
+
 
         [HttpGet("{id}/channels")]
         public async Task<IActionResult> GetChannelsByChannelType(int id)
@@ -121,6 +122,7 @@ namespace QuackersAPI_DDD.API.Controller
                 return StatusCode(500, $"An error occurred while deleting the channel: {ex.Message}");
             }
         }
+
 
         [HttpGet("{id}/messages")]
         public async Task<IActionResult> GetAllMessagesFromChannel(int id)

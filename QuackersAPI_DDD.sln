@@ -5,7 +5,7 @@ VisualStudioVersion = 17.9.34622.214
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QuackersAPI_DDD", "QuackersAPI_DDD\QuackersAPI_DDD.csproj", "{E257E1B1-03C1-4DC3-9416-862053E33EE0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QuackersAPI_DDD_Test", "QuackersAPI_DDD_Test\QuackersAPI_DDD_Test.csproj", "{F081D515-9233-4C1E-9E74-6D0351C7B5D9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QuackersAPI_DDD.Tests", "QuackersAPI_DDD.Tests\QuackersAPI_DDD.Tests.csproj", "{97678531-E2C7-4F8A-90F6-1AC438CBE865}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,10 +17,10 @@ Global
 		{E257E1B1-03C1-4DC3-9416-862053E33EE0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E257E1B1-03C1-4DC3-9416-862053E33EE0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E257E1B1-03C1-4DC3-9416-862053E33EE0}.Release|Any CPU.Build.0 = Release|Any CPU
-		{F081D515-9233-4C1E-9E74-6D0351C7B5D9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F081D515-9233-4C1E-9E74-6D0351C7B5D9}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{F081D515-9233-4C1E-9E74-6D0351C7B5D9}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F081D515-9233-4C1E-9E74-6D0351C7B5D9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{97678531-E2C7-4F8A-90F6-1AC438CBE865}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{97678531-E2C7-4F8A-90F6-1AC438CBE865}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{97678531-E2C7-4F8A-90F6-1AC438CBE865}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{97678531-E2C7-4F8A-90F6-1AC438CBE865}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

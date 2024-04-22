@@ -14,10 +14,11 @@ namespace QuackersAPI_DDD.Application.Service
         private readonly IChannelRepository _channelRepository;
         private readonly IChannelTypeService _channelTypeService;
         private readonly IMessageService _messageService;
-        public ChannelService(IChannelRepository channelRepository, IChannelTypeService channelTypeService)
+        public ChannelService(IChannelRepository channelRepository, IChannelTypeService channelTypeService, IMessageService messageService)
         {
             _channelRepository = channelRepository;
             _channelTypeService = channelTypeService;
+            _messageService = messageService;
         }
 
         public async Task<Channel> CreateChannel(CreateChannelDTO createChannelDTO)

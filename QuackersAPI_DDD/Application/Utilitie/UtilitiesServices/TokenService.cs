@@ -35,10 +35,10 @@ namespace QuackersAPI_DDD.Application.Utilitie.UtilitiesServices
             Console.WriteLine($"Issuer: {_issuer}, Audience: {_audience}, Key: {_secretKey.Substring(0, 5)}...");  // Show only a part of the key for security
 
             var claims = new List<Claim>
-    {
+{
         new Claim(ClaimTypes.NameIdentifier, user.Person_Id.ToString()),
-        new Claim(ClaimTypes.Email, user.Person_Email ?? "default@email.com"),
-        new Claim(ClaimTypes.Role, user.PersonRole?.PersonRole_Name ?? "DefaultRole")
+        new Claim(ClaimTypes.Email, user.Person_Email),
+        new Claim(ClaimTypes.Role, user.PersonRole.PersonRole_Name)
     };
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_secretKey));

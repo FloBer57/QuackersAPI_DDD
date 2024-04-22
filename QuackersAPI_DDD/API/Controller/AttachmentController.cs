@@ -17,14 +17,14 @@ namespace QuackersAPI_DDD.API.Controller
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAll()
+        public async Task<IActionResult> GetAllAttachment()
         {
                 var attachments = await _attachmentService.GetAllAttachments();
                 return Ok(attachments);
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetById(int id)
+        public async Task<IActionResult> GetAttachmentById(int id)
         {
             try
             {
@@ -54,11 +54,7 @@ namespace QuackersAPI_DDD.API.Controller
             try
             {
                 var newAttachments = await _attachmentService.CreateAttachments(dto, files);
-                if (newAttachments.Count == 0)
-                {
-                    return BadRequest("No attachments were created. All files failed to process.");
-                }
-                return CreatedAtAction(nameof(GetById), new { ids = newAttachments.Select(a => a.Attachment_Id).ToList() }, newAttachments);
+                return CreatedAtAction(nameof(GetAttachmentById), new { ids = newAttachments.Select(a => a.Attachment_Id).ToList() }, newAttachments);
             }
             catch (KeyNotFoundException ex)
             {
@@ -71,7 +67,7 @@ namespace QuackersAPI_DDD.API.Controller
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(int id)
+        public async Task<IActionResult> DeleteAttachmentById(int id)
         {
             try
             {
