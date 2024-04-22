@@ -37,7 +37,8 @@
         public async Task<Person> GetPersonByEmail(string email)
         {
             return await _context.Persons
-                .FirstOrDefaultAsync(p => p.Person_Email == email);
+                                 .Include(p => p.PersonRole) 
+                                 .FirstOrDefaultAsync(p => p.Person_Email == email);
         }
 
         public async Task<Person> UpdatePerson(Person person)

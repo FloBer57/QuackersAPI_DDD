@@ -1,4 +1,5 @@
-﻿using Microsoft.IdentityModel.Tokens;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using QuackersAPI_DDD.Application.Utilitie.InterfaceUtilitiesServices;
 using QuackersAPI_DDD.Domain.Model;
 using System.IdentityModel.Tokens.Jwt;
@@ -30,6 +31,10 @@ namespace QuackersAPI_DDD.Application.Utilitie.UtilitiesServices
                 throw new InvalidOperationException("JWT configuration settings are not properly initialized.");
             }
 
+            if (user.PersonRole == null)
+            {
+                throw new InvalidOperationException("Le rôle de l'utilisateur n'est pas défini.");
+            }
             // Log des valeurs pour le débogage
             Console.WriteLine($"Generating token for user: {user.Person_Id}");
             Console.WriteLine($"Issuer: {_issuer}, Audience: {_audience}, Key: {_secretKey.Substring(0, 5)}...");  // Show only a part of the key for security
@@ -53,5 +58,7 @@ namespace QuackersAPI_DDD.Application.Utilitie.UtilitiesServices
 
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
+
+
     }
 }
