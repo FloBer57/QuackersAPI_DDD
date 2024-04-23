@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using QuackersAPI_DDD.Application.Interface;
 using QuackersAPI_DDD.Application.InterfaceService;
@@ -7,6 +8,7 @@ using QuackersAPI_DDD.Application.Service.QuackersAPI_DDD.Application.Service;
 using QuackersAPI_DDD.Application.Utilitie.InterfaceUtilitiesServices;
 using QuackersAPI_DDD.Application.Utilitie.UtilitiesServices;
 using QuackersAPI_DDD.Domain.Model;
+using QuackersAPI_DDD.Domain.Utilitie.Model;
 using QuackersAPI_DDD.Infrastructure.InterfaceRepository;
 using QuackersAPI_DDD.Infrastructure.Repository;
 using QuackersAPI_DDD.Infrastructure.Repository.QuackersAPI_DDD.Infrastructure.Repository;
@@ -56,8 +58,7 @@ namespace QuackersAPI_DDD.Infrastructure.Database
             services.AddScoped<IResetTokenPasswordRepository, ResetTokenPasswordRepository>();
             services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
             services.AddScoped<IRefreshTokenService, RefreshTokenService>();
-            
-
+            services.AddScoped<IEmailService, EmailService>();
 
             return services;
         }

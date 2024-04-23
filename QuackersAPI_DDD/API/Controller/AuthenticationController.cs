@@ -11,6 +11,7 @@ namespace QuackersAPI_DDD.API.Controller
     [ApiController]
     public class AuthenticationController : ControllerBase
     {
+        private readonly IEmailService _emailService;
         private readonly IPersonService _personService;
         private readonly ISecurityService _securityService;
         private readonly ITokenJwtService _tokenService;
@@ -20,12 +21,14 @@ namespace QuackersAPI_DDD.API.Controller
             IPersonService personService,
             ISecurityService securityService,
             ITokenJwtService tokenService,
-            IRefreshTokenService refreshTokenService) // Inject the refresh token service
+            IRefreshTokenService refreshTokenService,
+            IEmailService emailService) // Inject the refresh token service
         {
             _personService = personService;
             _securityService = securityService;
             _tokenService = tokenService;
             _refreshTokenService = refreshTokenService;
+            _emailService = emailService;
         }
 
         [HttpPost("login")]
@@ -72,7 +75,7 @@ namespace QuackersAPI_DDD.API.Controller
                 }
 
                 var resetToken = _securityService.GeneratePasswordResetToken(person);
-                // _emailService.SendPasswordResetEmail(person.Email, resetToken); // Commenté pour les tests
+                _emailService.SendPasswordResetEmail(person.Person_Email, resetToken.Result);
 
                 // Retourner le token dans la réponse pour les tests
                 return Ok(new { Message = "Reset password link has been sent to your email.", ResetToken = resetToken });
@@ -90,6 +93,7 @@ namespace QuackersAPI_DDD.API.Controller
                 return StatusCode(500, "An internal error occurred. Please try again later. " + ex.Message);
             }
         }
+
         [HttpPost("reset-password")]
         public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordDTO resetPasswordDTO)
         {
