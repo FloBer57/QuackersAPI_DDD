@@ -31,7 +31,10 @@
 
         public async Task<Person> GetPersonById(int id)
         {
-            return await _context.Persons.FindAsync(id);
+            return await _context.Persons
+                                 .Include(p => p.PersonRole)
+                                 .FirstOrDefaultAsync(p => p.Person_Id == id);
+
         }
 
         public async Task<Person> GetPersonByEmail(string email)

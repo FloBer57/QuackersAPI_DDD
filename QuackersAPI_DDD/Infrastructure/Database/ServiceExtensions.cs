@@ -53,7 +53,12 @@ namespace QuackersAPI_DDD.Infrastructure.Database
             services.AddScoped<IAttachmentService, AttachmentService>();
             services.AddScoped<IAttachmentRepository, AttachmentRepository>();
             services.AddScoped<ISecurityService, SecurityService>();
-        
+            services.AddScoped<IResetTokenPasswordRepository, ResetTokenPasswordRepository>();
+            services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
+            services.AddScoped<IRefreshTokenService, RefreshTokenService>();
+            
+
+
             return services;
         }
     }

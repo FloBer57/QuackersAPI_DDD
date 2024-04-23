@@ -1,4 +1,6 @@
 ﻿using QuackersAPI_DDD.Application.Utilitie.InterfaceUtilitiesServices;
+using QuackersAPI_DDD.Domain.Model;
+using QuackersAPI_DDD.Infrastructure.InterfaceRepository;
 using System;
 using System.Linq;
 
@@ -6,7 +8,17 @@ namespace QuackersAPI_DDD.Application.Utilitie.UtilitiesServices
 {
     public class SecurityService : ISecurityService
     {
+        /*private readonly IEmailService _emailService; */
+        private readonly IResetTokenPasswordRepository _resetTokenRepository; 
+        private readonly IPersonRepository _personRepository;
         private static readonly Random random = new Random();
+
+        public SecurityService(/*IEmailService emailService ,*/IResetTokenPasswordRepository resetTokenRepository, IPersonRepository personRepository)
+        {
+            /*_emailService = emailService;*/
+            _resetTokenRepository = resetTokenRepository;
+            _personRepository = personRepository;
+        }
 
         public string HashPassword(string password)
         {
@@ -30,5 +42,59 @@ namespace QuackersAPI_DDD.Application.Utilitie.UtilitiesServices
             string uniqueName = $"{Guid.NewGuid()}{fileExtension}";
             return uniqueName;
         }
+
+        public async Task<string> GeneratePasswordResetToken(Person person)
+        {
+            if (person == null)
+            {
+                throw new ArgumentNullException(nameof(person), "Person object is null.");
+            }
+
+            var token = Guid.NewGuid().ToString();
+            var resetToken = new ResetTokenPassword
+            {
+                Token = token,
+                Person_Id = person.Person_Id,
+                ExpiresAt = DateTime.UtcNow.AddHours(1) 
+            };
+
+            await _resetTokenRepository.AddAsync(resetToken);
+            await _resetTokenRepository.SaveChangesAsync();
+
+            return token;
+        }
+
+
+        public async Task<bool> ResetPassword(string token, string newPassword)
+        {
+            if (string.IsNullOrEmpty(token))
+            {
+                throw new ArgumentException("Token cannot be null or empty.", nameof(token));
+            }
+
+            if (string.IsNullOrEmpty(newPassword))
+            {
+                throw new ArgumentException("New password cannot be null or empty.", nameof(newPassword));
+            }
+
+            var resetToken = await _resetTokenRepository.FindAsync(t => t.Token == token && t.ExpiresAt > DateTime.UtcNow);
+            if (resetToken == null)
+            {
+                throw new KeyNotFoundException("Token not found or expired.");
+            }
+
+            var person = await _personRepository.GetPersonById(resetToken.Person_Id);
+            if (person == null)
+            {
+                throw new KeyNotFoundException("Person not found for the provided token.");
+            }
+
+            person.Person_Password = HashPassword(newPassword); 
+            await _personRepository.UpdatePerson(person);
+
+            return true;
+        }
+
+
     }
 }

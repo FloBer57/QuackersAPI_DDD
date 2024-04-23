@@ -8,12 +8,12 @@ using System.Text;
 
 namespace QuackersAPI_DDD.Application.Utilitie.UtilitiesServices
 {
-    public class TokenService : ITokenService
+    public class TokenJwtService : ITokenJwtService
     {
         private readonly string _secretKey;
         private readonly string _issuer;
         private readonly string _audience;
-        public TokenService(string secretKey, string issuer, string audience)
+        public TokenJwtService(string secretKey, string issuer, string audience)
         {
             _secretKey = secretKey;
             _issuer = issuer;

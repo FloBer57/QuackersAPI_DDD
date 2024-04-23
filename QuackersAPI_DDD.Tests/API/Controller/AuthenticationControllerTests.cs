@@ -13,14 +13,14 @@ namespace QuackersAPI_DDD.Tests.API.Controller
     {
         private readonly Mock<IPersonService> _mockPersonService;
         private readonly Mock<ISecurityService> _mockSecurityService;
-        private readonly Mock<ITokenService> _mockTokenService;
+        private readonly Mock<ITokenJwtService> _mockTokenService;
         private readonly AuthenticationController _controller;
 
         public AuthenticationControllerTests()
         {
             _mockPersonService = new Mock<IPersonService>();
             _mockSecurityService = new Mock<ISecurityService>();
-            _mockTokenService = new Mock<ITokenService>();
+            _mockTokenService = new Mock<ITokenJwtService>();
             _controller = new AuthenticationController(_mockPersonService.Object, _mockSecurityService.Object, _mockTokenService.Object);
         }
 

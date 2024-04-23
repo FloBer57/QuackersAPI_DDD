@@ -51,4 +51,9 @@ public partial class Person
     public virtual ICollection<PersonXMessage> Personxmessages { get; set; } = new List<PersonXMessage>();
     [JsonIgnore]
     public virtual ICollection<PersonXNotification> Personxnotifications { get; set; } = new List<PersonXNotification>();
+    [JsonIgnore]
+    public virtual ICollection<RefreshToken> RefreshToken { get; set; } = new List<RefreshToken>();
+    [JsonIgnore]
+    public virtual ICollection<ResetTokenPassword> ResetTokenPassword { get; set; } = new List<ResetTokenPassword>();
+
 }

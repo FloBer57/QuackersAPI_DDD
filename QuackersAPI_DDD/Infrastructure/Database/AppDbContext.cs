@@ -51,6 +51,9 @@ public partial class AppDbContext : DbContext
 
     public virtual DbSet<Reaction> Reactions { get; set; }
 
+    public virtual DbSet<RefreshToken> RefreshTokens { get; set; }
+    public virtual DbSet<ResetTokenPassword> ResetTokens { get; set; }
+
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         if (!optionsBuilder.IsConfigured)
@@ -546,6 +549,78 @@ public partial class AppDbContext : DbContext
                 .HasMaxLength(255)
                 .HasColumnName("Reaction_PicturePath");
         });
+
+
+        modelBuilder.Entity<RefreshToken>(entity =>
+        {
+            entity.HasKey(e => e.Token_Id).HasName("PRIMARY");
+
+            entity.ToTable("refreshtokens");
+
+            // Indexes
+            entity.HasIndex(e => e.Person_Id, "Person_Id"); // Add an index on Person_Id
+
+            // Properties
+            entity.Property(e => e.Token_Id)
+                .HasColumnType("int")
+                .HasColumnName("Token_Id")
+                .ValueGeneratedOnAdd(); // Ensures Token_Id is auto-incremented
+
+            entity.Property(e => e.Person_Id)
+                .HasColumnType("int")
+                .HasColumnName("Person_Id");
+
+            entity.Property(e => e.Token)
+                .IsRequired()
+                .HasMaxLength(255)
+                .HasColumnName("Token");
+
+            entity.Property(e => e.ExpiresAt)
+                .HasColumnType("datetime")
+                .HasColumnName("ExpiresAt");
+
+            entity.Property(e => e.CreatedAt)
+                .HasColumnType("datetime")
+                .HasColumnName("CreatedAt")
+                .HasDefaultValueSql("CURRENT_TIMESTAMP"); // Set default value as current timestamp
+
+            // Correcting boolean conversion
+            entity.Property(e => e.Revoked)
+                .HasColumnName("Revoked");
+
+            // Foreign Key Constraints
+            entity.HasOne(e => e.Person) // Relationship definition
+                .WithMany(p => p.RefreshToken) // Ensure Person has a collection of RefreshTokens
+                .HasForeignKey(e => e.Person_Id) // Foreign key is Person_Id
+                .OnDelete(DeleteBehavior.Cascade); // Configure delete behavior if needed
+        });
+
+        modelBuilder.Entity<ResetTokenPassword>(entity =>
+        {
+            entity.ToTable("resettokenpassword");
+
+            entity.HasKey(e => e.Token_Id);
+            entity.Property(e => e.Token_Id).ValueGeneratedOnAdd();
+
+            entity.Property(e => e.Token)
+                .IsRequired()
+                .HasMaxLength(255);
+
+            entity.Property(e => e.ExpiresAt)
+                .HasColumnType("datetime");
+
+            entity.Property(e => e.CreatedAt)
+                .HasColumnType("datetime")
+                .HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+            // Relation to Person
+            entity.HasOne(d => d.Person)
+                .WithMany(p => p.ResetTokenPassword)
+                .HasForeignKey(d => d.Person_Id)
+                .OnDelete(DeleteBehavior.Cascade);
+        });
+
+
 
         OnModelCreatingPartial(modelBuilder);
     }

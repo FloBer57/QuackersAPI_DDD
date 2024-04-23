@@ -68,8 +68,8 @@ namespace QuackersAPI_DDD
 
             // Configuration de l'authentification JWT
             var jwtSettings = builder.Configuration.GetSection("Jwt");
-            builder.Services.AddSingleton<ITokenService>(provider =>
-                new TokenService(
+            builder.Services.AddSingleton<ITokenJwtService>(provider =>
+                new TokenJwtService(
                     jwtSettings["Key"],
                     jwtSettings["Issuer"],
                     jwtSettings["Audience"]

@@ -2,7 +2,7 @@
 
 namespace QuackersAPI_DDD.Application.Utilitie.InterfaceUtilitiesServices
 {
-    public interface ITokenService
+    public interface ITokenJwtService
     {
         string GenerateToken(Person person);
     }
