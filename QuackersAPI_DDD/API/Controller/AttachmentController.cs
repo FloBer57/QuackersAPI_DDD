@@ -16,13 +16,6 @@ namespace QuackersAPI_DDD.API.Controller
             _attachmentService = attachmentService;
         }
 
-        [HttpGet]
-        public async Task<IActionResult> GetAllAttachment()
-        {
-                var attachments = await _attachmentService.GetAllAttachments();
-                return Ok(attachments);
-        }
-
         [HttpGet("{id}")]
         public async Task<IActionResult> GetAttachmentById(int id)
         {

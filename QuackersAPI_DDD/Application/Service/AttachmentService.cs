@@ -22,12 +22,6 @@ namespace QuackersAPI_DDD.Application.Service
             _securityService = securityService;
         }
 
-        public async Task<IEnumerable<Attachment>> GetAllAttachments()
-        {
-            var attachments =  await _attachmentRepository.GetAllAttachments();
-            return attachments ?? new List<Attachment>();
-        }
-
         public async Task<Attachment> GetAttachmentById(int id)
         {
             var attachment = await _attachmentRepository.GetAttachmentById(id);

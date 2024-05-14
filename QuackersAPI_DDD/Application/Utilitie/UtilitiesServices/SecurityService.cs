@@ -55,7 +55,7 @@ namespace QuackersAPI_DDD.Application.Utilitie.UtilitiesServices
             {
                 Token = token,
                 Person_Id = person.Person_Id,
-                ExpiresAt = DateTime.UtcNow.AddHours(1) 
+                ExpiresAt = DateTime.Now.AddHours(1) 
             };
 
             await _resetTokenRepository.AddAsync(resetToken);

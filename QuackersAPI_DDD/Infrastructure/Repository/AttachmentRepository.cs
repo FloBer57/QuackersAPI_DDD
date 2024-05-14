@@ -14,11 +14,6 @@ namespace QuackersAPI_DDD.Infrastructure.Repository
             _context = context ?? throw new ArgumentNullException(nameof(context));
         }
 
-        public async Task<IEnumerable<Attachment>> GetAllAttachments()
-        {
-            return await _context.Attachments.ToListAsync();
-        }
-
         public async Task<Attachment> GetAttachmentById(int id)
         {
             return await _context.Attachments.FindAsync(id);

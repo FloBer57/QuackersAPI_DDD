@@ -6,7 +6,6 @@ namespace QuackersAPI_DDD.Application.InterfaceService
 {
     public interface IAttachmentService
     {
-        Task<IEnumerable<Attachment>> GetAllAttachments();
         Task<Attachment> GetAttachmentById(int id);
         Task<List<Attachment>> CreateAttachments(CreateAttachmentDTO dto, IEnumerable<IFormFile> files);
         Task<bool> DeleteAttachment(int id);

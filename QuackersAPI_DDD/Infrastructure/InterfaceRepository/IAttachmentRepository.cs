@@ -4,7 +4,6 @@ namespace QuackersAPI_DDD.Infrastructure.InterfaceRepository
 {
     public interface IAttachmentRepository
     {
-        Task<IEnumerable<Attachment>> GetAllAttachments();
         Task<Attachment> GetAttachmentById(int id);
         Task<IEnumerable<Attachment>> GetAttachmentsByMessageId(int messageId);
         Task<Attachment> CreateAttachment(Attachment attachment);
