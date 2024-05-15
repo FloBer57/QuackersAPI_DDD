@@ -108,7 +108,9 @@ namespace QuackersAPI_DDD
                 app.UseSwaggerUI();
             }
 
+            
             app.UseHttpsRedirection();
+            app.UseStaticFiles();
 
             app.UseCors("CorsPolicy"); // Appliquer la politique CORS avant les middlewares d'authentification et d'autorisation
 

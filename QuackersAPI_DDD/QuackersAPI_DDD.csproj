@@ -30,9 +30,12 @@
 
   <ItemGroup>
     <Folder Include="API\DTO\RefreshTokenDTO\" />
-    <Folder Include="DownloadTemporary\" />
     <Folder Include="Infrastructure\Utilities\InterfaceUtilitiesRepository\" />
     <Folder Include="Infrastructure\Utilities\UtilitiesRepository\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="wwwroot\Image\ChannelPicture\default.png" />
   </ItemGroup>
 
 </Project>

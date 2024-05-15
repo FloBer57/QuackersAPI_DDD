@@ -6,6 +6,7 @@ using QuackersAPI_DDD.Infrastructure.InterfaceRepository;
 using QuackersAPI_DDD.Application.InterfaceService;
 using QuackersAPI_DDD.Infrastructure.Repository;
 using QuackersAPI_DDD.API.DTO.ChannelTypeDTO;
+using QuackersAPI_DDD.Application.Utilitie.InterfaceUtilitiesServices;
 
 namespace QuackersAPI_DDD.Application.Service
 {
@@ -14,11 +15,13 @@ namespace QuackersAPI_DDD.Application.Service
         private readonly IChannelRepository _channelRepository;
         private readonly IChannelTypeService _channelTypeService;
         private readonly IMessageService _messageService;
-        public ChannelService(IChannelRepository channelRepository, IChannelTypeService channelTypeService, IMessageService messageService)
+        private readonly ISecurityService _securityService;
+        public ChannelService(IChannelRepository channelRepository, IChannelTypeService channelTypeService, IMessageService messageService, ISecurityService securityService)
         {
             _channelRepository = channelRepository;
             _channelTypeService = channelTypeService;
             _messageService = messageService;
+            _securityService = securityService;
         }
 
         public async Task<Channel> CreateChannel(CreateChannelDTO createChannelDTO)
@@ -39,7 +42,7 @@ namespace QuackersAPI_DDD.Application.Service
             var channel = new Channel
             {
                 Channel_Name = createChannelDTO.Channel_Name,
-                Channel_ImagePath = createChannelDTO.Channel_ImagePath,
+                Channel_ImagePath = "/Image/PersonPicture/default.png",
                 ChannelType_Id = createChannelDTO.ChannelType_Id, 
                 ChannelType = channelType
             };
