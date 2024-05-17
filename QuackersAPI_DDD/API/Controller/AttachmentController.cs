@@ -36,7 +36,6 @@ namespace QuackersAPI_DDD.API.Controller
 
         [HttpPost]
         [Consumes("multipart/form-data")]
-        
         public async Task<IActionResult> CreateAttachments([FromForm] CreateAttachmentDTO dto, [FromForm] List<IFormFile> files)
         {
             if (files == null || files.Count == 0)
@@ -47,7 +46,7 @@ namespace QuackersAPI_DDD.API.Controller
             try
             {
                 var newAttachments = await _attachmentService.CreateAttachments(dto, files);
-                return CreatedAtAction(nameof(GetAttachmentById), new { ids = newAttachments.Select(a => a.Attachment_Id).ToList() }, newAttachments);
+                return CreatedAtAction(nameof(GetAttachmentById), new { id = newAttachments.First().Attachment_Id }, newAttachments.First());
             }
             catch (KeyNotFoundException ex)
             {
@@ -58,6 +57,7 @@ namespace QuackersAPI_DDD.API.Controller
                 return StatusCode(500, "An error occurred while creating attachments: " + ex.Message);
             }
         }
+
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteAttachmentById(int id)

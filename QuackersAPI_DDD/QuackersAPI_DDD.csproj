@@ -36,6 +36,11 @@
 
   <ItemGroup>
     <None Include="wwwroot\Image\ChannelPicture\default.png" />
+    <None Include="wwwroot\Image\Attachment\Gringe - Ensemble, on aboie en silence [mp3-64K].torrent_241f9f10-63d0-48f9-80a2-9e92a1056170.added" />
+    <None Include="wwwroot\Image\Attachment\PokeApi.NET-v2_7cf79a1c-f16b-46f6-9838-726a96f26c1b.zip" />
+    <None Include="wwwroot\Image\Attachment\PokeApi.NET-v2_918fe2f7-8407-4c3f-86a7-9b89e7005dab.zip" />
+    <None Include="wwwroot\Image\Attachment\PokeApi.NET-v2_eb16add4-66eb-403d-b385-7b3e51bc3bf1.zip" />
+    <None Include="wwwroot\Image\Attachment\quackerbdd %288%29_5c23704c-d1f4-4229-b83e-ebb675b2475b.sql" />
   </ItemGroup>
 
 </Project>

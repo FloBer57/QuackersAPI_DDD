@@ -14,12 +14,14 @@ namespace QuackersAPI_DDD.Application.Service
         private readonly IAttachmentRepository _attachmentRepository;
         private readonly IMessageRepository _messageRepository;
         private readonly ISecurityService _securityService;
+        private readonly IWebHostEnvironment _env;
 
-        public AttachmentService(IAttachmentRepository attachmentRepository , IMessageRepository messageRepository, ISecurityService securityService)
+        public AttachmentService(IAttachmentRepository attachmentRepository, IMessageRepository messageRepository, ISecurityService securityService, IWebHostEnvironment env)
         {
             _attachmentRepository = attachmentRepository;
             _messageRepository = messageRepository;
             _securityService = securityService;
+            _env = env;
         }
 
         public async Task<Attachment> GetAttachmentById(int id)
@@ -47,7 +49,8 @@ namespace QuackersAPI_DDD.Application.Service
                 if (file.Length > 0)
                 {
                     string uniqueName = _securityService.GenerateUniqueAttachmentName(file.FileName);
-                    var filePath = Path.Combine("C:\\Users\\Florent\\Documents\\GitHub\\QuackersAPI_DDD\\QuackersAPI_DDD\\DownloadTemporary\\", uniqueName);
+                    var uploadsFolder = Path.Combine(_env.WebRootPath, "Image/Attachment");
+                    var filePath = Path.Combine(uploadsFolder, uniqueName);
 
                     using (var stream = new FileStream(filePath, FileMode.Create))
                     {
@@ -57,7 +60,7 @@ namespace QuackersAPI_DDD.Application.Service
                     var attachment = new Attachment
                     {
                         Attachment_Name = uniqueName,
-                        AttachmentThing = filePath, 
+                        AttachmentThing = $"/Image/Attachment/{uniqueName}",
                         Message_Id = dto.Message_Id
                     };
 
