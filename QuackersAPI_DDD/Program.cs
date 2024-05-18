@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using QuackersAPI_DDD.API.Hub;
 using QuackersAPI_DDD.Application.Interface;
 using QuackersAPI_DDD.Application.InterfaceService;
 using QuackersAPI_DDD.Application.Service;
@@ -27,7 +28,7 @@ namespace QuackersAPI_DDD
             builder.Services.AddControllers();
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.Configure<EmailSettings>(builder.Configuration.GetSection("EmailSettings"));
-
+            builder.Services.AddSignalR();
             builder.Services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "My API", Version = "v1" });
@@ -66,8 +67,10 @@ namespace QuackersAPI_DDD
                 options.AddPolicy("CorsPolicy",
                     builder => builder.WithOrigins("http://localhost:3000")
                     .AllowAnyMethod()
-                    .AllowAnyHeader());
-            });
+                    .AllowAnyHeader()
+                    .SetIsOriginAllowed(origin => true) // allow any origin
+                    .AllowCredentials()); // allow credentials
+        });
 
             builder.Services.AddDbContext<AppDbContext>(options =>
                 options.UseMySql(builder.Configuration.GetConnectionString("DefaultConnection"), new MySqlServerVersion(new Version(8, 0, 21))));
@@ -107,8 +110,8 @@ namespace QuackersAPI_DDD
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
-
             
+
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 
@@ -118,6 +121,7 @@ namespace QuackersAPI_DDD
             app.UseAuthorization();
 
             app.MapControllers();
+            app.MapHub<SignalrHub>("/hub");
 
             app.Run();
         }
