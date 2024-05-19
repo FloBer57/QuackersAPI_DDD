@@ -75,7 +75,7 @@ namespace QuackersAPI_DDD.API.Controller
                 }
 
                 var resetToken = _securityService.GeneratePasswordResetToken(person);
-                _emailService.SendPasswordResetEmail(person.Person_Email, resetToken.Result);
+                await _emailService.SendPasswordResetEmail(person.Person_Email, resetToken.Result);
 
                 // Retourner le token dans la réponse pour les tests
                 return Ok(new { Message = "Reset password link has been sent to your email.", ResetToken = resetToken });

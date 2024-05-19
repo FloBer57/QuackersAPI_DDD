@@ -25,7 +25,7 @@ public class EmailService : IEmailService
 
         string body = $"<h1>Réinitialisation du mot de passe</h1>" +
                       $"<p>Veuillez utiliser le lien suivant pour réinitialiser votre mot de passe :</p>" +
-                      $"<a href='https://Quackers.com/reset-password?token={TokenResetPassword}'>Réinitialiser le mot de passe</a>";
+                      $"<a href='http://localhost:3000/login?token={TokenResetPassword}'>Réinitialiser le mot de passe</a>";
 
         emailMessage.Body = new TextPart("html") { Text = body };
 
