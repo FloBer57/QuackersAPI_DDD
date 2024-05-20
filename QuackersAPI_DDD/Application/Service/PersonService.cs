@@ -118,23 +118,47 @@ namespace QuackersAPI_DDD.Application.Service
 
         public async Task<Person> UpdatePerson(int id, UpdatePersonDTO updatePersonDTO)
         {
-            var person = await GetPersonById(id); 
+            var person = await GetPersonById(id);
             if (person == null)
             {
                 throw new KeyNotFoundException($"Person with id {id} not found)");
             }
 
-            person.Person_Description = updatePersonDTO.Description ?? person.Person_Description;
-            person.Person_ProfilPicturePath = updatePersonDTO.ProfilPicturePath ?? person.Person_ProfilPicturePath;
+            if (updatePersonDTO.Description != null)
+            {
+                person.Person_Description = updatePersonDTO.Description;
+            }
+
+            if (updatePersonDTO.ProfilPicturePath != null)
+            {
+                person.Person_ProfilPicturePath = updatePersonDTO.ProfilPicturePath;
+            }
+
             if (!string.IsNullOrWhiteSpace(updatePersonDTO.Password))
             {
                 person.Person_Password = _securityService.HashPassword(updatePersonDTO.Password);
                 person.Person_IsTemporaryPassword = false;
             }
 
+            if (updatePersonDTO.StatutId.HasValue)
+            {
+                person.PersonStatut_Id = updatePersonDTO.StatutId.Value;
+            }
+
+            if (updatePersonDTO.JobTitleId.HasValue)
+            {
+                person.PersonJobTitle_Id = updatePersonDTO.JobTitleId.Value;
+            }
+
+            if (updatePersonDTO.RoleId.HasValue)
+            {
+                person.PersonRole_Id = updatePersonDTO.RoleId.Value;
+            }
+
             await _personRepository.UpdatePerson(person);
             return person;
         }
+
 
         public async Task<bool> DeletePerson(int id)
         {
