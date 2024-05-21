@@ -56,7 +56,7 @@ namespace QuackersAPI_DDD.Application.Service
                 Person_Description = $"Je suis {createPersonDTO.FirstName} {createPersonDTO.LastName}, nouveau chez Quacker!",
                 Person_TokenResetPassword = null,
                 Person_CreatedTimePerson = DateTime.Now,
-                Person_ProfilPicturePath = "Path/To/Default/Image",
+                Person_ProfilPicturePath = "/Image/ProfilePicture/default.png",
                 Person_Password = hashPassword,
                 PersonJobTitle_Id = createPersonDTO.JobTitle_Id,
                 PersonStatut_Id = 1,
