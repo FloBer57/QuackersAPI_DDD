@@ -17,19 +17,21 @@ namespace QuackersAPI_DDD.Application.Service
         private readonly IPersonStatutService _personStatutService;
         private readonly IPersonRoleService _personRoleService;
         private readonly ISecurityService _securityService;
+        private readonly IEmailService _emailService;
 
-        public PersonService(IPersonRepository personRepository, IPersonJobTitleService personJobTitleService, IPersonStatutService personStatutService, IPersonRoleService personRoleService, ISecurityService securityService)
+        public PersonService(IPersonRepository personRepository, IPersonJobTitleService personJobTitleService, IPersonStatutService personStatutService, IPersonRoleService personRoleService, ISecurityService securityService, IEmailService emailService)
         {
             _personRepository = personRepository;
             _personJobTitleService = personJobTitleService;
             _personStatutService = personStatutService;
             _personRoleService = personRoleService;
             _securityService = securityService;
+            _emailService = emailService;
         }
 
         public async Task<Person> CreatePerson(CreatePersonDTO createPersonDTO)
         {
-            // Validate existence of related entities before creating a person
+
             var jobTitle = await _personJobTitleService.GetPersonJobTitleById(createPersonDTO.JobTitle_Id);
             if (jobTitle == null)
                 throw new KeyNotFoundException("Job title not found.");
@@ -52,7 +54,7 @@ namespace QuackersAPI_DDD.Application.Service
                 Person_LastName = createPersonDTO.LastName,
                 Person_PhoneNumber = createPersonDTO.PhoneNumber,
                 Person_Description = $"Je suis {createPersonDTO.FirstName} {createPersonDTO.LastName}, nouveau chez Quacker!",
-                Person_TokenResetPassword = _securityService.GeneratePassword(),
+                Person_TokenResetPassword = null,
                 Person_CreatedTimePerson = DateTime.Now,
                 Person_ProfilPicturePath = "Path/To/Default/Image",
                 Person_Password = hashPassword,
@@ -61,6 +63,7 @@ namespace QuackersAPI_DDD.Application.Service
                 PersonRole_Id = 1
             };
 
+            await _emailService.SendPasswordCreatedEmail(newPerson.Person_Email, password);
             await _personRepository.CreatePerson(newPerson);
             return newPerson;
         }
@@ -90,7 +93,7 @@ namespace QuackersAPI_DDD.Application.Service
                 Person_LastName = createPersonTestDTO.LastName,
                 Person_PhoneNumber = createPersonTestDTO.PhoneNumber,
                 Person_Description = $"Je suis {createPersonTestDTO.FirstName} {createPersonTestDTO.LastName}, nouveau chez Quacker!",
-                Person_TokenResetPassword = _securityService.GeneratePassword(),
+                Person_TokenResetPassword = null,
                 Person_CreatedTimePerson = DateTime.Now,
                 Person_ProfilPicturePath = "Path/To/Default/Image",
                 Person_Password = hashPassword,
@@ -101,7 +104,7 @@ namespace QuackersAPI_DDD.Application.Service
 
             await _personRepository.CreatePerson(newPerson);
             return newPerson;
-        }
+        } 
 
         public async Task<IEnumerable<Person>> GetAllPersons()
         {

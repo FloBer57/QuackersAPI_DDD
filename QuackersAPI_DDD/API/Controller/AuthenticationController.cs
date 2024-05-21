@@ -15,14 +15,14 @@ namespace QuackersAPI_DDD.API.Controller
         private readonly IPersonService _personService;
         private readonly ISecurityService _securityService;
         private readonly ITokenJwtService _tokenService;
-        private readonly IRefreshTokenService _refreshTokenService; // Refresh token service
+        private readonly IRefreshTokenService _refreshTokenService; 
 
         public AuthenticationController(
             IPersonService personService,
             ISecurityService securityService,
             ITokenJwtService tokenService,
             IRefreshTokenService refreshTokenService,
-            IEmailService emailService) // Inject the refresh token service
+            IEmailService emailService) 
         {
             _personService = personService;
             _securityService = securityService;
@@ -53,8 +53,16 @@ namespace QuackersAPI_DDD.API.Controller
                     return Unauthorized("Invalid credentials.");
                 }
 
+                if (person.Person_IsTemporaryPassword)
+                {
+                    var resetToken = _securityService.GeneratePasswordResetToken(person);
+                    await _emailService.SendPasswordResetEmail(person.Person_Email, resetToken.Result);
+                    person.Person_IsTemporaryPassword = false;
+                    return Ok(new { Message = "Mot de passe temporaire utilisé. Un mail vient de vous être envoyé pour réinitialiser votre mot de passe." });
+                }
+
                 var token = _tokenService.GenerateToken(person);
-                var refreshToken = _refreshTokenService.GenerateRefreshToken(person); // Generate refresh token
+                var refreshToken = _refreshTokenService.GenerateRefreshToken(person); 
                 return Ok(new { Token = token, RefreshToken = refreshToken, Message = "Login successful." });
             }
             catch (Exception ex)
@@ -77,7 +85,6 @@ namespace QuackersAPI_DDD.API.Controller
                 var resetToken = _securityService.GeneratePasswordResetToken(person);
                 await _emailService.SendPasswordResetEmail(person.Person_Email, resetToken.Result);
 
-                // Retourner le token dans la réponse pour les tests
                 return Ok(new { Message = "Reset password link has been sent to your email.", ResetToken = resetToken });
             }
             catch (ArgumentNullException ex)

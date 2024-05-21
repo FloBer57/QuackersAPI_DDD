@@ -37,4 +37,27 @@ public class EmailService : IEmailService
             await client.DisconnectAsync(true);
         }
     }
+
+    public async Task SendPasswordCreatedEmail(string email, string Password)
+    {
+        var emailMessage = new MimeMessage();
+
+        emailMessage.From.Add(new MailboxAddress(_emailSettings.SenderName, _emailSettings.Sender));
+        emailMessage.To.Add(new MailboxAddress("", email));
+        emailMessage.Subject = "Création de compte sur Quackers";
+
+        string body = $"<h1>Création du compte</h1>" +
+                      $"<p>Veuillez utiliser le lien suivant pour vous connecter la première fois.</p>" +
+                      $"<a href='http://localhost:3000/login'> Voici votre mot de passe temporaire ! {Password} </a>";
+
+        emailMessage.Body = new TextPart("html") { Text = body };
+
+        using (var client = new SmtpClient())
+        {
+            await client.ConnectAsync(_emailSettings.MailServer, _emailSettings.MailPort, MailKit.Security.SecureSocketOptions.StartTls);
+            await client.AuthenticateAsync(_emailSettings.Sender, _emailSettings.Password);
+            await client.SendAsync(emailMessage);
+            await client.DisconnectAsync(true);
+        }
+    }
 }
