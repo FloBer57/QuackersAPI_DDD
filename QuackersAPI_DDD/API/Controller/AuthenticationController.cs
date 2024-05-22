@@ -53,15 +53,9 @@ namespace QuackersAPI_DDD.API.Controller
                     return Unauthorized("Invalid credentials.");
                 }
 
-                if (person.Person_IsTemporaryPassword)
-                {
-                    var resetToken = _securityService.GeneratePasswordResetToken(person);
-                    await _emailService.SendPasswordResetEmail(person.Person_Email, resetToken.Result);
-                    person.Person_IsTemporaryPassword = false;
-                    return Ok(new { Message = "Mot de passe temporaire utilisé. Un mail vient de vous être envoyé pour réinitialiser votre mot de passe." });
-                }
-
                 var token = _tokenService.GenerateToken(person);
+
+
                 var refreshToken = _refreshTokenService.GenerateRefreshToken(person); 
                 return Ok(new { Token = token, RefreshToken = refreshToken, Message = "Login successful." });
             }

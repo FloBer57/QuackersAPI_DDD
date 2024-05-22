@@ -1,4 +1,5 @@
-﻿using QuackersAPI_DDD.API.DTO.PersonDTO;
+﻿using Microsoft.EntityFrameworkCore;
+using QuackersAPI_DDD.API.DTO.PersonDTO;
 using QuackersAPI_DDD.Application.Interface;
 using QuackersAPI_DDD.Application.InterfaceService;
 using QuackersAPI_DDD.Application.Utilitie.InterfaceUtilitiesServices;
@@ -158,6 +159,11 @@ namespace QuackersAPI_DDD.Application.Service
                 person.PersonRole_Id = updatePersonDTO.RoleId.Value;
             }
 
+            if (!string.IsNullOrWhiteSpace(updatePersonDTO.PhoneNumber))
+            {
+                person.Person_PhoneNumber = updatePersonDTO.PhoneNumber;
+            }
+
             await _personRepository.UpdatePerson(person);
             return person;
         }
@@ -207,6 +213,24 @@ namespace QuackersAPI_DDD.Application.Service
                 throw new KeyNotFoundException($"No person found with email {email}.");
 
             return person;
+        }
+
+        public async Task<string> UploadProfilePictureAsync(IFormFile file)
+        {
+            if (file == null || file.Length == 0)
+            {
+                throw new ArgumentException("No file uploaded.");
+            }
+
+            var fileName = Path.GetRandomFileName() + Path.GetExtension(file.FileName);
+            var filePath = Path.Combine("wwwroot/Image/ProfilePicture", fileName);
+
+            using (var stream = new FileStream(filePath, FileMode.Create))
+            {
+                await file.CopyToAsync(stream);
+            }
+
+            return $"/image/ProfilePicture/{fileName}";
         }
     }
 }

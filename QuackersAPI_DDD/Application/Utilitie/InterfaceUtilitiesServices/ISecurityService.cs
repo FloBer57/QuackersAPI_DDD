@@ -10,5 +10,6 @@ namespace QuackersAPI_DDD.Application.Utilitie.InterfaceUtilitiesServices
         string GenerateUniqueAttachmentName(string originalFileName);
         Task<string> GeneratePasswordResetToken(Person person);
         Task<bool> ResetPassword(string token, string newPassword);
+        Task<bool> VerifyCurrentPassword(int userId, string currentPassword);
     }
 }

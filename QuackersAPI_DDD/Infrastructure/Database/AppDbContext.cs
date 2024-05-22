@@ -582,17 +582,15 @@ public partial class AppDbContext : DbContext
             entity.Property(e => e.CreatedAt)
                 .HasColumnType("datetime")
                 .HasColumnName("CreatedAt")
-                .HasDefaultValueSql("CURRENT_TIMESTAMP"); // Set default value as current timestamp
+                .HasDefaultValueSql("CURRENT_TIMESTAMP"); 
 
-            // Correcting boolean conversion
             entity.Property(e => e.Revoked)
                 .HasColumnName("Revoked");
 
-            // Foreign Key Constraints
-            entity.HasOne(e => e.Person) // Relationship definition
-                .WithMany(p => p.RefreshToken) // Ensure Person has a collection of RefreshTokens
-                .HasForeignKey(e => e.Person_Id) // Foreign key is Person_Id
-                .OnDelete(DeleteBehavior.Cascade); // Configure delete behavior if needed
+            entity.HasOne(e => e.Person) 
+                .WithMany(p => p.RefreshToken) 
+                .HasForeignKey(e => e.Person_Id) 
+                .OnDelete(DeleteBehavior.Cascade); 
         });
 
         modelBuilder.Entity<ResetTokenPassword>(entity =>

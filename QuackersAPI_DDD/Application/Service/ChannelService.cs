@@ -32,7 +32,6 @@ namespace QuackersAPI_DDD.Application.Service
                 throw new KeyNotFoundException($"ChannelType with id {createChannelDTO.ChannelType_Id} not found.");
             }
 
-            // Vérifiez si un canal avec le même nom existe déjà
             if (await _channelRepository.ChannelNameExists(createChannelDTO.Channel_Name))
             {
                 throw new InvalidOperationException($"A channel with the name '{createChannelDTO.Channel_Name}' already exists.");

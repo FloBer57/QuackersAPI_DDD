@@ -4,6 +4,7 @@ namespace QuackersAPI_DDD.API.DTO.PersonDTO
 {
     public class UpdatePersonDTO
     {
+        [StringLength(10, MinimumLength = 10, ErrorMessage = "Phone number need 10 characters")]
         [Phone(ErrorMessage = "Invalid phone number format.")]
         public string? PhoneNumber { get; set; }
 

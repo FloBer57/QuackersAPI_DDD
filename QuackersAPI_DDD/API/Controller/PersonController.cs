@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using QuackersAPI_DDD.API.DTO.PersonDTO;
 using QuackersAPI_DDD.Application.Interface;
+using QuackersAPI_DDD.Application.Utilitie.InterfaceUtilitiesServices;
 
 namespace QuackersAPI_DDD.API.Controller
 {
@@ -9,10 +10,12 @@ namespace QuackersAPI_DDD.API.Controller
     public class PersonController : ControllerBase
     {
         private readonly IPersonService _personService;
+        private readonly ISecurityService _securityService;
 
-        public PersonController(IPersonService personService)
+        public PersonController(IPersonService personService, ISecurityService securityService)
         {
-            _personService = personService ?? throw new ArgumentNullException(nameof(personService));
+            _personService = personService;
+            _securityService = securityService;
         }
 
         [HttpGet]
@@ -200,6 +203,42 @@ namespace QuackersAPI_DDD.API.Controller
             catch (Exception e)
             {
                 return StatusCode(500, "Internal server error: " + e.Message);
+            }
+        }
+
+        [HttpPost("verify-password")]
+        public async Task<IActionResult> VerifyPassword([FromBody] VerifyPasswordDTO verifyPasswordDTO)
+        {
+            try
+            {
+                var isValid = await _securityService.VerifyCurrentPassword(verifyPasswordDTO.UserId, verifyPasswordDTO.CurrentPassword);
+                if (!isValid)
+                {
+                    return BadRequest("Invalid current password");
+                }
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Internal server error: " + ex.Message);
+            }
+        }
+
+        [HttpPost("uploadProfilePicture")]
+        public async Task<IActionResult> UploadProfilePicture(IFormFile file)
+        {
+            try
+            {
+                var filePath = await _personService.UploadProfilePictureAsync(file);
+                return Ok(new { path = filePath });
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
             }
         }
     }

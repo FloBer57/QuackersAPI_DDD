@@ -89,11 +89,28 @@ namespace QuackersAPI_DDD.Application.Utilitie.UtilitiesServices
                 throw new KeyNotFoundException("Person not found for the provided token.");
             }
 
-            person.Person_Password = HashPassword(newPassword); 
+            if ( person.Person_IsTemporaryPassword == true ) {
+                person.Person_IsTemporaryPassword = false;
+            }
+
+            person.Person_Password = HashPassword(newPassword);
+            
             await _personRepository.UpdatePerson(person);
 
             return true;
         }
+
+        public async Task<bool> VerifyCurrentPassword(int userId, string currentPassword)
+        {
+            var person = await _personRepository.GetPersonById(userId);
+            if (person == null)
+            {
+                throw new KeyNotFoundException($"Person with id {userId} not found");
+            }
+
+            return VerifyPassword(currentPassword, person.Person_Password);
+        }
+
 
 
     }

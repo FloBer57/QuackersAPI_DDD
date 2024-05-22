@@ -17,5 +17,7 @@
         Task<Person> GetPersonById(int id);
         Task<Person> UpdatePerson(int id, UpdatePersonDTO person);
         Task<bool> DeletePerson(int id);
+
+        Task<string> UploadProfilePictureAsync(IFormFile file);
     }
 }

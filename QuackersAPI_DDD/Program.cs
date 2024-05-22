@@ -33,7 +33,6 @@ namespace QuackersAPI_DDD
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "My API", Version = "v1" });
 
-                // Configure Swagger to use the Bearer token for authorization
                 c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
                 {
                     In = ParameterLocation.Header,
