@@ -69,7 +69,7 @@
                 {
                     Message_Text = dto.MessageText,
                     Message_Date = DateTime.Now,
-                    Message_IsNotArchived = true,
+                    Message_HasAttachment = dto.Message_HasAttachment,
                     Channel_Id = dto.ChannelId,
                     Person_Id = dto.PersonId
                 };
@@ -86,9 +86,9 @@
                 }
 
                 message.Message_Text = dto.Message_Text ?? message.Message_Text;
-                if (dto.Message_IsNotArchived.HasValue)
+                if (dto.Message_HasAttachment.HasValue)
                 {
-                    message.Message_IsNotArchived = dto.Message_IsNotArchived.Value;
+                    message.Message_HasAttachment = dto.Message_HasAttachment.Value;
                 }
 
                 return await _messageRepository.UpdateMessage(message);

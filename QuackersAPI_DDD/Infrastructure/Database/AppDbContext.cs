@@ -219,7 +219,7 @@ public partial class AppDbContext : DbContext
             entity.Property(e => e.Message_Date)
                 .HasColumnType("datetime")
                 .HasColumnName("Message_Date");
-            entity.Property(e => e.Message_IsNotArchived).HasColumnName("Message_IsNotArchived");
+            entity.Property(e => e.Message_HasAttachment).HasColumnName("Message_HasAttachment");
             entity.Property(e => e.Message_Text)
                 .HasColumnType("text")
                 .HasColumnName("Message_Text");
