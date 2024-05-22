@@ -41,7 +41,7 @@ namespace QuackersAPI_DDD.Application.Service
             var channel = new Channel
             {
                 Channel_Name = createChannelDTO.Channel_Name,
-                Channel_ImagePath = "/Image/PersonPicture/default.png",
+                Channel_ImagePath = "/Image/ProfilePicture/default.png",
                 ChannelType_Id = createChannelDTO.ChannelType_Id, 
                 ChannelType = channelType
             };
