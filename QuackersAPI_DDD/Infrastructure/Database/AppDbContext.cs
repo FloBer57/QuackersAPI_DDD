@@ -376,9 +376,6 @@ public partial class AppDbContext : DbContext
             entity.Property(e => e.PersonStatut_Id)
                 .HasColumnType("int(11)")
                 .HasColumnName("PersonStatut_Id");
-            entity.Property(e => e.Person_TokenResetPassword)
-                .HasMaxLength(255)
-                .HasColumnName("Person_TokenResetPassword");
 
             entity.HasOne(d => d.PersonJobTitle).WithMany(p => p.People)
                 .HasForeignKey(d => d.PersonJobTitle_Id)

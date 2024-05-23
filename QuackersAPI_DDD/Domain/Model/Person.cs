@@ -24,8 +24,6 @@ public partial class Person
 
     public string? Person_Description { get; set; } 
 
-    public string? Person_TokenResetPassword { get; set; }
-
     public bool Person_IsTemporaryPassword { get; set; } = true;
 
     public int PersonJobTitle_Id { get; set; }
