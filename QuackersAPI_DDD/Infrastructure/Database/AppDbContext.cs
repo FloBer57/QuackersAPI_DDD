@@ -294,7 +294,7 @@ public partial class AppDbContext : DbContext
                 .HasColumnName("Notification_Id");
             entity.Property(e => e.Notification_DatePost).HasColumnName("Notification_DatePost");
             entity.Property(e => e.Notification_Name)
-                .HasMaxLength(50)
+                .HasMaxLength(255)
                 .HasColumnName("Notification_Name");
             entity.Property(e => e.Notification_Text)
                 .HasMaxLength(255)
