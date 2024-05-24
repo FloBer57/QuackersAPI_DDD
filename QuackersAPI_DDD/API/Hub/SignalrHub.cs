@@ -1,6 +1,7 @@
 ﻿namespace QuackersAPI_DDD.API.Hub
 {
     using Microsoft.AspNetCore.SignalR;
+    using QuackersAPI_DDD.Domain.Model;
 
     public class SignalrHub : Hub
     {
@@ -18,5 +19,20 @@
         {
             await Groups.RemoveFromGroupAsync(Context.ConnectionId, channelId.ToString());
         }
+
+        public async Task SendNotification(int notificationId, string notificationName, string notificationText, int notificationType)
+        {
+
+            await Clients.AllExcept(notificationId.ToString()).SendAsync("ReceiveNotification", new
+            {
+                NotificationId = notificationId,
+                NotificationName = notificationName,
+                NotificationText = notificationText,
+                NotificationType = notificationType
+            });
+
+        }
     }
+
 }
+
