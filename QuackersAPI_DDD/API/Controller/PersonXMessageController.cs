@@ -45,6 +45,11 @@ namespace QuackersAPI_DDD.API.Controller
         [HttpPost]
         public async Task<IActionResult> CreateAssociation([FromBody] CreatePersonXMessageDTO dto)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
             try
             {
                 var createdAssociation = await _service.CreateAssociation(dto);
@@ -67,6 +72,11 @@ namespace QuackersAPI_DDD.API.Controller
         [HttpPut("{personId}/{messageId}")]
         public async Task<IActionResult> UpdateAssociation(int personId, int messageId, [FromBody] UpdatePersonXMessageDTO dto)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
             try
             {
                 var updatedAssociation = await _service.UpdateAssociation(personId, messageId, dto);

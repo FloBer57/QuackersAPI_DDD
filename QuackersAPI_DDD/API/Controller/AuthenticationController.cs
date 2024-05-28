@@ -1,10 +1,10 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using QuackersAPI_DDD.API.DTO.AuthenticationDTO;
-using QuackersAPI_DDD.Application.Interface; // Interfaces for services
+using QuackersAPI_DDD.Application.Interface;
 using QuackersAPI_DDD.Application.InterfaceService;
 using QuackersAPI_DDD.Application.Utilitie.InterfaceUtilitiesServices;
-using QuackersAPI_DDD.Infrastructure.InterfaceRepository; // Security and Token interfaces
+using QuackersAPI_DDD.Infrastructure.InterfaceRepository;
 
 namespace QuackersAPI_DDD.API.Controller
 {
@@ -16,14 +16,14 @@ namespace QuackersAPI_DDD.API.Controller
         private readonly IPersonService _personService;
         private readonly ISecurityService _securityService;
         private readonly ITokenJwtService _tokenService;
-        private readonly IRefreshTokenService _refreshTokenService; 
+        private readonly IRefreshTokenService _refreshTokenService;
 
         public AuthenticationController(
             IPersonService personService,
             ISecurityService securityService,
             ITokenJwtService tokenService,
             IRefreshTokenService refreshTokenService,
-            IEmailService emailService) 
+            IEmailService emailService)
         {
             _personService = personService;
             _securityService = securityService;
@@ -35,6 +35,11 @@ namespace QuackersAPI_DDD.API.Controller
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginDTO loginDTO)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
             if (string.IsNullOrWhiteSpace(loginDTO.Email) || string.IsNullOrWhiteSpace(loginDTO.Password))
             {
                 return BadRequest("Email and password are required.");
@@ -55,9 +60,7 @@ namespace QuackersAPI_DDD.API.Controller
                 }
 
                 var token = _tokenService.GenerateToken(person);
-
-
-                var refreshToken = _refreshTokenService.GenerateRefreshToken(person); 
+                var refreshToken = _refreshTokenService.GenerateRefreshToken(person);
                 return Ok(new { Token = token, RefreshToken = refreshToken, Message = "Login successful." });
             }
             catch (Exception ex)
@@ -69,6 +72,11 @@ namespace QuackersAPI_DDD.API.Controller
         [HttpPost("reset-password-request")]
         public async Task<IActionResult> ResetPasswordRequest([FromBody] ResetPasswordRequestDTO request)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
             try
             {
                 var person = await _personService.GetPersonByEmail(request.Email);
@@ -99,10 +107,15 @@ namespace QuackersAPI_DDD.API.Controller
         [HttpPost("reset-password")]
         public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordDTO resetPasswordDTO)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
             try
             {
                 var result = await _securityService.ResetPassword(resetPasswordDTO.Token, resetPasswordDTO.NewPassword);
-                    return Ok("Password has been reset successfully.");
+                return Ok("Password has been reset successfully.");
             }
             catch (ArgumentNullException ex)
             {
@@ -118,10 +131,14 @@ namespace QuackersAPI_DDD.API.Controller
             }
         }
 
-
         [HttpPost("refresh")]
         public async Task<IActionResult> RefreshToken([FromBody] RefreshTokenDTO refreshTokenDTO)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
             try
             {
                 var personId = await _refreshTokenService.ValidateRefreshToken(refreshTokenDTO.RefreshToken);
@@ -148,6 +165,11 @@ namespace QuackersAPI_DDD.API.Controller
         [HttpPost("revoke")]
         public async Task<IActionResult> RevokeRefreshToken([FromBody] RevokeTokenDTO revokeTokenDTO)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
             try
             {
                 var success = await _refreshTokenService.RevokeRefreshToken(revokeTokenDTO.RefreshToken);
@@ -170,6 +192,5 @@ namespace QuackersAPI_DDD.API.Controller
                 return StatusCode(500, "An error occurred while processing your request: " + ex.Message);
             }
         }
-
     }
 }

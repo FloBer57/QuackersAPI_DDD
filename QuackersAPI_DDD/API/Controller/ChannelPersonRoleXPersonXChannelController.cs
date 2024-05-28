@@ -16,7 +16,7 @@ namespace QuackersAPI_DDD.API.Controller
             _service = service;
         }
 
-        [Authorize(Roles ="Administrateur")]
+        [Authorize(Roles = "Administrateur")]
         [HttpGet]
         public async Task<IActionResult> GetAllAssociations()
         {
@@ -96,6 +96,11 @@ namespace QuackersAPI_DDD.API.Controller
         [HttpPost]
         public async Task<IActionResult> CreateAssociation([FromBody] CreateChannelPersonRoleXPersonXChannelDTO association)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
             try
             {
                 var createdAssociation = await _service.CreateAssociation(association);
@@ -119,6 +124,11 @@ namespace QuackersAPI_DDD.API.Controller
         [HttpPut("{personId}/{channelId}")]
         public async Task<IActionResult> UpdateAssociation(int personId, int channelId, [FromBody] UpdateChannelPersonRoleXPersonXChannelDTO dto)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
             try
             {
                 var updatedAssociation = await _service.UpdateAssociation(personId, channelId, dto);
@@ -158,4 +168,3 @@ namespace QuackersAPI_DDD.API.Controller
         }
     }
 }
-

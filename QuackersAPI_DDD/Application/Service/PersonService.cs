@@ -126,6 +126,14 @@ namespace QuackersAPI_DDD.Application.Service
                 throw new KeyNotFoundException($"Person with id {id} not found)");
             }
 
+            ApplyUpdates(person, updatePersonDTO);
+
+            await _personRepository.UpdatePerson(person);
+            return person;
+        }
+
+        private void ApplyUpdates(Person person, UpdatePersonDTO updatePersonDTO)
+        {
             if (updatePersonDTO.Description != null)
             {
                 person.Person_Description = updatePersonDTO.Description;
@@ -161,11 +169,7 @@ namespace QuackersAPI_DDD.Application.Service
             {
                 person.Person_PhoneNumber = updatePersonDTO.PhoneNumber;
             }
-
-            await _personRepository.UpdatePerson(person);
-            return person;
         }
-
 
         public async Task<bool> DeletePerson(int id)
         {

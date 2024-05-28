@@ -20,6 +20,11 @@ namespace QuackersAPI_DDD.API.Controller
         [HttpPost]
         public async Task<IActionResult> CreatePersonStatut([FromBody] CreatePersonStatutDTO personStatutDTO)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
             try
             {
                 var createdPersonStatut = await _personStatutService.CreatePersonStatut(personStatutDTO);
@@ -63,6 +68,11 @@ namespace QuackersAPI_DDD.API.Controller
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdatePersonStatut(int id, [FromBody] UpdatePersonStatutDTO personStatutDTO)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
             try
             {
                 var updatedPersonStatut = await _personStatutService.UpdatePersonStatut(id, personStatutDTO);

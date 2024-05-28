@@ -17,12 +17,12 @@ namespace QuackersAPI_DDD.API.Controller
             _channelPersonRoleService = channelPersonRoleService;
         }
 
-        [Authorize(Roles ="Administrateur")]
+        [Authorize(Roles = "Administrateur")]
         [HttpGet]
         public async Task<IActionResult> GetAllChannelPersonRoles()
         {
-                var roles = await _channelPersonRoleService.GetAllChannelPersonRoles();
-                return Ok(roles);
+            var roles = await _channelPersonRoleService.GetAllChannelPersonRoles();
+            return Ok(roles);
         }
 
         [Authorize]
@@ -56,7 +56,7 @@ namespace QuackersAPI_DDD.API.Controller
             }
             catch (InvalidOperationException ex)
             {
-                return Conflict(ex.Message); 
+                return Conflict(ex.Message);
             }
             catch (Exception ex)
             {
@@ -109,7 +109,6 @@ namespace QuackersAPI_DDD.API.Controller
             {
                 return StatusCode(500, "An error occurred while deleting the channel person role: " + ex.Message);
             }
-
         }
     }
 }

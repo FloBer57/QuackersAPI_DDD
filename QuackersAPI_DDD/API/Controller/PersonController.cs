@@ -54,6 +54,11 @@ namespace QuackersAPI_DDD.API.Controller
         [HttpPost]
         public async Task<IActionResult> CreatePerson([FromBody] CreatePersonDTO createPersonDTO)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
             try
             {
                 var person = await _personService.CreatePerson(createPersonDTO);
@@ -76,6 +81,11 @@ namespace QuackersAPI_DDD.API.Controller
         [HttpPost("test")]
         public async Task<IActionResult> CreatePersonTest([FromBody] CreatePersonTestDTO createPersonTestDTO)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
             try
             {
                 var person = await _personService.CreatePersonTest(createPersonTestDTO);
@@ -98,6 +108,11 @@ namespace QuackersAPI_DDD.API.Controller
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdatePerson(int id, [FromBody] UpdatePersonDTO updatePersonDTO)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
             try
             {
                 var updatedPerson = await _personService.UpdatePerson(id, updatePersonDTO);
@@ -210,6 +225,11 @@ namespace QuackersAPI_DDD.API.Controller
         [HttpPost("verify-password")]
         public async Task<IActionResult> VerifyPassword([FromBody] VerifyPasswordDTO verifyPasswordDTO)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
             try
             {
                 var isValid = await _securityService.VerifyCurrentPassword(verifyPasswordDTO.UserId, verifyPasswordDTO.CurrentPassword);

@@ -40,6 +40,11 @@ namespace QuackersAPI_DDD.API.Controller
         [Consumes("multipart/form-data")]
         public async Task<IActionResult> CreateAttachments([FromForm] CreateAttachmentDTO dto, [FromForm] List<IFormFile> files)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
             if (files == null || files.Count == 0)
             {
                 return BadRequest("No files received.");

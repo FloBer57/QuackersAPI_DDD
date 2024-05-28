@@ -44,6 +44,11 @@ namespace QuackersAPI_DDD.API.Controller
         [HttpPost]
         public async Task<IActionResult> CreateReaction([FromBody] CreateReactionDTO dto)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
             try
             {
                 var createdReaction = await _reactionService.CreateReaction(dto);
@@ -62,6 +67,11 @@ namespace QuackersAPI_DDD.API.Controller
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateReaction(int id, [FromBody] UpdateReactionDTO dto)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
             try
             {
                 var updatedReaction = await _reactionService.UpdateReaction(id, dto);

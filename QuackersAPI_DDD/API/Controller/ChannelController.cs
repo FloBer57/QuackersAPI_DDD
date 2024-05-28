@@ -26,8 +26,8 @@ namespace QuackersAPI_DDD.API.Controller
         [HttpGet]
         public async Task<IActionResult> GetAllChannels()
         {
-                var channels = await _channelService.GetAllChannels();
-                return Ok(channels);
+            var channels = await _channelService.GetAllChannels();
+            return Ok(channels);
         }
 
         [Authorize]
@@ -72,6 +72,11 @@ namespace QuackersAPI_DDD.API.Controller
         [HttpPost]
         public async Task<IActionResult> CreateChannel([FromBody] CreateChannelDTO createChannelDTO)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
             try
             {
                 var createdChannel = await _channelService.CreateChannel(createChannelDTO);
@@ -95,6 +100,11 @@ namespace QuackersAPI_DDD.API.Controller
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateChannel(int id, [FromBody] UpdateChannelDTO updateChannelDTO)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
             try
             {
                 var updatedChannel = await _channelService.UpdateChannel(id, updateChannelDTO);
@@ -118,7 +128,11 @@ namespace QuackersAPI_DDD.API.Controller
         [HttpDelete]
         public async Task<IActionResult> DeleteChannel([FromBody] DeleteChannelDTO id)
         {
-            Console.WriteLine("coucou");
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
             try
             {
                 var person = await _personService.GetPersonById(id.Person_Id);
@@ -148,9 +162,6 @@ namespace QuackersAPI_DDD.API.Controller
                 return StatusCode(500, $"An error occurred while deleting the channel: {ex.Message}");
             }
         }
-
-
-
 
         [Authorize]
         [HttpGet("{id}/messages")]

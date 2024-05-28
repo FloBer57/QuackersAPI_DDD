@@ -17,12 +17,12 @@ namespace QuackersAPI_DDD.API.Controller
             _channelTypeService = channelTypeService;
         }
 
-        [Authorize(Roles ="Administrateur")]
+        [Authorize(Roles = "Administrateur")]
         [HttpGet]
         public async Task<IActionResult> GetAllChannelTypes()
         {
             var channelTypes = await _channelTypeService.GetAllChannelTypes();
-            return Ok(channelTypes);  
+            return Ok(channelTypes);
         }
 
         [Authorize]
@@ -52,6 +52,7 @@ namespace QuackersAPI_DDD.API.Controller
             {
                 return BadRequest(ModelState);
             }
+
             try
             {
                 var createdChannelType = await _channelTypeService.CreateChannelType(dto);
@@ -75,6 +76,7 @@ namespace QuackersAPI_DDD.API.Controller
             {
                 return BadRequest(ModelState);
             }
+
             try
             {
                 var updatedChannelType = await _channelTypeService.UpdateChannelType(id, dto);
