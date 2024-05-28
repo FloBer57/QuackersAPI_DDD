@@ -35,7 +35,6 @@ namespace QuackersAPI_DDD.Application.Utilitie.UtilitiesServices
             {
                 throw new InvalidOperationException("Le rôle de l'utilisateur n'est pas défini.");
             }
-            // Log des valeurs pour le débogage
             Console.WriteLine($"Generating token for user: {user.Person_Id}");
             Console.WriteLine($"Issuer: {_issuer}, Audience: {_audience}, Key: {_secretKey.Substring(0, 5)}...");  // Show only a part of the key for security
 
