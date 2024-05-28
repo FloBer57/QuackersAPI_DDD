@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using QuackersAPI_DDD.API.DTO.ChannelPersonRoleDTO;
 using QuackersAPI_DDD.Application.InterfaceService;
 using QuackersAPI_DDD.Domain.Model;
@@ -16,6 +17,7 @@ namespace QuackersAPI_DDD.API.Controller
             _channelPersonRoleService = channelPersonRoleService;
         }
 
+        [Authorize(Roles ="Administrateur")]
         [HttpGet]
         public async Task<IActionResult> GetAllChannelPersonRoles()
         {
@@ -23,6 +25,7 @@ namespace QuackersAPI_DDD.API.Controller
                 return Ok(roles);
         }
 
+        [Authorize]
         [HttpGet("{id}")]
         public async Task<IActionResult> GetChannelPersonRoleById(int id)
         {
@@ -37,6 +40,7 @@ namespace QuackersAPI_DDD.API.Controller
             }
         }
 
+        [Authorize]
         [HttpPost]
         public async Task<IActionResult> CreateChannelPersonRole([FromBody] CreateChannelPersonRoleDTO dto)
         {
@@ -60,6 +64,7 @@ namespace QuackersAPI_DDD.API.Controller
             }
         }
 
+        [Authorize]
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateChannelPersonRole(int id, [FromBody] UpdateChannelPersonRoleDTO dto)
         {
@@ -87,7 +92,7 @@ namespace QuackersAPI_DDD.API.Controller
             }
         }
 
-
+        [Authorize]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteChannelPersonRole(int id)
         {

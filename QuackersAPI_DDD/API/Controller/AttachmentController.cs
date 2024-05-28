@@ -16,6 +16,7 @@ namespace QuackersAPI_DDD.API.Controller
             _attachmentService = attachmentService;
         }
 
+        [Authorize]
         [HttpGet("{id}")]
         public async Task<IActionResult> GetAttachmentById(int id)
         {
@@ -34,6 +35,7 @@ namespace QuackersAPI_DDD.API.Controller
             }
         }
 
+        [Authorize]
         [HttpPost]
         [Consumes("multipart/form-data")]
         public async Task<IActionResult> CreateAttachments([FromForm] CreateAttachmentDTO dto, [FromForm] List<IFormFile> files)
@@ -58,7 +60,7 @@ namespace QuackersAPI_DDD.API.Controller
             }
         }
 
-
+        [Authorize]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteAttachmentById(int id)
         {

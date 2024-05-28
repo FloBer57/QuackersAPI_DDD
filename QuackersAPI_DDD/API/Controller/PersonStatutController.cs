@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using QuackersAPI_DDD.API.DTO.PersonStatutDTO;
 using QuackersAPI_DDD.Application.InterfaceService;
 
@@ -15,6 +16,7 @@ namespace QuackersAPI_DDD.API.Controller
             _personStatutService = personStatutService ?? throw new ArgumentNullException(nameof(personStatutService));
         }
 
+        [Authorize(Roles ="Administrateur")]
         [HttpPost]
         public async Task<IActionResult> CreatePersonStatut([FromBody] CreatePersonStatutDTO personStatutDTO)
         {
@@ -32,14 +34,14 @@ namespace QuackersAPI_DDD.API.Controller
                 return StatusCode(500, $"An error occurred while creating the person status: {ex.Message}");
             }
         }
-
+        [Authorize]
         [HttpGet]
         public async Task<IActionResult> GetAllPersonStatuts()
         {
                 var personStatuts = await _personStatutService.GetAllPersonStatuts();
                 return Ok(personStatuts);
         }
-
+        [Authorize]
         [HttpGet("{id}")]
         public async Task<IActionResult> GetPersonStatutById(int id)
         {
@@ -57,7 +59,7 @@ namespace QuackersAPI_DDD.API.Controller
                 return StatusCode(500, $"An error occurred while retrieving the person status with ID {id}: {ex.Message}");
             }
         }
-
+        [Authorize]
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdatePersonStatut(int id, [FromBody] UpdatePersonStatutDTO personStatutDTO)
         {
@@ -75,7 +77,7 @@ namespace QuackersAPI_DDD.API.Controller
                 return StatusCode(500, $"An error occurred while updating the person status: {ex.Message}");
             }
         }
-
+        [Authorize]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeletePersonStatut(int id)
         {

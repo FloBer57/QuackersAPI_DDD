@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using QuackersAPI_DDD.API.DTO.PersonRoleDTO;
 using QuackersAPI_DDD.Application.InterfaceService;
 
@@ -15,6 +16,7 @@ namespace QuackersAPI_DDD.API.Controller
             _personRoleService = personRoleService ?? throw new ArgumentNullException(nameof(personRoleService));
         }
 
+        [Authorize(Roles ="Administrateur")]
         [HttpPost]
         public async Task<IActionResult> CreatePersonRole([FromBody] CreatePersonRoleDTO createPersonRoleDTO)
         {
@@ -32,14 +34,14 @@ namespace QuackersAPI_DDD.API.Controller
                 return StatusCode(500, $"An error occurred while creating the person role: {ex.Message}");
             }
         }
-
+        [Authorize]
         [HttpGet]
         public async Task<IActionResult> GetAllPersonRoles()
         {
                 var personRoles = await _personRoleService.GetAllPersonRoles();
                 return Ok(personRoles);
         }
-
+        [Authorize]
         [HttpGet("{id}")]
         public async Task<IActionResult> GetPersonRoleById(int id)
         {
@@ -57,7 +59,7 @@ namespace QuackersAPI_DDD.API.Controller
                 return StatusCode(500, $"An error occurred while retrieving the person role with ID {id}: {ex.Message}");
             }
         }
-
+        [Authorize]
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdatePersonRole(int id, [FromBody] UpdatePersonRoleDTO updatePersonRoleDTO)
         {
@@ -79,7 +81,7 @@ namespace QuackersAPI_DDD.API.Controller
                 return StatusCode(500, $"An error occurred while updating the person role: {ex.Message}");
             }
         }
-
+        [Authorize]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeletePersonRole(int id)
         {

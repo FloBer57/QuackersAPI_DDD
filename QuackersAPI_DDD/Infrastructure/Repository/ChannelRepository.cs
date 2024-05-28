@@ -10,10 +10,19 @@
     public class ChannelRepository : IChannelRepository
     {
         private readonly AppDbContext _context;
+        private readonly IPersonXChannelRepository _personXChannelRepository;
+        private readonly IChannelPersonRoleXPersonXChannelRepository _channelPersonRoleXPersonXChannelRepository;
+        private readonly IMessageRepository _messageRepository;
 
-        public ChannelRepository(AppDbContext context)
+        public ChannelRepository(AppDbContext context,
+            IPersonXChannelRepository personXChannelRepository,
+            IChannelPersonRoleXPersonXChannelRepository channelPersonRoleXPersonXChannelRepository,
+            IMessageRepository messageRepository)
         {
             _context = context;
+            _personXChannelRepository = personXChannelRepository;
+            _channelPersonRoleXPersonXChannelRepository = channelPersonRoleXPersonXChannelRepository;
+            _messageRepository = messageRepository;
         }
 
         public async Task<Channel> CreateChannel(Channel channel)
@@ -53,9 +62,40 @@
 
         public async Task DeleteChannel(Channel channel)
         {
+            var personChannels = await _context.Personxchannels
+                .Where(pc => pc.Channel_Id == channel.Channel_Id)
+                .ToListAsync();
+
+            if (personChannels.Any())
+            {
+                _context.Personxchannels.RemoveRange(personChannels);
+            }
+
+            var channelRoles = await _context.Channelpersonrolexpersonxchannels
+                .Where(cp => cp.Channel_Id == channel.Channel_Id)
+                .ToListAsync();
+
+            if (channelRoles.Any())
+            {
+                _context.Channelpersonrolexpersonxchannels.RemoveRange(channelRoles);
+            }
+
+            var messages = await _context.Messages
+                .Where(m => m.Channel_Id == channel.Channel_Id)
+                .ToListAsync();
+
+            if (messages.Any())
+            {
+                _context.Messages.RemoveRange(messages);
+            }
+
             _context.Channels.Remove(channel);
+
             await _context.SaveChangesAsync();
         }
+
+
+
 
         public async Task<bool> ChannelNameExists(string name)
         {

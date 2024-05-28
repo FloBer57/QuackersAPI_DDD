@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using QuackersAPI_DDD.API.DTO.ChannelTypeDTO;
 using QuackersAPI_DDD.Application.InterfaceService;
 using QuackersAPI_DDD.Domain.Model;
@@ -16,6 +17,7 @@ namespace QuackersAPI_DDD.API.Controller
             _channelTypeService = channelTypeService;
         }
 
+        [Authorize(Roles ="Administrateur")]
         [HttpGet]
         public async Task<IActionResult> GetAllChannelTypes()
         {
@@ -23,6 +25,7 @@ namespace QuackersAPI_DDD.API.Controller
             return Ok(channelTypes);  
         }
 
+        [Authorize]
         [HttpGet("{id}")]
         public async Task<IActionResult> GetChannelTypeById(int id)
         {
@@ -41,6 +44,7 @@ namespace QuackersAPI_DDD.API.Controller
             }
         }
 
+        [Authorize]
         [HttpPost]
         public async Task<IActionResult> CreateChannelType([FromBody] CreateChannelTypeDTO dto)
         {
@@ -63,6 +67,7 @@ namespace QuackersAPI_DDD.API.Controller
             }
         }
 
+        [Authorize]
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateChannelType(int id, [FromBody] UpdateChannelTypeDTO dto)
         {
@@ -89,6 +94,7 @@ namespace QuackersAPI_DDD.API.Controller
             }
         }
 
+        [Authorize]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteChannelType(int id)
         {

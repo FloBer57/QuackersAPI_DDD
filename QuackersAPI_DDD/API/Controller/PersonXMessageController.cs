@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using QuackersAPI_DDD.API.DTO.PersonXMessageDTO;
 using QuackersAPI_DDD.Application.InterfaceService;
 
@@ -14,7 +15,7 @@ namespace QuackersAPI_DDD.API.Controller
         {
             _service = service ?? throw new ArgumentNullException(nameof(service));
         }
-
+        [Authorize(Roles ="Administrateur")]
         [HttpGet]
         public async Task<IActionResult> GetAllAssociations()
         {
@@ -22,7 +23,7 @@ namespace QuackersAPI_DDD.API.Controller
                 var associations = await _service.GetAllAssociations();
                 return Ok(associations);
         }
-
+        [Authorize]
         [HttpGet("{personId}/{messageId}")]
         public async Task<IActionResult> GetAssociationById(int personId, int messageId)
         {
@@ -40,7 +41,7 @@ namespace QuackersAPI_DDD.API.Controller
                 return StatusCode(500, $"Internal server error: {e.Message}");
             }
         }
-
+        [Authorize]
         [HttpPost]
         public async Task<IActionResult> CreateAssociation([FromBody] CreatePersonXMessageDTO dto)
         {
@@ -62,7 +63,7 @@ namespace QuackersAPI_DDD.API.Controller
                 return StatusCode(500, $"Internal server error: {e.Message}");
             }
         }
-
+        [Authorize]
         [HttpPut("{personId}/{messageId}")]
         public async Task<IActionResult> UpdateAssociation(int personId, int messageId, [FromBody] UpdatePersonXMessageDTO dto)
         {
@@ -80,7 +81,7 @@ namespace QuackersAPI_DDD.API.Controller
                 return StatusCode(500, $"Internal server error: {e.Message}");
             }
         }
-
+        [Authorize]
         [HttpDelete("{personId}/{messageId}")]
         public async Task<IActionResult> DeleteAssociation(int personId, int messageId)
         {
@@ -98,7 +99,7 @@ namespace QuackersAPI_DDD.API.Controller
                 return StatusCode(500, $"Internal server error: {e.Message}");
             }
         }
-
+        [Authorize]
         [HttpGet("message/{messageId}/persons")]
         public async Task<IActionResult> GetPersonsByMessageId(int messageId)
         {
@@ -116,7 +117,7 @@ namespace QuackersAPI_DDD.API.Controller
                 return StatusCode(500, "An internal server error has occurred: " + ex.Message);
             }
         }
-
+        [Authorize]
         [HttpGet("persons/{personId}/messages")]
         public async Task<IActionResult> GetMessagesByPersonId(int personId)
         {

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using QuackersAPI_DDD.API.DTO.PersonXNotificationDTO;
 using QuackersAPI_DDD.Application.InterfaceService;
 using System.Threading.Tasks;

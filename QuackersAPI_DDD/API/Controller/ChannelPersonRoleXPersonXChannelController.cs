@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using QuackersAPI_DDD.API.DTO.ChannelPersonRoleXPersonXChannel;
 using QuackersAPI_DDD.Application.InterfaceService;
 
@@ -15,6 +16,7 @@ namespace QuackersAPI_DDD.API.Controller
             _service = service;
         }
 
+        [Authorize(Roles ="Administrateur")]
         [HttpGet]
         public async Task<IActionResult> GetAllAssociations()
         {
@@ -29,6 +31,7 @@ namespace QuackersAPI_DDD.API.Controller
             }
         }
 
+        [Authorize]
         [HttpGet("{personId}/{channelId}")]
         public async Task<IActionResult> GetAssociationById(int personId, int channelId)
         {
@@ -47,6 +50,7 @@ namespace QuackersAPI_DDD.API.Controller
             }
         }
 
+        [Authorize]
         [HttpGet("channels/{channelId}/roles/{roleId}/persons")]
         public async Task<IActionResult> GetPersonsByRoleInChannel(int channelId, int roleId)
         {
@@ -65,6 +69,7 @@ namespace QuackersAPI_DDD.API.Controller
             }
         }
 
+        [Authorize]
         [HttpGet("persons/{personId}/roles")]
         public async Task<IActionResult> GetRolesByPersonInChannels(int personId)
         {
@@ -87,6 +92,7 @@ namespace QuackersAPI_DDD.API.Controller
             }
         }
 
+        [Authorize]
         [HttpPost]
         public async Task<IActionResult> CreateAssociation([FromBody] CreateChannelPersonRoleXPersonXChannelDTO association)
         {
@@ -109,6 +115,7 @@ namespace QuackersAPI_DDD.API.Controller
             }
         }
 
+        [Authorize]
         [HttpPut("{personId}/{channelId}")]
         public async Task<IActionResult> UpdateAssociation(int personId, int channelId, [FromBody] UpdateChannelPersonRoleXPersonXChannelDTO dto)
         {
@@ -131,6 +138,7 @@ namespace QuackersAPI_DDD.API.Controller
             }
         }
 
+        [Authorize]
         [HttpDelete("{personId}/{channelId}")]
         public async Task<IActionResult> DeleteAssociation(int personId, int channelId)
         {

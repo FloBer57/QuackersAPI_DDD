@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using QuackersAPI_DDD.API.DTO.ChannelDTO;
+using QuackersAPI_DDD.API.DTO.MessageDTO;
 using QuackersAPI_DDD.Application.Interface;
+using QuackersAPI_DDD.Application.InterfaceService;
 
 namespace QuackersAPI_DDD.API.Controller
 {
@@ -10,12 +12,17 @@ namespace QuackersAPI_DDD.API.Controller
     public class ChannelController : ControllerBase
     {
         private readonly IChannelService _channelService;
+        private readonly IChannelPersonRoleXPersonXChannelService _channelPersonRoleXPersonXChannelService;
+        private readonly IPersonService _personService;
 
-        public ChannelController(IChannelService channelService)
+        public ChannelController(IChannelService channelService, IChannelPersonRoleXPersonXChannelService channelPersonRoleXPersonXChannelService, IPersonService personService)
         {
             _channelService = channelService;
+            _channelPersonRoleXPersonXChannelService = channelPersonRoleXPersonXChannelService;
+            _personService = personService;
         }
 
+        [Authorize(Roles = "Administrateur")]
         [HttpGet]
         public async Task<IActionResult> GetAllChannels()
         {
@@ -23,6 +30,7 @@ namespace QuackersAPI_DDD.API.Controller
                 return Ok(channels);
         }
 
+        [Authorize]
         [HttpGet("{id}")]
         public async Task<IActionResult> GetChannelById(int id)
         {
@@ -41,6 +49,7 @@ namespace QuackersAPI_DDD.API.Controller
             }
         }
 
+        [Authorize]
         [HttpGet("{id}/channels")]
         public async Task<IActionResult> GetChannelsByChannelType(int id)
         {
@@ -59,6 +68,7 @@ namespace QuackersAPI_DDD.API.Controller
             }
         }
 
+        [Authorize]
         [HttpPost]
         public async Task<IActionResult> CreateChannel([FromBody] CreateChannelDTO createChannelDTO)
         {
@@ -81,6 +91,7 @@ namespace QuackersAPI_DDD.API.Controller
             }
         }
 
+        [Authorize]
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateChannel(int id, [FromBody] UpdateChannelDTO updateChannelDTO)
         {
@@ -103,14 +114,30 @@ namespace QuackersAPI_DDD.API.Controller
             }
         }
 
-        [Authorize(Roles = "Administrateur")]
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteChannel(int id)
+        [Authorize]
+        [HttpDelete]
+        public async Task<IActionResult> DeleteChannel([FromBody] DeleteChannelDTO id)
         {
+            Console.WriteLine("coucou");
             try
             {
-                await _channelService.DeleteChannel(id);
-                return NoContent();
+                var person = await _personService.GetPersonById(id.Person_Id);
+                if (person.PersonRole_Id == 2)
+                {
+                    await _channelService.DeleteChannel(id.Channel_Id);
+                    return NoContent();
+                }
+                else
+                {
+                    var role = await _channelPersonRoleXPersonXChannelService.GetRolesByPersonInOneChannels(id.Person_Id, id.Channel_Id);
+                    if (role == null || role.ChannelPersonRole.ChannelPersonRole_Id != 2)
+                    {
+                        return StatusCode(401, "You do not have permission to delete this channel.");
+                    }
+
+                    await _channelService.DeleteChannel(id.Channel_Id);
+                    return NoContent();
+                }
             }
             catch (KeyNotFoundException ex)
             {
@@ -123,6 +150,9 @@ namespace QuackersAPI_DDD.API.Controller
         }
 
 
+
+
+        [Authorize]
         [HttpGet("{id}/messages")]
         public async Task<IActionResult> GetAllMessagesFromChannel(int id)
         {

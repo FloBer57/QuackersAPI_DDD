@@ -59,6 +59,16 @@ public class ChannelPersonRoleXPersonXChannelService : IChannelPersonRoleXPerson
         return roles;
     }
 
+    public async Task <ChannelPersonRoleXPersonXChannel> GetRolesByPersonInOneChannels(int personId, int channelId)
+    {
+        var role = await _repository.GetRolesByPersonInOneChannel(personId, channelId);
+        if (role == null)
+        {
+            throw new KeyNotFoundException("No roles found with person.");
+        }
+        return role;
+    }
+
     public async Task<ChannelPersonRoleXPersonXChannel> CreateAssociation(CreateChannelPersonRoleXPersonXChannelDTO dto)
     {
         var person = await _personRepository.GetPersonById(dto.PersonId);

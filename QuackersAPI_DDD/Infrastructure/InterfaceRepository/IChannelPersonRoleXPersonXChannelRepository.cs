@@ -13,5 +13,6 @@ namespace QuackersAPI_DDD.Infrastructure.InterfaceRepository
         Task AddPersonRoleToChannel(int personId, int channelId);
         Task<IEnumerable<Person>> GetPersonsByRoleInChannel(int channelId, int roleId);
         Task<IEnumerable<ChannelPersonRole>> GetRolesByPersonInChannels(int personId);
+        Task<ChannelPersonRoleXPersonXChannel> GetRolesByPersonInOneChannel(int personId, int channelId);
     }
 }

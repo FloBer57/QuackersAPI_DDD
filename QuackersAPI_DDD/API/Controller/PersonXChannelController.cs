@@ -17,13 +17,14 @@ namespace QuackersAPI_DDD.API.Controller
             _service = service;
         }
 
+        [Authorize(Roles ="Administrateur")]
         [HttpGet]
         public async Task<IActionResult> GetAllAssociations()
         {
             var associations = await _service.GetAllAssociations();
             return Ok(associations);
         }
-
+        [Authorize]
         [HttpGet("{personId}/{channelId}")]
         public async Task<IActionResult> GetAssociationById(int personId, int channelId)
         {
@@ -37,7 +38,7 @@ namespace QuackersAPI_DDD.API.Controller
                 return NotFound(e.Message);
             }
         }
-
+        [Authorize]
         [HttpPost]
         public async Task<IActionResult> CreateAssociation([FromBody] CreatePersonXChannelDTO dto)
         {
@@ -55,7 +56,7 @@ namespace QuackersAPI_DDD.API.Controller
                 return StatusCode(500, "Internal server error: " + e.Message);
             }
         }
-
+        [Authorize]
         [HttpPut("{personId}/{channelId}")]
         public async Task<IActionResult> UpdateAssociation(int personId, int channelId, [FromBody] UpdatePersonXChannelDTO dto)
         {
@@ -73,7 +74,7 @@ namespace QuackersAPI_DDD.API.Controller
                 return StatusCode(500, "Internal server error: " + e.Message);
             }
         }
-
+        [Authorize]
         [HttpDelete("{personId}/{channelId}")]
         public async Task<IActionResult> Delete(int personId, int channelId)
         {
@@ -91,7 +92,7 @@ namespace QuackersAPI_DDD.API.Controller
                 return StatusCode(500, "Internal server error: " + e.Message);
             }
         }
-
+        [Authorize]
         [HttpGet("channels/{channelId}/persons")]
         public async Task<IActionResult> GetPersonsByChannelId(int channelId)
         {
@@ -109,7 +110,7 @@ namespace QuackersAPI_DDD.API.Controller
                 return StatusCode(500, "An internal server error has occurred: " + ex.Message);
             }
         }
-
+        [Authorize]
         [HttpGet("persons/{personId}/channels")]
         public async Task<IActionResult> GetChannelsByPersonId(int personId)
         {

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using QuackersAPI_DDD.API.DTO.NotificationDTO;
 using QuackersAPI_DDD.Application.InterfaceService;
 using QuackersAPI_DDD.Infrastructure.InterfaceRepository;
@@ -15,14 +16,14 @@ namespace QuackersAPI_DDD.API.Controller
         {
             _notificationService = notificationService;
         }
-
+        [Authorize]
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
             var notifications = await _notificationService.GetAllNotifications();
             return Ok(notifications);
         }
-
+        [Authorize]
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id)
         {
@@ -44,7 +45,7 @@ namespace QuackersAPI_DDD.API.Controller
                 return StatusCode(500, ex.Message);
             }
         }
-
+        [Authorize]
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] CreateNotificationDTO dto)
         {
@@ -70,7 +71,7 @@ namespace QuackersAPI_DDD.API.Controller
                 return StatusCode(500, ex.Message);
             }
         }
-
+        [Authorize]
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateNotification(int id, [FromBody] UpdateNotificationDTO dto)
         {
@@ -92,7 +93,7 @@ namespace QuackersAPI_DDD.API.Controller
                 return StatusCode(500, ex.Message);
             }
         }
-
+        [Authorize]
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {

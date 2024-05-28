@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using QuackersAPI_DDD.API.DTO.AuthenticationDTO;
 using QuackersAPI_DDD.Application.Interface; // Interfaces for services
 using QuackersAPI_DDD.Application.InterfaceService;
@@ -143,7 +144,7 @@ namespace QuackersAPI_DDD.API.Controller
             }
         }
 
-
+        [Authorize]
         [HttpPost("revoke")]
         public async Task<IActionResult> RevokeRefreshToken([FromBody] RevokeTokenDTO revokeTokenDTO)
         {

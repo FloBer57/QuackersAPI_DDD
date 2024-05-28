@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using QuackersAPI_DDD.API.DTO.PersonJobTitleDTO;
 using QuackersAPI_DDD.Application.InterfaceService;
 
@@ -15,6 +16,7 @@ namespace QuackersAPI_DDD.API.Controller
             _personJobTitleService = personJobTitleService ?? throw new ArgumentNullException(nameof(personJobTitleService));
         }
 
+        [Authorize(Roles ="Administrateur")]
         [HttpPost]
         public async Task<IActionResult> CreatePersonJobTitle([FromBody] CreatePersonJobTitleDTO createPersonJobTitleDTO)
         {
@@ -32,7 +34,7 @@ namespace QuackersAPI_DDD.API.Controller
                 return StatusCode(500, $"An internal server error has occurred: {ex.Message}");
             }
         }
-
+        [Authorize]
         [HttpGet]
         public async Task<IActionResult> GetAllPersonJobTitle()
         {
@@ -41,7 +43,7 @@ namespace QuackersAPI_DDD.API.Controller
                 return Ok(personJobTitles);
 
         }
-
+        [Authorize]
         [HttpGet("{id}")]
         public async Task<IActionResult> GetPersonJobTitleById(int id)
         {
@@ -59,7 +61,7 @@ namespace QuackersAPI_DDD.API.Controller
                 return StatusCode(500, $"An error occurred while retrieving the person job title with ID {id}: {ex.Message}");
             }
         }
-
+        [Authorize]
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdatePersonJobTitle(int id, [FromBody] UpdatePersonJobTitleDTO updatePersonJobTitleDTO)
         {
@@ -81,7 +83,7 @@ namespace QuackersAPI_DDD.API.Controller
                 return StatusCode(500, $"An internal server error has occurred while updating the person job title: {ex.Message}");
             }
         }
-
+        [Authorize]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeletePersonJobTitle(int id)
         {

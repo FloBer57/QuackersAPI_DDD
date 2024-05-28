@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.EntityFrameworkCore;
 using QuackersAPI_DDD.Domain.Model;
 using QuackersAPI_DDD.Infrastructure.Database;
 using QuackersAPI_DDD.Infrastructure.InterfaceRepository;
@@ -88,6 +89,7 @@ namespace QuackersAPI_DDD.Infrastructure.Repository
             return false;
         }
 
+
         public async Task AddPersonRoleToChannel(int personId, int channelId)
         {
             var association = await GetAssociationByIds(personId,channelId);
@@ -96,6 +98,21 @@ namespace QuackersAPI_DDD.Infrastructure.Repository
                 _context.Channelpersonrolexpersonxchannels.Add(association);
                 await _context.SaveChangesAsync();
             }
+        }
+
+        public async Task<ChannelPersonRoleXPersonXChannel> GetRolesByPersonInOneChannel(int personId, int channelId)
+        {
+            var association = await _context.Channelpersonrolexpersonxchannels
+                .Where(a => a.Person_Id == personId && a.Channel_Id == channelId)
+                .Include(a => a.ChannelPersonRole)
+                .FirstOrDefaultAsync();
+
+            if (association == null)
+            {
+                throw new KeyNotFoundException("No roles found for the specified person in the given channel.");
+            }
+
+            return association;
         }
     }
 }

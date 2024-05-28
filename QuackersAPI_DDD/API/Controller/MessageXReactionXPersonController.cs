@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using QuackersAPI_DDD.API.DTO.MessagexreactionxpersonDTO;
 using QuackersAPI_DDD.Application.InterfaceService;
 using QuackersAPI_DDD.Application.Service;
@@ -15,14 +16,14 @@ namespace QuackersAPI_DDD.API.Controller
         {
             _service = service;
         }
-
+        [Authorize]
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
             var reactions = await _service.GetAllReactions();
             return Ok(reactions);
         }
-
+        [Authorize]
         [HttpGet("{personId}/{messageId}/{reactionId}")]
         public async Task<IActionResult> GetById(int personId, int messageId, int reactionId)
         {
@@ -40,7 +41,7 @@ namespace QuackersAPI_DDD.API.Controller
                 return NotFound(e.Message);
             }
         }
-
+        [Authorize]
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] CreateMessageXReactionXPersonDTO dto)
         {
@@ -62,7 +63,7 @@ namespace QuackersAPI_DDD.API.Controller
                 return StatusCode(500, "Internal server error: " + ex.Message);
             }
         }
-
+        [Authorize]
         [HttpPut("{personId}/{messageId}/{reactionId}")]
         public async Task<IActionResult> Update(int personId, int messageId, int reactionId, [FromBody] UpdateMessageXReactionXPersonDTO dto)
         {
@@ -84,7 +85,7 @@ namespace QuackersAPI_DDD.API.Controller
                 return StatusCode(500, "Internal server error: " + e.Message);
             }
         }
-
+        [Authorize]
         [HttpDelete("{personId}/{messageId}/{reactionId}")]
         public async Task<IActionResult> Delete(int personId, int messageId, int reactionId)
         {
@@ -106,7 +107,7 @@ namespace QuackersAPI_DDD.API.Controller
                 return StatusCode(500, "Internal server error: " + e.Message);
             }
         }
-
+        [Authorize]
         [HttpGet("{messageId}/reactions/count")]
         public async Task<IActionResult> GetMessageReactionCounts(int messageId)
         {

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using QuackersAPI_DDD.API.DTO.NotificationTypeDTO;
 using QuackersAPI_DDD.Application.InterfaceService;
 
@@ -14,14 +15,14 @@ namespace QuackersAPI_DDD.API.Controller
         {
             _notificationTypeService = notificationTypeService;
         }
-
+        [Authorize]
         [HttpGet]
         public async Task<IActionResult> GetAllNotificationTypes()
         {
             var types = await _notificationTypeService.GetAllNotificationTypes();
             return Ok(types);
         }
-
+        [Authorize]
         [HttpGet("{id}")]
         public async Task<IActionResult> GetNotificationTypeById(int id)
         {
@@ -41,7 +42,7 @@ namespace QuackersAPI_DDD.API.Controller
                 return StatusCode(500, "Internal server error: " + ex.Message);
             }
         }
-
+        [Authorize]
         [HttpPost]
         public async Task<IActionResult> CreateNotificationType([FromBody] CreateNotificationTypeDTO dto)
         {
@@ -59,7 +60,7 @@ namespace QuackersAPI_DDD.API.Controller
                 return StatusCode(500, "An internal server error has occurred: " + ex.Message);
             }
         }
-
+        [Authorize]
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateNotificationType(int id, [FromBody] UpdateNotificationTypeDTO dto)
         {
@@ -81,7 +82,7 @@ namespace QuackersAPI_DDD.API.Controller
                 return StatusCode(500, "An internal server error has occurred: " + ex.Message);
             }
         }
-
+        [Authorize]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteNotificationType(int id)
         {

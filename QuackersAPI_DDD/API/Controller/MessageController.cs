@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using QuackersAPI_DDD.API.DTO.MessageDTO;
 using QuackersAPI_DDD.Application.InterfaceService;
 using QuackersAPI_DDD.Domain.Model;
@@ -16,6 +17,7 @@ namespace QuackersAPI_DDD.API.Controller
             _messageService = messageService;
         }
 
+        [Authorize(Roles ="Administrateur")]
         [HttpGet]
         public async Task<IActionResult> GetAllMessages()
         {
@@ -23,6 +25,7 @@ namespace QuackersAPI_DDD.API.Controller
             return Ok(messages);
         }
 
+        [Authorize]
         [HttpGet("{id}")]
         public async Task<IActionResult> GetMessageById(int id)
         {
@@ -36,7 +39,7 @@ namespace QuackersAPI_DDD.API.Controller
                 return NotFound(ex.Message);
             }
         }
-
+        [Authorize]
         [HttpGet("{id}/attachments")]
         public async Task<IActionResult> GetMessageAttachments(int id)
         {
@@ -58,7 +61,7 @@ namespace QuackersAPI_DDD.API.Controller
                 return StatusCode(500, "An internal server error has occurred: " + ex.Message);
             }
         }
-
+        [Authorize]
         [HttpPost]
         public async Task<IActionResult> CreateMessage([FromBody] CreateMessageDTO messageDto)
         {
@@ -84,7 +87,7 @@ namespace QuackersAPI_DDD.API.Controller
                 return StatusCode(500, "An internal server error has occurred: " + ex.Message);
             }
         }
-
+        [Authorize]
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateMessage(int id, [FromBody] UpdateMessageDTO updateMessageDTO)
         {
@@ -106,7 +109,7 @@ namespace QuackersAPI_DDD.API.Controller
                 return StatusCode(500, "An internal server error has occurred: " + ex.Message);
             }
         }
-
+        [Authorize]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteMessage(int id)
         {

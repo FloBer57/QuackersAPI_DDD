@@ -128,7 +128,7 @@ public partial class AppDbContext : DbContext
 
             entity.HasOne(d => d.ChannelType).WithMany(p => p.Channels)
                 .HasForeignKey(d => d.ChannelType_Id)
-                .OnDelete(DeleteBehavior.ClientSetNull)
+                .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("channel_ibfk_1");
         });
 
@@ -169,17 +169,17 @@ public partial class AppDbContext : DbContext
 
             entity.HasOne(d => d.Channel).WithMany(p => p.Channelpersonrolexpersonxchannels)
                 .HasForeignKey(d => d.Channel_Id)
-                .OnDelete(DeleteBehavior.ClientSetNull)
+                .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("channelpersonrolexpersonxchannel_ibfk_2");
 
             entity.HasOne(d => d.Person).WithMany(p => p.Channelpersonrolexpersonxchannels)
                 .HasForeignKey(d => d.Person_Id)
-                .OnDelete(DeleteBehavior.ClientSetNull)
+                .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("channelpersonrolexpersonxchannel_ibfk_1");
 
             entity.HasOne(d => d.ChannelPersonRole).WithMany(p => p.ChannelPersonRolesXPersonsXChannels)
               .HasForeignKey(d => d.ChannelPersonRole_Id)
-              .OnDelete(DeleteBehavior.ClientSetNull)
+              .OnDelete(DeleteBehavior.Cascade)
               .HasConstraintName("channelpersonrolexpersonxchannel_ibfk_3");
         });
 
@@ -229,12 +229,12 @@ public partial class AppDbContext : DbContext
 
             entity.HasOne(d => d.Channel).WithMany(p => p.Messages)
                 .HasForeignKey(d => d.Channel_Id)
-                .OnDelete(DeleteBehavior.ClientSetNull)
+                .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("message_ibfk_1");
 
             entity.HasOne(d => d.Person).WithMany(p => p.Messages)
                 .HasForeignKey(d => d.Person_Id)
-                .OnDelete(DeleteBehavior.ClientSetNull)
+                .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("message_ibfk_2");
 
 
@@ -267,17 +267,17 @@ public partial class AppDbContext : DbContext
 
             entity.HasOne(d => d.Message).WithMany(p => p.Messagexreactionxpeople)
                 .HasForeignKey(d => d.Message_Id)
-                .OnDelete(DeleteBehavior.ClientSetNull)
+                .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("messagexreactionxperson_ibfk_2");
 
             entity.HasOne(d => d.Person).WithMany(p => p.Messagexreactionxpeople)
                 .HasForeignKey(d => d.Person_Id)
-                .OnDelete(DeleteBehavior.ClientSetNull)
+                .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("messagexreactionxperson_ibfk_1");
 
             entity.HasOne(d => d.Reaction).WithMany(p => p.Messagexreactionxpeople)
                 .HasForeignKey(d => d.Reaction_Id)
-                .OnDelete(DeleteBehavior.ClientSetNull)
+                .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("messagexreactionxperson_ibfk_3");
         });
 
@@ -305,7 +305,7 @@ public partial class AppDbContext : DbContext
 
             entity.HasOne(d => d.NotificationType).WithMany(p => p.Notifications)
                 .HasForeignKey(d => d.Notification_TypeId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
+                .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("notification_ibfk_1");
         });
 
@@ -379,17 +379,17 @@ public partial class AppDbContext : DbContext
 
             entity.HasOne(d => d.PersonJobTitle).WithMany(p => p.People)
                 .HasForeignKey(d => d.PersonJobTitle_Id)
-                .OnDelete(DeleteBehavior.ClientSetNull)
+                .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("person_ibfk_1");
 
             entity.HasOne(d => d.PersonRole).WithMany(p => p.People)
                 .HasForeignKey(d => d.PersonRole_Id)
-                .OnDelete(DeleteBehavior.ClientSetNull)
+                .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("person_ibfk_3");
 
             entity.HasOne(d => d.PersonStatut).WithMany(p => p.People)
                 .HasForeignKey(d => d.PersonStatut_Id)
-                .OnDelete(DeleteBehavior.ClientSetNull)
+                .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("person_ibfk_2");
         });
 
@@ -457,12 +457,12 @@ public partial class AppDbContext : DbContext
 
             entity.HasOne(d => d.Channel).WithMany(p => p.Personxchannels)
                 .HasForeignKey(d => d.Channel_Id)
-                .OnDelete(DeleteBehavior.ClientSetNull)
+                .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("personxchannel_ibfk_2");
 
             entity.HasOne(d => d.Person).WithMany(p => p.Personxchannels)
                 .HasForeignKey(d => d.Person_Id)
-                .OnDelete(DeleteBehavior.ClientSetNull)
+                .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("personxchannel_ibfk_1");
         });
 
@@ -488,12 +488,12 @@ public partial class AppDbContext : DbContext
 
             entity.HasOne(d => d.Message).WithMany(p => p.Personxmessages)
                 .HasForeignKey(d => d.Message_Id)
-                .OnDelete(DeleteBehavior.ClientSetNull)
+                .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("personxmessage_ibfk_2");
 
             entity.HasOne(d => d.Person).WithMany(p => p.Personxmessages)
                 .HasForeignKey(d => d.Person_Id)
-                .OnDelete(DeleteBehavior.ClientSetNull)
+                .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("personxmessage_ibfk_1");
         });
 
@@ -519,12 +519,12 @@ public partial class AppDbContext : DbContext
 
             entity.HasOne(d => d.Notification).WithMany(p => p.Personxnotifications)
                 .HasForeignKey(d => d.Notification_Id)
-                .OnDelete(DeleteBehavior.ClientSetNull)
+                .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("personxnotification_ibfk_2");
 
             entity.HasOne(d => d.Person).WithMany(p => p.Personxnotifications)
                 .HasForeignKey(d => d.Person_Id)
-                .OnDelete(DeleteBehavior.ClientSetNull)
+                .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("personxnotification_ibfk_1");
         });
 

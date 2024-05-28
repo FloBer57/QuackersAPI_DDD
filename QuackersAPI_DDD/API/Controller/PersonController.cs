@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using QuackersAPI_DDD.API.DTO.PersonDTO;
 using QuackersAPI_DDD.Application.Interface;
 using QuackersAPI_DDD.Application.Utilitie.InterfaceUtilitiesServices;
@@ -17,7 +18,7 @@ namespace QuackersAPI_DDD.API.Controller
             _personService = personService;
             _securityService = securityService;
         }
-
+        [Authorize(Roles ="Administrateur")]
         [HttpGet]
         public async Task<IActionResult> GetAllPersons()
         {
@@ -31,7 +32,7 @@ namespace QuackersAPI_DDD.API.Controller
                 return StatusCode(500, "Internal server error: " + e.Message);
             }
         }
-
+        [Authorize]
         [HttpGet("{id}")]
         public async Task<IActionResult> GetPersonById(int id)
         {
@@ -49,7 +50,7 @@ namespace QuackersAPI_DDD.API.Controller
                 return StatusCode(500, "Internal server error: " + e.Message);
             }
         }
-
+        [Authorize]
         [HttpPost]
         public async Task<IActionResult> CreatePerson([FromBody] CreatePersonDTO createPersonDTO)
         {
@@ -71,7 +72,7 @@ namespace QuackersAPI_DDD.API.Controller
                 return StatusCode(500, "Internal server error: " + e.Message);
             }
         }
-
+        [Authorize]
         [HttpPost("test")]
         public async Task<IActionResult> CreatePersonTest([FromBody] CreatePersonTestDTO createPersonTestDTO)
         {
@@ -93,7 +94,7 @@ namespace QuackersAPI_DDD.API.Controller
                 return StatusCode(500, "Internal server error: " + e.Message);
             }
         }
-
+        [Authorize]
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdatePerson(int id, [FromBody] UpdatePersonDTO updatePersonDTO)
         {
@@ -111,7 +112,7 @@ namespace QuackersAPI_DDD.API.Controller
                 return StatusCode(500, "Internal server error: " + e.Message);
             }
         }
-
+        [Authorize]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeletePerson(int id)
         {
@@ -133,7 +134,7 @@ namespace QuackersAPI_DDD.API.Controller
                 return StatusCode(500, "Internal server error: " + e.Message);
             }
         }
-
+        [Authorize]
         [HttpGet("ByJobTitle/{jobTitleId}")]
         public async Task<IActionResult> GetPersonsByJobTitle(int jobTitleId)
         {
@@ -151,7 +152,7 @@ namespace QuackersAPI_DDD.API.Controller
                 return StatusCode(500, "Internal server error: " + e.Message);
             }
         }
-
+        [Authorize]
         [HttpGet("ByStatut/{statutId}")]
         public async Task<IActionResult> GetPersonsByStatut(int statutId)
         {
@@ -169,7 +170,7 @@ namespace QuackersAPI_DDD.API.Controller
                 return StatusCode(500, "Internal server error: " + e.Message);
             }
         }
-
+        [Authorize]
         [HttpGet("ByRole/{roleId}")]
         public async Task<IActionResult> GetPersonsByRole(int roleId)
         {
@@ -187,7 +188,7 @@ namespace QuackersAPI_DDD.API.Controller
                 return StatusCode(500, "Internal server error: " + e.Message);
             }
         }
-
+        [Authorize]
         [HttpGet("ByEmail/{email}")]
         public async Task<IActionResult> GetPersonByEmail(string email)
         {
@@ -205,7 +206,7 @@ namespace QuackersAPI_DDD.API.Controller
                 return StatusCode(500, "Internal server error: " + e.Message);
             }
         }
-
+        [Authorize]
         [HttpPost("verify-password")]
         public async Task<IActionResult> VerifyPassword([FromBody] VerifyPasswordDTO verifyPasswordDTO)
         {
@@ -223,7 +224,7 @@ namespace QuackersAPI_DDD.API.Controller
                 return StatusCode(500, "Internal server error: " + ex.Message);
             }
         }
-
+        [Authorize]
         [HttpPost("uploadProfilePicture")]
         public async Task<IActionResult> UploadProfilePicture(IFormFile file)
         {
