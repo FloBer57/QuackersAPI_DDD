@@ -1,5 +1,4 @@
-﻿using QuackersAPI_DDD.Domain.Utilitie;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Text.Json.Serialization;
 
@@ -9,9 +8,9 @@ public partial class Person
 {
     public int Person_Id { get; set; }
 
-    public string Person_Password { get; set; }
+    public string? Person_Password { get; set; }
 
-    public string Person_Email { get; set; }
+    public string? Person_Email { get; set; }
 
     public string? Person_PhoneNumber { get; set; }
 
@@ -25,13 +24,7 @@ public partial class Person
 
     public string? Person_Description { get; set; } 
 
-    public string? Person_TokenResetPassword { get; set; }
-
     public bool Person_IsTemporaryPassword { get; set; } = true;
-
-    public string? Person_LoggedInToken { get; set; }
-
-    public DateTime? Person_LoggedInTokenExpirationDate { get; set; }
 
     public int PersonJobTitle_Id { get; set; }
 
@@ -43,17 +36,22 @@ public partial class Person
     [JsonIgnore]
     public virtual ICollection<Message> Messages { get; set; } = new List<Message>();
     [JsonIgnore]
-    public virtual ICollection<Messagexreactionxperson> Messagexreactionxpeople { get; set; } = new List<Messagexreactionxperson>();
-
+    public virtual ICollection<MessageXReactionXPerson> Messagexreactionxpeople { get; set; } = new List<MessageXReactionXPerson>();
+    [JsonIgnore]
     public virtual PersonJobTitle PersonJobTitle { get; set; } = null!;
-
+    [JsonIgnore]
     public virtual PersonRole PersonRole { get; set; } = null!;
-
+    [JsonIgnore]
     public virtual PersonStatut PersonStatut { get; set; } = null!;
     [JsonIgnore]
-    public virtual ICollection<Personxchannel> Personxchannels { get; set; } = new List<Personxchannel>();
+    public virtual ICollection<PersonXChannel> Personxchannels { get; set; } = new List<PersonXChannel>();
     [JsonIgnore]
-    public virtual ICollection<Personxmessage> Personxmessages { get; set; } = new List<Personxmessage>();
+    public virtual ICollection<PersonXMessage> Personxmessages { get; set; } = new List<PersonXMessage>();
     [JsonIgnore]
-    public virtual ICollection<Personxnotification> Personxnotifications { get; set; } = new List<Personxnotification>();
+    public virtual ICollection<PersonXNotification> Personxnotifications { get; set; } = new List<PersonXNotification>();
+    [JsonIgnore]
+    public virtual ICollection<RefreshToken> RefreshToken { get; set; } = new List<RefreshToken>();
+    [JsonIgnore]
+    public virtual ICollection<ResetTokenPassword> ResetTokenPassword { get; set; } = new List<ResetTokenPassword>();
+
 }

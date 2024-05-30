@@ -8,12 +8,16 @@
     public interface IPersonService
     {
         Task<Person> CreatePerson(CreatePersonDTO createPersonDTO);
+        Task<Person> CreatePersonTest(CreatePersonTestDTO createPersonTestDTO);
         Task<IEnumerable<Person>> GetAllPersons();
         Task<IEnumerable<Person>> GetPersonsByJobTitle(int jobTitleId);
         Task<IEnumerable<Person>> GetPersonsByStatut(int statutId);
         Task<IEnumerable<Person>> GetPersonsByRole(int roleId);
+        Task<Person> GetPersonByEmail(string email);
         Task<Person> GetPersonById(int id);
         Task<Person> UpdatePerson(int id, UpdatePersonDTO person);
         Task<bool> DeletePerson(int id);
+
+        Task<string> UploadProfilePictureAsync(IFormFile file);
     }
 }

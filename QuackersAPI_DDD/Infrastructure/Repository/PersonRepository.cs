@@ -1,11 +1,12 @@
 ﻿namespace QuackersAPI_DDD.Infrastructure.Repository
 {
     using Microsoft.EntityFrameworkCore;
-    using QuackersAPI_DDD.Domain.Model;
-    using QuackersAPI_DDD.Infrastructure.Database;
     using System.Collections.Generic;
     using System.Threading.Tasks;
-    using QuackersAPI_DDD.Infrastructure.InterfaceRepository;
+    using global::QuackersAPI_DDD.Infrastructure.InterfaceRepository;
+    using global::QuackersAPI_DDD.Domain.Model;
+    using global::QuackersAPI_DDD.Infrastructure.Database;
+    using System.ComponentModel.DataAnnotations;
 
     public class PersonRepository : IPersonRepository
     {
@@ -30,7 +31,17 @@
 
         public async Task<Person> GetPersonById(int id)
         {
-            return await _context.Persons.FindAsync(id);
+            return await _context.Persons
+                                 .Include(p => p.PersonRole)
+                                 .FirstOrDefaultAsync(p => p.Person_Id == id);
+
+        }
+
+        public async Task<Person> GetPersonByEmail(string email)
+        {
+            return await _context.Persons
+                                 .Include(p => p.PersonRole) 
+                                 .FirstOrDefaultAsync(p => p.Person_Email == email);
         }
 
         public async Task<Person> UpdatePerson(Person person)
@@ -69,6 +80,16 @@
             return await _context.Persons
                 .Where(p => p.PersonRole_Id == roleId)
                 .ToListAsync();
+        }
+
+        public async Task<bool> PersonEmailExists(string email)
+        {
+            return await _context.Persons.AnyAsync(r => r.Person_Email == email);
+        }
+
+        public async Task<bool> PersonPhoneNumberExists(string phoneNumber)
+        {
+            return await _context.Persons.AnyAsync(r => r.Person_PhoneNumber == phoneNumber);
         }
     }
 }

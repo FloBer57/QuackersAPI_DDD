@@ -47,5 +47,9 @@ namespace QuackersAPI_DDD.Infrastructure.Repository
                 await _context.SaveChangesAsync();
             }
         }
+        public async Task<bool> ChannelTypeNameExists(string name)
+        {
+            return await _context.ChannelTypes.AnyAsync(r => r.ChannelType_Name == name);
+        }
     }
 }

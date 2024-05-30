@@ -9,5 +9,6 @@ namespace QuackersAPI_DDD.Infrastructure.InterfaceRepository
         Task<ChannelType> CreateChannelType(ChannelType channelType);
         Task<ChannelType> UpdateChannelType(ChannelType channelType);
         Task DeleteChannelType(int id);
+        Task<bool> ChannelTypeNameExists(string name);
     }
 }

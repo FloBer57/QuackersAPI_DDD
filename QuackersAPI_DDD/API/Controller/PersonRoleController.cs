@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using QuackersAPI_DDD.API.DTO.PersonRoleDTO;
 using QuackersAPI_DDD.Application.InterfaceService;
 
@@ -15,51 +16,98 @@ namespace QuackersAPI_DDD.API.Controller
             _personRoleService = personRoleService ?? throw new ArgumentNullException(nameof(personRoleService));
         }
 
+        [Authorize(Roles ="Administrateur")]
         [HttpPost]
         public async Task<IActionResult> CreatePersonRole([FromBody] CreatePersonRoleDTO createPersonRoleDTO)
         {
-            var createdPersonRole = await _personRoleService.CreatePersonRole(createPersonRoleDTO);
-            return CreatedAtAction(nameof(GetPersonRoleById), new { id = createdPersonRole.PersonRole_Id }, createdPersonRole);
-        }
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
 
+            try
+            {
+                var createdPersonRole = await _personRoleService.CreatePersonRole(createPersonRoleDTO);
+                return CreatedAtAction(nameof(GetPersonRoleById), new { id = createdPersonRole.PersonRole_Id }, createdPersonRole);
+            }
+            catch (InvalidOperationException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"An error occurred while creating the person role: {ex.Message}");
+            }
+        }
+        [Authorize]
         [HttpGet]
         public async Task<IActionResult> GetAllPersonRoles()
         {
-            var personRoles = await _personRoleService.GetAllPersonRoles();
-            if (personRoles == null)
-            {
-                return NotFound("No PersonRole can be found");
-            }
-            return Ok(personRoles);
+                var personRoles = await _personRoleService.GetAllPersonRoles();
+                return Ok(personRoles);
         }
-
+        [Authorize]
         [HttpGet("{id}")]
         public async Task<IActionResult> GetPersonRoleById(int id)
         {
-            var personRole = await _personRoleService.GetPersonRoleById(id);
-            if (personRole == null)
+            try
             {
-                return NotFound("No PersonRole with id = {id} can be found");
+                var personRole = await _personRoleService.GetPersonRoleById(id);
+                return Ok(personRole);
             }
-            return Ok(personRole);
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"An error occurred while retrieving the person role with ID {id}: {ex.Message}");
+            }
         }
-
+        [Authorize]
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdatePersonRole(int id, [FromBody] UpdatePersonRoleDTO updatePersonRoleDTO)
         {
-            var updatedPersonRole = await _personRoleService.UpdatePersonRole(id, updatePersonRoleDTO);
-            return Ok(updatedPersonRole);
-        }
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
 
+            try
+            {
+                var updatedPersonRole = await _personRoleService.UpdatePersonRole(id, updatePersonRoleDTO);
+                return Ok(updatedPersonRole);
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (InvalidOperationException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"An error occurred while updating the person role: {ex.Message}");
+            }
+        }
+        [Authorize]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeletePersonRole(int id)
         {
-            var result = await _personRoleService.DeletePersonRole(id);
-            if (!result)
+            try
             {
-                return NotFound();
+                var success = await _personRoleService.DeletePersonRole(id);
+                return NoContent();
             }
-            return NoContent();
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"An error occurred while deleting the person role: {ex.Message}");
+            }
         }
     }
 }

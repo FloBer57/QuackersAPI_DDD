@@ -9,5 +9,7 @@ namespace QuackersAPI_DDD.Infrastructure.InterfaceRepository
         Task<PersonStatut> CreatePersonStatut(PersonStatut personStatut);
         Task<PersonStatut> UpdatePersonStatut(int id, PersonStatut personStatut);
         Task<bool> DeletePersonStatut(int id);
+        Task<bool> PersonStatutNameExists(string name);
+
     }
 }

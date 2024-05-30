@@ -12,5 +12,6 @@
         Task<IEnumerable<Channel>> GetChannelsByChannelType(int channelTypeId);
         Task<Channel> UpdateChannel(Channel channel);
         Task DeleteChannel(Channel channel);
+        Task<bool> ChannelNameExists(string name);
     }
 }

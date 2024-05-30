@@ -1,12 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using QuackersAPI_DDD.Application.Interface;
-using QuackersAPI_DDD.Domain.Model;
-using System;
-using System.Threading.Tasks;
-using System.Collections.Generic;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using QuackersAPI_DDD.API.DTO.PersonDTO;
-using QuackersAPI_DDD.Domain.Utilitie;
-using QuackersAPI_DDD.Application.Service;
+using QuackersAPI_DDD.Application.Interface;
+using QuackersAPI_DDD.Application.Utilitie.InterfaceUtilitiesServices;
 
 namespace QuackersAPI_DDD.API.Controller
 {
@@ -15,96 +11,256 @@ namespace QuackersAPI_DDD.API.Controller
     public class PersonController : ControllerBase
     {
         private readonly IPersonService _personService;
+        private readonly ISecurityService _securityService;
 
-        public PersonController(IPersonService personService)
+        public PersonController(IPersonService personService, ISecurityService securityService)
         {
             _personService = personService;
+            _securityService = securityService;
         }
-
+        [Authorize(Roles ="Administrateur")]
         [HttpGet]
         public async Task<IActionResult> GetAllPersons()
         {
-            var persons = await _personService.GetAllPersons();
-            if (persons == null)
+            try
             {
-                return NotFound($"No person have been created");
+                var persons = await _personService.GetAllPersons();
+                return Ok(persons);
             }
-            return Ok(persons);
+            catch (Exception e)
+            {
+                return StatusCode(500, "Internal server error: " + e.Message);
+            }
         }
-
+        [Authorize]
         [HttpGet("{id}")]
         public async Task<IActionResult> GetPersonById(int id)
         {
-            var person = await _personService.GetPersonById(id);
-            if (person == null)
+            try
             {
-                return NotFound($"Person with id {id} not found.");
+                var person = await _personService.GetPersonById(id);
+                return person != null ? Ok(person) : NotFound($"No person found with ID {id}.");
             }
-            return Ok(person);
-        }
-
-        [HttpGet("{id}/JobTitle")]
-        public async Task<IActionResult> GetPersonByJobTitle(int id)
-        {
-            var channels = await _personService.GetPersonsByJobTitle(id);
-            if (channels == null)
+            catch (KeyNotFoundException e)
             {
-                return NotFound($"Person with JobTitle id {id} not found");
+                return NotFound(e.Message);
             }
-            return Ok(channels);
-        }
-
-        [HttpGet("{id}/Statut")]
-        public async Task<IActionResult> GetPersonByStatut(int id)
-        {
-            var channels = await _personService.GetPersonsByStatut(id);
-            if (channels == null)
+            catch (Exception e)
             {
-                return NotFound($"Person with Statut id {id} not found");
+                return StatusCode(500, "Internal server error: " + e.Message);
             }
-            return Ok(channels);
         }
-
-        [HttpGet("{id}/Role")]
-        public async Task<IActionResult> GetPersonByRole(int id)
-        {
-            var channels = await _personService.GetPersonsByRole(id);
-            if (channels == null)
-            {
-                return NotFound($"Person with Role id {id} not found");
-            }
-            return Ok(channels);
-        }
-
+        [Authorize]
         [HttpPost]
         public async Task<IActionResult> CreatePerson([FromBody] CreatePersonDTO createPersonDTO)
         {
-            var createdPerson = await _personService.CreatePerson(createPersonDTO);
-            return CreatedAtAction(nameof(GetPersonById), new { id = createdPerson.Person_Id }, createdPerson);
-        }
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
 
+            try
+            {
+                var person = await _personService.CreatePerson(createPersonDTO);
+                return CreatedAtAction(nameof(GetPersonById), new { id = person.Person_Id }, person);
+            }
+            catch (InvalidOperationException e)
+            {
+                return Conflict(e.Message);
+            }
+            catch (KeyNotFoundException e)
+            {
+                return NotFound(e.Message);
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, "Internal server error: " + e.Message);
+            }
+        }
+        [Authorize]
+        [HttpPost("test")]
+        public async Task<IActionResult> CreatePersonTest([FromBody] CreatePersonTestDTO createPersonTestDTO)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            try
+            {
+                var person = await _personService.CreatePersonTest(createPersonTestDTO);
+                return CreatedAtAction(nameof(GetPersonById), new { id = person.Person_Id }, person);
+            }
+            catch (KeyNotFoundException e)
+            {
+                return NotFound(e.Message);
+            }
+            catch (InvalidOperationException e)
+            {
+                return Conflict(e.Message);
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, "Internal server error: " + e.Message);
+            }
+        }
+        [Authorize]
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdatePerson(int id, [FromBody] UpdatePersonDTO updatePersonDTO)
         {
-            var updatedPerson = await _personService.UpdatePerson(id, updatePersonDTO);
-            if (updatedPerson == null)
+            if (!ModelState.IsValid)
             {
-                return NotFound($"Person with id {id} not found.");
+                return BadRequest(ModelState);
             }
 
-            return Ok(updatedPerson);
+            try
+            {
+                var updatedPerson = await _personService.UpdatePerson(id, updatePersonDTO);
+                return Ok(updatedPerson);
+            }
+            catch (KeyNotFoundException e)
+            {
+                return NotFound(e.Message);
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, "Internal server error: " + e.Message);
+            }
         }
-
-
+        [Authorize]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeletePerson(int id)
         {
-            var success = await _personService.DeletePerson(id);
-            if (!success)
+            try
             {
-                return NotFound($"Person with id {id} not found.");
+                var result = await _personService.DeletePerson(id);
+                if (!result)
+                {
+                    return NotFound($"No person found with ID {id}.");
+                }
+                return NoContent();
             }
-            return Ok($"Person with id {id} deleted successfully.");
+            catch (KeyNotFoundException e)
+            {
+                return NotFound(e.Message);
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, "Internal server error: " + e.Message);
+            }
+        }
+        [Authorize]
+        [HttpGet("ByJobTitle/{jobTitleId}")]
+        public async Task<IActionResult> GetPersonsByJobTitle(int jobTitleId)
+        {
+            try
+            {
+                var persons = await _personService.GetPersonsByJobTitle(jobTitleId);
+                return Ok(persons);
+            }
+            catch (KeyNotFoundException e)
+            {
+                return NotFound(e.Message);
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, "Internal server error: " + e.Message);
+            }
+        }
+        [Authorize]
+        [HttpGet("ByStatut/{statutId}")]
+        public async Task<IActionResult> GetPersonsByStatut(int statutId)
+        {
+            try
+            {
+                var persons = await _personService.GetPersonsByStatut(statutId);
+                return Ok(persons);
+            }
+            catch (KeyNotFoundException e)
+            {
+                return NotFound(e.Message);
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, "Internal server error: " + e.Message);
+            }
+        }
+        [Authorize]
+        [HttpGet("ByRole/{roleId}")]
+        public async Task<IActionResult> GetPersonsByRole(int roleId)
+        {
+            try
+            {
+                var persons = await _personService.GetPersonsByRole(roleId);
+                return Ok(persons);
+            }
+            catch (KeyNotFoundException e)
+            {
+                return NotFound(e.Message);
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, "Internal server error: " + e.Message);
+            }
+        }
+        [Authorize]
+        [HttpGet("ByEmail/{email}")]
+        public async Task<IActionResult> GetPersonByEmail(string email)
+        {
+            try
+            {
+                var person = await _personService.GetPersonByEmail(email);
+                return Ok(person);
+            }
+            catch (KeyNotFoundException e)
+            {
+                return NotFound(e.Message);
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, "Internal server error: " + e.Message);
+            }
+        }
+        [Authorize]
+        [HttpPost("verify-password")]
+        public async Task<IActionResult> VerifyPassword([FromBody] VerifyPasswordDTO verifyPasswordDTO)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            try
+            {
+                var isValid = await _securityService.VerifyCurrentPassword(verifyPasswordDTO.UserId, verifyPasswordDTO.CurrentPassword);
+                if (!isValid)
+                {
+                    return BadRequest("Invalid current password");
+                }
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Internal server error: " + ex.Message);
+            }
+        }
+        [Authorize]
+        [HttpPost("uploadProfilePicture")]
+        public async Task<IActionResult> UploadProfilePicture(IFormFile file)
+        {
+            try
+            {
+                var filePath = await _personService.UploadProfilePictureAsync(file);
+                return Ok(new { path = filePath });
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
         }
     }
 }

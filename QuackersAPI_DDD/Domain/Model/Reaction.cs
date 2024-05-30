@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace QuackersAPI_DDD.Domain.Model;
 
@@ -10,6 +11,6 @@ public partial class Reaction
     public string Reaction_Name { get; set; } = null!;
 
     public string? Reaction_PicturePath { get; set; }
-
-    public virtual ICollection<Messagexreactionxperson> Messagexreactionxpeople { get; set; } = new List<Messagexreactionxperson>();
+    [JsonIgnore]
+    public virtual ICollection<MessageXReactionXPerson> Messagexreactionxpeople { get; set; } = new List<MessageXReactionXPerson>();
 }

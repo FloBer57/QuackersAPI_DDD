@@ -24,10 +24,12 @@ public partial class AppDbContext : DbContext
     public virtual DbSet<ChannelPersonRoleXPersonXChannel> Channelpersonrolexpersonxchannels { get; set; }
 
     public virtual DbSet<ChannelType> ChannelTypes { get; set; }
+    public virtual DbSet<ChannelPersonRole> ChannelPersonRoles { get; set; }
+
 
     public virtual DbSet<Message> Messages { get; set; }
 
-    public virtual DbSet<Messagexreactionxperson> Messagexreactionxpeople { get; set; }
+    public virtual DbSet<MessageXReactionXPerson> Messagexreactionxpeople { get; set; }
 
     public virtual DbSet<Notification> Notifications { get; set; }
 
@@ -41,13 +43,16 @@ public partial class AppDbContext : DbContext
 
     public virtual DbSet<PersonStatut> Personstatuts { get; set; }
 
-    public virtual DbSet<Personxchannel> Personxchannels { get; set; }
+    public virtual DbSet<PersonXChannel> Personxchannels { get; set; }
 
-    public virtual DbSet<Personxmessage> Personxmessages { get; set; }
+    public virtual DbSet<PersonXMessage> Personxmessages { get; set; }
 
-    public virtual DbSet<Personxnotification> Personxnotifications { get; set; }
+    public virtual DbSet<PersonXNotification> Personxnotifications { get; set; }
 
     public virtual DbSet<Reaction> Reactions { get; set; }
+
+    public virtual DbSet<RefreshToken> RefreshTokens { get; set; }
+    public virtual DbSet<ResetTokenPassword> ResetTokens { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
@@ -94,7 +99,7 @@ public partial class AppDbContext : DbContext
 
             entity.HasOne(d => d.Message).WithMany(p => p.Attachments)
                 .HasForeignKey(d => d.Message_Id)
-                .OnDelete(DeleteBehavior.ClientSetNull)
+                .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("attachment_ibfk_1");
         });
 
@@ -123,10 +128,25 @@ public partial class AppDbContext : DbContext
 
             entity.HasOne(d => d.ChannelType).WithMany(p => p.Channels)
                 .HasForeignKey(d => d.ChannelType_Id)
-                .OnDelete(DeleteBehavior.ClientSetNull)
+                .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("channel_ibfk_1");
         });
 
+        modelBuilder.Entity<ChannelPersonRole>(entity =>
+        {
+            entity.HasKey(e => e.ChannelPersonRole_Id).HasName("PRIMARY");
+
+            entity.ToTable("channelpersonrole");
+
+            entity.HasIndex(e => e.ChannelPersonRole_Name, "ChannelPersonRole_Name").IsUnique();
+
+            entity.Property(e => e.ChannelPersonRole_Id)
+                .HasColumnType("int(11)")
+                .HasColumnName("ChannelPersonRole_Id");
+            entity.Property(e => e.ChannelPersonRole_Name)
+                .HasMaxLength(50)
+                .HasColumnName("ChannelPersonRole_Name");
+        });
         modelBuilder.Entity<ChannelPersonRoleXPersonXChannel>(entity =>
         {
             entity.HasKey(e => new { e.Person_Id, e.Channel_Id })
@@ -149,13 +169,18 @@ public partial class AppDbContext : DbContext
 
             entity.HasOne(d => d.Channel).WithMany(p => p.Channelpersonrolexpersonxchannels)
                 .HasForeignKey(d => d.Channel_Id)
-                .OnDelete(DeleteBehavior.ClientSetNull)
+                .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("channelpersonrolexpersonxchannel_ibfk_2");
 
             entity.HasOne(d => d.Person).WithMany(p => p.Channelpersonrolexpersonxchannels)
                 .HasForeignKey(d => d.Person_Id)
-                .OnDelete(DeleteBehavior.ClientSetNull)
+                .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("channelpersonrolexpersonxchannel_ibfk_1");
+
+            entity.HasOne(d => d.ChannelPersonRole).WithMany(p => p.ChannelPersonRolesXPersonsXChannels)
+              .HasForeignKey(d => d.ChannelPersonRole_Id)
+              .OnDelete(DeleteBehavior.Cascade)
+              .HasConstraintName("channelpersonrolexpersonxchannel_ibfk_3");
         });
 
         modelBuilder.Entity<ChannelType>(entity =>
@@ -178,6 +203,7 @@ public partial class AppDbContext : DbContext
         {
             entity.HasKey(e => e.Message_Id).HasName("PRIMARY");
 
+
             entity.ToTable("message");
 
             entity.HasIndex(e => e.Channel_Id, "Channel_ID");
@@ -193,7 +219,7 @@ public partial class AppDbContext : DbContext
             entity.Property(e => e.Message_Date)
                 .HasColumnType("datetime")
                 .HasColumnName("Message_Date");
-            entity.Property(e => e.Message_IsNotArchived).HasColumnName("Message_IsNotArchived");
+            entity.Property(e => e.Message_HasAttachment).HasColumnName("Message_HasAttachment");
             entity.Property(e => e.Message_Text)
                 .HasColumnType("text")
                 .HasColumnName("Message_Text");
@@ -203,16 +229,18 @@ public partial class AppDbContext : DbContext
 
             entity.HasOne(d => d.Channel).WithMany(p => p.Messages)
                 .HasForeignKey(d => d.Channel_Id)
-                .OnDelete(DeleteBehavior.ClientSetNull)
+                .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("message_ibfk_1");
 
             entity.HasOne(d => d.Person).WithMany(p => p.Messages)
                 .HasForeignKey(d => d.Person_Id)
-                .OnDelete(DeleteBehavior.ClientSetNull)
+                .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("message_ibfk_2");
+
+
         });
 
-        modelBuilder.Entity<Messagexreactionxperson>(entity =>
+        modelBuilder.Entity<MessageXReactionXPerson>(entity =>
         {
             entity.HasKey(e => new { e.Person_Id, e.Message_Id, e.Reaction_Id })
                 .HasName("PRIMARY")
@@ -239,17 +267,17 @@ public partial class AppDbContext : DbContext
 
             entity.HasOne(d => d.Message).WithMany(p => p.Messagexreactionxpeople)
                 .HasForeignKey(d => d.Message_Id)
-                .OnDelete(DeleteBehavior.ClientSetNull)
+                .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("messagexreactionxperson_ibfk_2");
 
             entity.HasOne(d => d.Person).WithMany(p => p.Messagexreactionxpeople)
                 .HasForeignKey(d => d.Person_Id)
-                .OnDelete(DeleteBehavior.ClientSetNull)
+                .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("messagexreactionxperson_ibfk_1");
 
             entity.HasOne(d => d.Reaction).WithMany(p => p.Messagexreactionxpeople)
                 .HasForeignKey(d => d.Reaction_Id)
-                .OnDelete(DeleteBehavior.ClientSetNull)
+                .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("messagexreactionxperson_ibfk_3");
         });
 
@@ -266,7 +294,7 @@ public partial class AppDbContext : DbContext
                 .HasColumnName("Notification_Id");
             entity.Property(e => e.Notification_DatePost).HasColumnName("Notification_DatePost");
             entity.Property(e => e.Notification_Name)
-                .HasMaxLength(50)
+                .HasMaxLength(255)
                 .HasColumnName("Notification_Name");
             entity.Property(e => e.Notification_Text)
                 .HasMaxLength(255)
@@ -277,7 +305,7 @@ public partial class AppDbContext : DbContext
 
             entity.HasOne(d => d.NotificationType).WithMany(p => p.Notifications)
                 .HasForeignKey(d => d.Notification_TypeId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
+                .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("notification_ibfk_1");
         });
 
@@ -333,12 +361,6 @@ public partial class AppDbContext : DbContext
             entity.Property(e => e.Person_LastName)
                 .HasMaxLength(50)
                 .HasColumnName("Person_LastName");
-            entity.Property(e => e.Person_LoggedInToken)
-                .HasMaxLength(255)
-                .HasColumnName("Person_LoggedInToken");
-            entity.Property(e => e.Person_LoggedInTokenExpirationDate)
-                .HasColumnType("datetime")
-                .HasColumnName("Person_LoggedInTokenExpirationDate");
             entity.Property(e => e.Person_Password)
                 .HasMaxLength(255)
                 .HasColumnName("Person_Password");
@@ -354,23 +376,20 @@ public partial class AppDbContext : DbContext
             entity.Property(e => e.PersonStatut_Id)
                 .HasColumnType("int(11)")
                 .HasColumnName("PersonStatut_Id");
-            entity.Property(e => e.Person_TokenResetPassword)
-                .HasMaxLength(255)
-                .HasColumnName("Person_TokenResetPassword");
 
             entity.HasOne(d => d.PersonJobTitle).WithMany(p => p.People)
                 .HasForeignKey(d => d.PersonJobTitle_Id)
-                .OnDelete(DeleteBehavior.ClientSetNull)
+                .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("person_ibfk_1");
 
             entity.HasOne(d => d.PersonRole).WithMany(p => p.People)
                 .HasForeignKey(d => d.PersonRole_Id)
-                .OnDelete(DeleteBehavior.ClientSetNull)
+                .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("person_ibfk_3");
 
             entity.HasOne(d => d.PersonStatut).WithMany(p => p.People)
                 .HasForeignKey(d => d.PersonStatut_Id)
-                .OnDelete(DeleteBehavior.ClientSetNull)
+                .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("person_ibfk_2");
         });
 
@@ -416,7 +435,7 @@ public partial class AppDbContext : DbContext
                 .HasColumnName("PersonStatut_Name");
         });
 
-        modelBuilder.Entity<Personxchannel>(entity =>
+        modelBuilder.Entity<PersonXChannel>(entity =>
         {
             entity.HasKey(e => new { e.Person_Id, e.Channel_Id })
                 .HasName("PRIMARY")
@@ -438,16 +457,16 @@ public partial class AppDbContext : DbContext
 
             entity.HasOne(d => d.Channel).WithMany(p => p.Personxchannels)
                 .HasForeignKey(d => d.Channel_Id)
-                .OnDelete(DeleteBehavior.ClientSetNull)
+                .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("personxchannel_ibfk_2");
 
             entity.HasOne(d => d.Person).WithMany(p => p.Personxchannels)
                 .HasForeignKey(d => d.Person_Id)
-                .OnDelete(DeleteBehavior.ClientSetNull)
+                .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("personxchannel_ibfk_1");
         });
 
-        modelBuilder.Entity<Personxmessage>(entity =>
+        modelBuilder.Entity<PersonXMessage>(entity =>
         {
             entity.HasKey(e => new { e.Person_Id, e.Message_Id })
                 .HasName("PRIMARY")
@@ -469,16 +488,16 @@ public partial class AppDbContext : DbContext
 
             entity.HasOne(d => d.Message).WithMany(p => p.Personxmessages)
                 .HasForeignKey(d => d.Message_Id)
-                .OnDelete(DeleteBehavior.ClientSetNull)
+                .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("personxmessage_ibfk_2");
 
             entity.HasOne(d => d.Person).WithMany(p => p.Personxmessages)
                 .HasForeignKey(d => d.Person_Id)
-                .OnDelete(DeleteBehavior.ClientSetNull)
+                .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("personxmessage_ibfk_1");
         });
 
-        modelBuilder.Entity<Personxnotification>(entity =>
+        modelBuilder.Entity<PersonXNotification>(entity =>
         {
             entity.HasKey(e => new { e.Person_Id, e.Notification_Id })
                 .HasName("PRIMARY")
@@ -500,12 +519,12 @@ public partial class AppDbContext : DbContext
 
             entity.HasOne(d => d.Notification).WithMany(p => p.Personxnotifications)
                 .HasForeignKey(d => d.Notification_Id)
-                .OnDelete(DeleteBehavior.ClientSetNull)
+                .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("personxnotification_ibfk_2");
 
             entity.HasOne(d => d.Person).WithMany(p => p.Personxnotifications)
                 .HasForeignKey(d => d.Person_Id)
-                .OnDelete(DeleteBehavior.ClientSetNull)
+                .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("personxnotification_ibfk_1");
         });
 
@@ -527,6 +546,76 @@ public partial class AppDbContext : DbContext
                 .HasMaxLength(255)
                 .HasColumnName("Reaction_PicturePath");
         });
+
+
+        modelBuilder.Entity<RefreshToken>(entity =>
+        {
+            entity.HasKey(e => e.Token_Id).HasName("PRIMARY");
+
+            entity.ToTable("refreshtokens");
+
+            // Indexes
+            entity.HasIndex(e => e.Person_Id, "Person_Id"); // Add an index on Person_Id
+
+            // Properties
+            entity.Property(e => e.Token_Id)
+                .HasColumnType("int")
+                .HasColumnName("Token_Id")
+                .ValueGeneratedOnAdd(); // Ensures Token_Id is auto-incremented
+
+            entity.Property(e => e.Person_Id)
+                .HasColumnType("int")
+                .HasColumnName("Person_Id");
+
+            entity.Property(e => e.Token)
+                .IsRequired()
+                .HasMaxLength(255)
+                .HasColumnName("Token");
+
+            entity.Property(e => e.ExpiresAt)
+                .HasColumnType("datetime")
+                .HasColumnName("ExpiresAt");
+
+            entity.Property(e => e.CreatedAt)
+                .HasColumnType("datetime")
+                .HasColumnName("CreatedAt")
+                .HasDefaultValueSql("CURRENT_TIMESTAMP"); 
+
+            entity.Property(e => e.Revoked)
+                .HasColumnName("Revoked");
+
+            entity.HasOne(e => e.Person) 
+                .WithMany(p => p.RefreshToken) 
+                .HasForeignKey(e => e.Person_Id) 
+                .OnDelete(DeleteBehavior.Cascade); 
+        });
+
+        modelBuilder.Entity<ResetTokenPassword>(entity =>
+        {
+            entity.ToTable("resettokenpassword");
+
+            entity.HasKey(e => e.Token_Id);
+            entity.Property(e => e.Token_Id).ValueGeneratedOnAdd();
+
+            entity.Property(e => e.Token)
+                .IsRequired()
+                .HasMaxLength(255);
+
+            entity.Property(e => e.ExpiresAt)
+                .HasColumnType("datetime");
+
+            entity.Property(e => e.CreatedAt)
+                .HasColumnType("datetime")
+                .HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+            // Relation to Person
+            entity.HasOne(d => d.Person)
+                .WithMany(p => p.ResetTokenPassword)
+                .HasForeignKey(d => d.Person_Id)
+                .OnDelete(DeleteBehavior.Cascade);
+        });
+
+
 
         OnModelCreatingPartial(modelBuilder);
     }

@@ -43,5 +43,10 @@ namespace QuackersAPI_DDD.Infrastructure.Repository
             _context.Personjobtitles.Remove(personJobTitle);
             await _context.SaveChangesAsync();
         }
+
+        public async Task<bool> PersonJobTitleNameExists(string name)
+        {
+            return await _context.Personjobtitles.AnyAsync(r => r.PersonJobTitle_Name == name);
+        }
     }
 }
