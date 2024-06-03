@@ -67,8 +67,8 @@ namespace QuackersAPI_DDD
                     builder => builder.WithOrigins("http://localhost:3000")
                     .AllowAnyMethod()
                     .AllowAnyHeader()
-                    .SetIsOriginAllowed(origin => true) // allow any origin
-                    .AllowCredentials()); // allow credentials
+                    .SetIsOriginAllowed(origin => true) 
+                    .AllowCredentials()); 
         });
 
             builder.Services.AddDbContext<AppDbContext>(options =>
