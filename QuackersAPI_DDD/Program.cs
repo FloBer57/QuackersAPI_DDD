@@ -124,6 +124,11 @@ namespace QuackersAPI_DDD
 
             app.Urls.Add("https://localhost:7019");
 
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapFallbackToFile("index.html");
+            });
+
             app.Run();
         }
     }
