@@ -122,6 +122,8 @@ namespace QuackersAPI_DDD
             app.MapControllers();
             app.MapHub<SignalrHub>("/hub");
 
+            app.Urls.Add("https://localhost:7019");
+
             app.Run();
         }
     }
