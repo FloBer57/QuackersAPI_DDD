@@ -64,7 +64,7 @@ namespace QuackersAPI_DDD
             builder.Services.AddCors(options =>
             {
                 options.AddPolicy("CorsPolicy",
-                    builder => builder.WithOrigins("http://localhost:3000")
+                    builder => builder.WithOrigins("http://localhost:3000", "https://localhost:3000", "https://quackers.florentbernar.fr")
                     .AllowAnyMethod()
                     .AllowAnyHeader()
                     .SetIsOriginAllowed(origin => true) // allow any origin
@@ -111,10 +111,12 @@ namespace QuackersAPI_DDD
             }
             
 
+            app.Urls.Add("https://localhost:7019");
             app.UseHttpsRedirection();
             app.UseStaticFiles();
+            app.MapFallbackToController("Index","Fallback");
 
-            app.UseCors("CorsPolicy"); // Appliquer la politique CORS avant les middlewares d'authentification et d'autorisation
+            app.UseCors("CorsPolicy"); 
 
             app.UseAuthentication();
             app.UseAuthorization();
