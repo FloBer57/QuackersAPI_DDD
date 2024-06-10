@@ -64,7 +64,7 @@ namespace QuackersAPI_DDD
             builder.Services.AddCors(options =>
             {
                 options.AddPolicy("CorsPolicy",
-                    builder => builder.WithOrigins("http://localhost:3000", "https://localhost:3000", "https://quackers.florentbernar.fr")
+                    builder => builder.WithOrigins("http://localhost:3000", "https://localhost:3000", "https://quackers.florentbernar.fr", "https://localhost:7019")
                     .AllowAnyMethod()
                     .AllowAnyHeader()
                     .SetIsOriginAllowed(origin => true) // allow any origin
