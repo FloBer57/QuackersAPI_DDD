@@ -1,9 +1,0 @@
-
-
-POST  http://localhost:5038/api/Authentication/login
-
-Content-Type: application/json
-{
-  "email": "noah.moore@example.com",
-  "password": "pw25"
-}

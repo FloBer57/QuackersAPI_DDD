@@ -1,0 +1,317 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\Florent\\Documents\\GitHub\\QuackersAPI_DDD\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{E257E1B1-03C1-4DC3-9416-862053E33EE0}|QuackersAPI_DDD\\QuackersAPI_DDD.csproj|c:\\users\\florent\\documents\\github\\quackersapi_ddd\\quackersapi_ddd\\infrastructure\\repository\\messagerepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E257E1B1-03C1-4DC3-9416-862053E33EE0}|QuackersAPI_DDD\\QuackersAPI_DDD.csproj|solutionrelative:quackersapi_ddd\\infrastructure\\repository\\messagerepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E257E1B1-03C1-4DC3-9416-862053E33EE0}|QuackersAPI_DDD\\QuackersAPI_DDD.csproj|c:\\users\\florent\\documents\\github\\quackersapi_ddd\\quackersapi_ddd\\application\\service\\channelservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E257E1B1-03C1-4DC3-9416-862053E33EE0}|QuackersAPI_DDD\\QuackersAPI_DDD.csproj|solutionrelative:quackersapi_ddd\\application\\service\\channelservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E257E1B1-03C1-4DC3-9416-862053E33EE0}|QuackersAPI_DDD\\QuackersAPI_DDD.csproj|c:\\users\\florent\\documents\\github\\quackersapi_ddd\\quackersapi_ddd\\api\\controller\\personxchannelcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E257E1B1-03C1-4DC3-9416-862053E33EE0}|QuackersAPI_DDD\\QuackersAPI_DDD.csproj|solutionrelative:quackersapi_ddd\\api\\controller\\personxchannelcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E257E1B1-03C1-4DC3-9416-862053E33EE0}|QuackersAPI_DDD\\QuackersAPI_DDD.csproj|c:\\users\\florent\\documents\\github\\quackersapi_ddd\\quackersapi_ddd\\infrastructure\\database\\appdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E257E1B1-03C1-4DC3-9416-862053E33EE0}|QuackersAPI_DDD\\QuackersAPI_DDD.csproj|solutionrelative:quackersapi_ddd\\infrastructure\\database\\appdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E257E1B1-03C1-4DC3-9416-862053E33EE0}|QuackersAPI_DDD\\QuackersAPI_DDD.csproj|c:\\users\\florent\\documents\\github\\quackersapi_ddd\\quackersapi_ddd\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{E257E1B1-03C1-4DC3-9416-862053E33EE0}|QuackersAPI_DDD\\QuackersAPI_DDD.csproj|solutionrelative:quackersapi_ddd\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E257E1B1-03C1-4DC3-9416-862053E33EE0}|QuackersAPI_DDD\\QuackersAPI_DDD.csproj|c:\\users\\florent\\documents\\github\\quackersapi_ddd\\quackersapi_ddd\\domain\\model\\message.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E257E1B1-03C1-4DC3-9416-862053E33EE0}|QuackersAPI_DDD\\QuackersAPI_DDD.csproj|solutionrelative:quackersapi_ddd\\domain\\model\\message.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E257E1B1-03C1-4DC3-9416-862053E33EE0}|QuackersAPI_DDD\\QuackersAPI_DDD.csproj|c:\\users\\florent\\documents\\github\\quackersapi_ddd\\quackersapi_ddd\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E257E1B1-03C1-4DC3-9416-862053E33EE0}|QuackersAPI_DDD\\QuackersAPI_DDD.csproj|solutionrelative:quackersapi_ddd\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{55037157-25E5-490E-B56B-895636DF9EAA}|QuackersTests\\QuackersTests.csproj|c:\\users\\florent\\documents\\github\\quackersapi_ddd\\quackerstests\\quackerstests.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
+      "RelativeMoniker": "D:0:0:{55037157-25E5-490E-B56B-895636DF9EAA}|QuackersTests\\QuackersTests.csproj|solutionrelative:quackerstests\\quackerstests.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E257E1B1-03C1-4DC3-9416-862053E33EE0}|QuackersAPI_DDD\\QuackersAPI_DDD.csproj|c:\\users\\florent\\documents\\github\\quackersapi_ddd\\quackersapi_ddd\\quackersapi_ddd.http||{5703B403-55E7-4C63-8C88-A8F52C7A45C5}",
+      "RelativeMoniker": "D:0:0:{E257E1B1-03C1-4DC3-9416-862053E33EE0}|QuackersAPI_DDD\\QuackersAPI_DDD.csproj|solutionrelative:quackersapi_ddd\\quackersapi_ddd.http||{5703B403-55E7-4C63-8C88-A8F52C7A45C5}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E257E1B1-03C1-4DC3-9416-862053E33EE0}|QuackersAPI_DDD\\QuackersAPI_DDD.csproj|c:\\users\\florent\\documents\\github\\quackersapi_ddd\\quackersapi_ddd\\application\\utilitie\\utilitiesservices\\tokenjwtservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E257E1B1-03C1-4DC3-9416-862053E33EE0}|QuackersAPI_DDD\\QuackersAPI_DDD.csproj|solutionrelative:quackersapi_ddd\\application\\utilitie\\utilitiesservices\\tokenjwtservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E257E1B1-03C1-4DC3-9416-862053E33EE0}|QuackersAPI_DDD\\QuackersAPI_DDD.csproj|c:\\users\\florent\\documents\\github\\quackersapi_ddd\\quackersapi_ddd\\sheet.md||{EFC0BB08-EA7D-40C6-A696-C870411A895B}",
+      "RelativeMoniker": "D:0:0:{E257E1B1-03C1-4DC3-9416-862053E33EE0}|QuackersAPI_DDD\\QuackersAPI_DDD.csproj|solutionrelative:quackersapi_ddd\\sheet.md||{EFC0BB08-EA7D-40C6-A696-C870411A895B}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E257E1B1-03C1-4DC3-9416-862053E33EE0}|QuackersAPI_DDD\\QuackersAPI_DDD.csproj|c:\\users\\florent\\documents\\github\\quackersapi_ddd\\quackersapi_ddd\\properties\\launchsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{E257E1B1-03C1-4DC3-9416-862053E33EE0}|QuackersAPI_DDD\\QuackersAPI_DDD.csproj|solutionrelative:quackersapi_ddd\\properties\\launchsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E257E1B1-03C1-4DC3-9416-862053E33EE0}|QuackersAPI_DDD\\QuackersAPI_DDD.csproj|c:\\users\\florent\\documents\\github\\quackersapi_ddd\\quackersapi_ddd\\api\\controller\\fallbackcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E257E1B1-03C1-4DC3-9416-862053E33EE0}|QuackersAPI_DDD\\QuackersAPI_DDD.csproj|solutionrelative:quackersapi_ddd\\api\\controller\\fallbackcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E257E1B1-03C1-4DC3-9416-862053E33EE0}|QuackersAPI_DDD\\QuackersAPI_DDD.csproj|c:\\users\\florent\\documents\\github\\quackersapi_ddd\\quackersapi_ddd\\api\\controller\\attachmentcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E257E1B1-03C1-4DC3-9416-862053E33EE0}|QuackersAPI_DDD\\QuackersAPI_DDD.csproj|solutionrelative:quackersapi_ddd\\api\\controller\\attachmentcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E257E1B1-03C1-4DC3-9416-862053E33EE0}|QuackersAPI_DDD\\QuackersAPI_DDD.csproj|c:\\users\\florent\\documents\\github\\quackersapi_ddd\\quackersapi_ddd\\api\\dto\\attachmentdto\\createattachmentdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E257E1B1-03C1-4DC3-9416-862053E33EE0}|QuackersAPI_DDD\\QuackersAPI_DDD.csproj|solutionrelative:quackersapi_ddd\\api\\dto\\attachmentdto\\createattachmentdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E257E1B1-03C1-4DC3-9416-862053E33EE0}|QuackersAPI_DDD\\QuackersAPI_DDD.csproj|c:\\users\\florent\\documents\\github\\quackersapi_ddd\\quackersapi_ddd\\api\\hub\\signalrhub.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E257E1B1-03C1-4DC3-9416-862053E33EE0}|QuackersAPI_DDD\\QuackersAPI_DDD.csproj|solutionrelative:quackersapi_ddd\\api\\hub\\signalrhub.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 0,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "MessageRepository.cs",
+              "DocumentMoniker": "C:\\Users\\Florent\\Documents\\GitHub\\QuackersAPI_DDD\\QuackersAPI_DDD\\Infrastructure\\Repository\\MessageRepository.cs",
+              "RelativeDocumentMoniker": "QuackersAPI_DDD\\Infrastructure\\Repository\\MessageRepository.cs",
+              "ToolTip": "C:\\Users\\Florent\\Documents\\GitHub\\QuackersAPI_DDD\\QuackersAPI_DDD\\Infrastructure\\Repository\\MessageRepository.cs",
+              "RelativeToolTip": "QuackersAPI_DDD\\Infrastructure\\Repository\\MessageRepository.cs",
+              "ViewState": "AQIAAD0AAAAAAAAAAAAwwEgAAAAfAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-06-10T12:24:05.974Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "ChannelService.cs",
+              "DocumentMoniker": "C:\\Users\\Florent\\Documents\\GitHub\\QuackersAPI_DDD\\QuackersAPI_DDD\\Application\\Service\\ChannelService.cs",
+              "RelativeDocumentMoniker": "QuackersAPI_DDD\\Application\\Service\\ChannelService.cs",
+              "ToolTip": "C:\\Users\\Florent\\Documents\\GitHub\\QuackersAPI_DDD\\QuackersAPI_DDD\\Application\\Service\\ChannelService.cs",
+              "RelativeToolTip": "QuackersAPI_DDD\\Application\\Service\\ChannelService.cs",
+              "ViewState": "AQIAAHkAAAAAAAAAAAAswI0AAAAcAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-06-10T12:23:42.958Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "PersonXChannelController.cs",
+              "DocumentMoniker": "C:\\Users\\Florent\\Documents\\GitHub\\QuackersAPI_DDD\\QuackersAPI_DDD\\API\\Controller\\PersonXChannelController.cs",
+              "RelativeDocumentMoniker": "QuackersAPI_DDD\\API\\Controller\\PersonXChannelController.cs",
+              "ToolTip": "C:\\Users\\Florent\\Documents\\GitHub\\QuackersAPI_DDD\\QuackersAPI_DDD\\API\\Controller\\PersonXChannelController.cs",
+              "RelativeToolTip": "QuackersAPI_DDD\\API\\Controller\\PersonXChannelController.cs",
+              "ViewState": "AQIAAAsAAAAAAAAAAAAAwBcAAABDAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-06-10T12:23:19.285Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "AppDbContext.cs",
+              "DocumentMoniker": "C:\\Users\\Florent\\Documents\\GitHub\\QuackersAPI_DDD\\QuackersAPI_DDD\\Infrastructure\\Database\\AppDbContext.cs",
+              "RelativeDocumentMoniker": "QuackersAPI_DDD\\Infrastructure\\Database\\AppDbContext.cs",
+              "ToolTip": "C:\\Users\\Florent\\Documents\\GitHub\\QuackersAPI_DDD\\QuackersAPI_DDD\\Infrastructure\\Database\\AppDbContext.cs",
+              "RelativeToolTip": "QuackersAPI_DDD\\Infrastructure\\Database\\AppDbContext.cs",
+              "ViewState": "AQIAAMwAAAAAAAAAAAAkwN0AAABhAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-06-10T12:23:03.377Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "Message.cs",
+              "DocumentMoniker": "C:\\Users\\Florent\\Documents\\GitHub\\QuackersAPI_DDD\\QuackersAPI_DDD\\Domain\\Model\\Message.cs",
+              "RelativeDocumentMoniker": "QuackersAPI_DDD\\Domain\\Model\\Message.cs",
+              "ToolTip": "C:\\Users\\Florent\\Documents\\GitHub\\QuackersAPI_DDD\\QuackersAPI_DDD\\Domain\\Model\\Message.cs",
+              "RelativeToolTip": "QuackersAPI_DDD\\Domain\\Model\\Message.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAuwA0AAAAYAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-06-10T12:22:32.884Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "TokenJwtService.cs",
+              "DocumentMoniker": "C:\\Users\\Florent\\Documents\\GitHub\\QuackersAPI_DDD\\QuackersAPI_DDD\\Application\\Utilitie\\UtilitiesServices\\TokenJwtService.cs",
+              "RelativeDocumentMoniker": "QuackersAPI_DDD\\Application\\Utilitie\\UtilitiesServices\\TokenJwtService.cs",
+              "ToolTip": "C:\\Users\\Florent\\Documents\\GitHub\\QuackersAPI_DDD\\QuackersAPI_DDD\\Application\\Utilitie\\UtilitiesServices\\TokenJwtService.cs",
+              "RelativeToolTip": "QuackersAPI_DDD\\Application\\Utilitie\\UtilitiesServices\\TokenJwtService.cs",
+              "ViewState": "AQIAABgAAAAAAAAAAAAYwAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-06-10T09:39:39.856Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
+              "Title": "Sheet.md",
+              "DocumentMoniker": "C:\\Users\\Florent\\Documents\\GitHub\\QuackersAPI_DDD\\QuackersAPI_DDD\\Sheet.md",
+              "RelativeDocumentMoniker": "QuackersAPI_DDD\\Sheet.md",
+              "ToolTip": "C:\\Users\\Florent\\Documents\\GitHub\\QuackersAPI_DDD\\QuackersAPI_DDD\\Sheet.md",
+              "RelativeToolTip": "QuackersAPI_DDD\\Sheet.md",
+              "ViewState": "AQIAADkAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001818|",
+              "WhenOpened": "2024-06-10T09:39:25.256Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "appsettings.json",
+              "DocumentMoniker": "C:\\Users\\Florent\\Documents\\GitHub\\QuackersAPI_DDD\\QuackersAPI_DDD\\appsettings.json",
+              "RelativeDocumentMoniker": "QuackersAPI_DDD\\appsettings.json",
+              "ToolTip": "C:\\Users\\Florent\\Documents\\GitHub\\QuackersAPI_DDD\\QuackersAPI_DDD\\appsettings.json",
+              "RelativeToolTip": "QuackersAPI_DDD\\appsettings.json",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAIAAABgAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2024-06-07T12:17:26.972Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "QuackersTests.csproj",
+              "DocumentMoniker": "C:\\Users\\Florent\\Documents\\GitHub\\QuackersAPI_DDD\\QuackersTests\\QuackersTests.csproj",
+              "RelativeDocumentMoniker": "QuackersTests\\QuackersTests.csproj",
+              "ToolTip": "C:\\Users\\Florent\\Documents\\GitHub\\QuackersAPI_DDD\\QuackersTests\\QuackersTests.csproj",
+              "RelativeToolTip": "QuackersTests\\QuackersTests.csproj",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
+              "WhenOpened": "2024-06-07T12:12:27.109Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 12,
+              "Title": "FallbackController.cs",
+              "DocumentMoniker": "C:\\Users\\Florent\\Documents\\GitHub\\QuackersAPI_DDD\\QuackersAPI_DDD\\API\\Controller\\FallbackController.cs",
+              "RelativeDocumentMoniker": "QuackersAPI_DDD\\API\\Controller\\FallbackController.cs",
+              "ToolTip": "C:\\Users\\Florent\\Documents\\GitHub\\QuackersAPI_DDD\\QuackersAPI_DDD\\API\\Controller\\FallbackController.cs",
+              "RelativeToolTip": "QuackersAPI_DDD\\API\\Controller\\FallbackController.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAoAAABmAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-06-07T09:56:05.883Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\Users\\Florent\\Documents\\GitHub\\QuackersAPI_DDD\\QuackersAPI_DDD\\Program.cs",
+              "RelativeDocumentMoniker": "QuackersAPI_DDD\\Program.cs",
+              "ToolTip": "C:\\Users\\Florent\\Documents\\GitHub\\QuackersAPI_DDD\\QuackersAPI_DDD\\Program.cs",
+              "RelativeToolTip": "QuackersAPI_DDD\\Program.cs",
+              "ViewState": "AQIAAGEAAAAAAAAAAAAiwGwAAAAhAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-06-07T07:02:59.675Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "QuackersAPI_DDD.http",
+              "DocumentMoniker": "C:\\Users\\Florent\\Documents\\GitHub\\QuackersAPI_DDD\\QuackersAPI_DDD\\QuackersAPI_DDD.http",
+              "RelativeDocumentMoniker": "QuackersAPI_DDD\\QuackersAPI_DDD.http",
+              "ToolTip": "C:\\Users\\Florent\\Documents\\GitHub\\QuackersAPI_DDD\\QuackersAPI_DDD\\QuackersAPI_DDD.http",
+              "RelativeToolTip": "QuackersAPI_DDD\\QuackersAPI_DDD.http",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAYAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003502|",
+              "WhenOpened": "2024-06-07T12:12:28.425Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 11,
+              "Title": "launchSettings.json",
+              "DocumentMoniker": "C:\\Users\\Florent\\Documents\\GitHub\\QuackersAPI_DDD\\QuackersAPI_DDD\\Properties\\launchSettings.json",
+              "RelativeDocumentMoniker": "QuackersAPI_DDD\\Properties\\launchSettings.json",
+              "ToolTip": "C:\\Users\\Florent\\Documents\\GitHub\\QuackersAPI_DDD\\QuackersAPI_DDD\\Properties\\launchSettings.json",
+              "RelativeToolTip": "QuackersAPI_DDD\\Properties\\launchSettings.json",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAA4AAAAcAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2024-06-07T09:59:42.777Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 13,
+              "Title": "AttachmentController.cs",
+              "DocumentMoniker": "C:\\Users\\Florent\\Documents\\GitHub\\QuackersAPI_DDD\\QuackersAPI_DDD\\API\\Controller\\AttachmentController.cs",
+              "RelativeDocumentMoniker": "QuackersAPI_DDD\\API\\Controller\\AttachmentController.cs",
+              "ToolTip": "C:\\Users\\Florent\\Documents\\GitHub\\QuackersAPI_DDD\\QuackersAPI_DDD\\API\\Controller\\AttachmentController.cs",
+              "RelativeToolTip": "QuackersAPI_DDD\\API\\Controller\\AttachmentController.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAEsAAAANAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-06-07T07:04:03.55Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 14,
+              "Title": "CreateAttachmentDTO.cs",
+              "DocumentMoniker": "C:\\Users\\Florent\\Documents\\GitHub\\QuackersAPI_DDD\\QuackersAPI_DDD\\API\\DTO\\AttachmentDTO\\CreateAttachmentDTO.cs",
+              "RelativeDocumentMoniker": "QuackersAPI_DDD\\API\\DTO\\AttachmentDTO\\CreateAttachmentDTO.cs",
+              "ToolTip": "C:\\Users\\Florent\\Documents\\GitHub\\QuackersAPI_DDD\\QuackersAPI_DDD\\API\\DTO\\AttachmentDTO\\CreateAttachmentDTO.cs",
+              "RelativeToolTip": "QuackersAPI_DDD\\API\\DTO\\AttachmentDTO\\CreateAttachmentDTO.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-06-07T07:04:01.595Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 15,
+              "Title": "SignalrHub.cs",
+              "DocumentMoniker": "C:\\Users\\Florent\\Documents\\GitHub\\QuackersAPI_DDD\\QuackersAPI_DDD\\API\\Hub\\SignalrHub.cs",
+              "RelativeDocumentMoniker": "QuackersAPI_DDD\\API\\Hub\\SignalrHub.cs",
+              "ToolTip": "C:\\Users\\Florent\\Documents\\GitHub\\QuackersAPI_DDD\\QuackersAPI_DDD\\API\\Hub\\SignalrHub.cs",
+              "RelativeToolTip": "QuackersAPI_DDD\\API\\Hub\\SignalrHub.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-06-07T07:03:56.442Z"
+            }
+          ]
+        },
+        {
+          "DockedWidth": 272,
+          "SelectedChildIndex": -1,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{3ae79031-e1bc-11d0-8f78-00a0c9110057}"
+            }
+          ]
+        },
+        {
+          "DockedWidth": 272,
+          "SelectedChildIndex": -1,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:133:0:{116d2292-e37d-41cd-a077-ebacac4c8cc4}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:134:0:{116d2292-e37d-41cd-a077-ebacac4c8cc4}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:132:0:{116d2292-e37d-41cd-a077-ebacac4c8cc4}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:131:0:{116d2292-e37d-41cd-a077-ebacac4c8cc4}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:130:0:{116d2292-e37d-41cd-a077-ebacac4c8cc4}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:129:0:{116d2292-e37d-41cd-a077-ebacac4c8cc4}"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
